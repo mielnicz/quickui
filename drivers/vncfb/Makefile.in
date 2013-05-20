@@ -95,15 +95,15 @@ am__v_AR_0 = @echo "  AR      " $@;
 am__v_AR_1 = 
 libgfxvncfb_a_AR = $(AR) $(ARFLAGS)
 libgfxvncfb_a_LIBADD =
-am_libgfxvncfb_a_OBJECTS = vncfb.$(OBJEXT) main.$(OBJEXT) \
-	rfbserver.$(OBJEXT) rfbregion.$(OBJEXT) auth.$(OBJEXT) \
-	sockets.$(OBJEXT) stats.$(OBJEXT) corre.$(OBJEXT) \
-	hextile.$(OBJEXT) rre.$(OBJEXT) translate.$(OBJEXT) \
-	cutpaste.$(OBJEXT) cursor.$(OBJEXT) font.$(OBJEXT) \
-	draw.$(OBJEXT) selbox.$(OBJEXT) cargs.$(OBJEXT) \
-	scale.$(OBJEXT) zlib.$(OBJEXT) zrle.$(OBJEXT) \
-	zrleoutstream.$(OBJEXT) zrlepalettehelper.$(OBJEXT) \
-	tight.$(OBJEXT)
+am_libgfxvncfb_a_OBJECTS = vncfb.$(OBJEXT) auth.$(OBJEXT) \
+	cargs.$(OBJEXT) corre.$(OBJEXT) cursor.$(OBJEXT) \
+	cutpaste.$(OBJEXT) draw.$(OBJEXT) font.$(OBJEXT) \
+	hextile.$(OBJEXT) httpd.$(OBJEXT) main.$(OBJEXT) \
+	rfbregion.$(OBJEXT) rfbserver.$(OBJEXT) rre.$(OBJEXT) \
+	scale.$(OBJEXT) selbox.$(OBJEXT) sockets.$(OBJEXT) \
+	stats.$(OBJEXT) translate.$(OBJEXT) ultra.$(OBJEXT) \
+	zlib.$(OBJEXT) zrle.$(OBJEXT) zrleoutstream.$(OBJEXT) \
+	zrlepalettehelper.$(OBJEXT) vncauth.$(OBJEXT)
 libgfxvncfb_a_OBJECTS = $(am_libgfxvncfb_a_OBJECTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -264,28 +264,30 @@ AM_CPPFLAGS = \
 lib_LIBRARIES = libgfxvncfb.a
 libgfxvncfb_a_SOURCES = \
   vncfb.c \
-  vncserver/main.c \
-  vncserver/rfbserver.c \
-  vncserver/rfbregion.c \
   vncserver/auth.c \
+  vncserver/cargs.c \
+  vncserver/corre.c \
+  vncserver/cursor.c \
+  vncserver/cutpaste.c \
+  vncserver/draw.c \
+  vncserver/font.c \
+  vncserver/hextile.c \
+  vncserver/httpd.c \
+  vncserver/main.c \
+  vncserver/rfbregion.c \
+  vncserver/rfbserver.c \
+  vncserver/rre.c \
+  vncserver/scale.c \
+  vncserver/selbox.c \
   vncserver/sockets.c \
   vncserver/stats.c \
-  vncserver/corre.c \
-  vncserver/hextile.c \
-  vncserver/rre.c \
   vncserver/translate.c \
-  vncserver/cutpaste.c \
-  vncserver/cursor.c \
-  vncserver/font.c \
-  vncserver/draw.c \
-  vncserver/selbox.c \
-  vncserver/cargs.c \
-  vncserver/scale.c \
+  vncserver/ultra.c \
   vncserver/zlib.c \
   vncserver/zrle.c \
   vncserver/zrleoutstream.c \
   vncserver/zrlepalettehelper.c \
-  vncserver/tight.c
+  vncserver/common/vncauth.c
 
 all: all-am
 
@@ -371,6 +373,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/draw.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/font.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hextile.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/httpd.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rfbregion.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rfbserver.Po@am__quote@
@@ -379,8 +382,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/selbox.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sockets.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stats.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tight.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/translate.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ultra.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vncauth.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vncfb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/zlib.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/zrle.Po@am__quote@
@@ -401,6 +405,132 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(COMPILE) -c `$(CYGPATH_W) '$<'`
 
+auth.o: vncserver/auth.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT auth.o -MD -MP -MF $(DEPDIR)/auth.Tpo -c -o auth.o `test -f 'vncserver/auth.c' || echo '$(srcdir)/'`vncserver/auth.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/auth.Tpo $(DEPDIR)/auth.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/auth.c' object='auth.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o auth.o `test -f 'vncserver/auth.c' || echo '$(srcdir)/'`vncserver/auth.c
+
+auth.obj: vncserver/auth.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT auth.obj -MD -MP -MF $(DEPDIR)/auth.Tpo -c -o auth.obj `if test -f 'vncserver/auth.c'; then $(CYGPATH_W) 'vncserver/auth.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/auth.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/auth.Tpo $(DEPDIR)/auth.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/auth.c' object='auth.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o auth.obj `if test -f 'vncserver/auth.c'; then $(CYGPATH_W) 'vncserver/auth.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/auth.c'; fi`
+
+cargs.o: vncserver/cargs.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT cargs.o -MD -MP -MF $(DEPDIR)/cargs.Tpo -c -o cargs.o `test -f 'vncserver/cargs.c' || echo '$(srcdir)/'`vncserver/cargs.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/cargs.Tpo $(DEPDIR)/cargs.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/cargs.c' object='cargs.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o cargs.o `test -f 'vncserver/cargs.c' || echo '$(srcdir)/'`vncserver/cargs.c
+
+cargs.obj: vncserver/cargs.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT cargs.obj -MD -MP -MF $(DEPDIR)/cargs.Tpo -c -o cargs.obj `if test -f 'vncserver/cargs.c'; then $(CYGPATH_W) 'vncserver/cargs.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/cargs.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/cargs.Tpo $(DEPDIR)/cargs.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/cargs.c' object='cargs.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o cargs.obj `if test -f 'vncserver/cargs.c'; then $(CYGPATH_W) 'vncserver/cargs.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/cargs.c'; fi`
+
+corre.o: vncserver/corre.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT corre.o -MD -MP -MF $(DEPDIR)/corre.Tpo -c -o corre.o `test -f 'vncserver/corre.c' || echo '$(srcdir)/'`vncserver/corre.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/corre.Tpo $(DEPDIR)/corre.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/corre.c' object='corre.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o corre.o `test -f 'vncserver/corre.c' || echo '$(srcdir)/'`vncserver/corre.c
+
+corre.obj: vncserver/corre.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT corre.obj -MD -MP -MF $(DEPDIR)/corre.Tpo -c -o corre.obj `if test -f 'vncserver/corre.c'; then $(CYGPATH_W) 'vncserver/corre.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/corre.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/corre.Tpo $(DEPDIR)/corre.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/corre.c' object='corre.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o corre.obj `if test -f 'vncserver/corre.c'; then $(CYGPATH_W) 'vncserver/corre.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/corre.c'; fi`
+
+cursor.o: vncserver/cursor.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT cursor.o -MD -MP -MF $(DEPDIR)/cursor.Tpo -c -o cursor.o `test -f 'vncserver/cursor.c' || echo '$(srcdir)/'`vncserver/cursor.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/cursor.Tpo $(DEPDIR)/cursor.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/cursor.c' object='cursor.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o cursor.o `test -f 'vncserver/cursor.c' || echo '$(srcdir)/'`vncserver/cursor.c
+
+cursor.obj: vncserver/cursor.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT cursor.obj -MD -MP -MF $(DEPDIR)/cursor.Tpo -c -o cursor.obj `if test -f 'vncserver/cursor.c'; then $(CYGPATH_W) 'vncserver/cursor.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/cursor.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/cursor.Tpo $(DEPDIR)/cursor.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/cursor.c' object='cursor.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o cursor.obj `if test -f 'vncserver/cursor.c'; then $(CYGPATH_W) 'vncserver/cursor.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/cursor.c'; fi`
+
+cutpaste.o: vncserver/cutpaste.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT cutpaste.o -MD -MP -MF $(DEPDIR)/cutpaste.Tpo -c -o cutpaste.o `test -f 'vncserver/cutpaste.c' || echo '$(srcdir)/'`vncserver/cutpaste.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/cutpaste.Tpo $(DEPDIR)/cutpaste.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/cutpaste.c' object='cutpaste.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o cutpaste.o `test -f 'vncserver/cutpaste.c' || echo '$(srcdir)/'`vncserver/cutpaste.c
+
+cutpaste.obj: vncserver/cutpaste.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT cutpaste.obj -MD -MP -MF $(DEPDIR)/cutpaste.Tpo -c -o cutpaste.obj `if test -f 'vncserver/cutpaste.c'; then $(CYGPATH_W) 'vncserver/cutpaste.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/cutpaste.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/cutpaste.Tpo $(DEPDIR)/cutpaste.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/cutpaste.c' object='cutpaste.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o cutpaste.obj `if test -f 'vncserver/cutpaste.c'; then $(CYGPATH_W) 'vncserver/cutpaste.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/cutpaste.c'; fi`
+
+draw.o: vncserver/draw.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT draw.o -MD -MP -MF $(DEPDIR)/draw.Tpo -c -o draw.o `test -f 'vncserver/draw.c' || echo '$(srcdir)/'`vncserver/draw.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/draw.Tpo $(DEPDIR)/draw.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/draw.c' object='draw.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o draw.o `test -f 'vncserver/draw.c' || echo '$(srcdir)/'`vncserver/draw.c
+
+draw.obj: vncserver/draw.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT draw.obj -MD -MP -MF $(DEPDIR)/draw.Tpo -c -o draw.obj `if test -f 'vncserver/draw.c'; then $(CYGPATH_W) 'vncserver/draw.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/draw.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/draw.Tpo $(DEPDIR)/draw.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/draw.c' object='draw.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o draw.obj `if test -f 'vncserver/draw.c'; then $(CYGPATH_W) 'vncserver/draw.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/draw.c'; fi`
+
+font.o: vncserver/font.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT font.o -MD -MP -MF $(DEPDIR)/font.Tpo -c -o font.o `test -f 'vncserver/font.c' || echo '$(srcdir)/'`vncserver/font.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/font.Tpo $(DEPDIR)/font.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/font.c' object='font.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o font.o `test -f 'vncserver/font.c' || echo '$(srcdir)/'`vncserver/font.c
+
+font.obj: vncserver/font.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT font.obj -MD -MP -MF $(DEPDIR)/font.Tpo -c -o font.obj `if test -f 'vncserver/font.c'; then $(CYGPATH_W) 'vncserver/font.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/font.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/font.Tpo $(DEPDIR)/font.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/font.c' object='font.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o font.obj `if test -f 'vncserver/font.c'; then $(CYGPATH_W) 'vncserver/font.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/font.c'; fi`
+
+hextile.o: vncserver/hextile.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT hextile.o -MD -MP -MF $(DEPDIR)/hextile.Tpo -c -o hextile.o `test -f 'vncserver/hextile.c' || echo '$(srcdir)/'`vncserver/hextile.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/hextile.Tpo $(DEPDIR)/hextile.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/hextile.c' object='hextile.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o hextile.o `test -f 'vncserver/hextile.c' || echo '$(srcdir)/'`vncserver/hextile.c
+
+hextile.obj: vncserver/hextile.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT hextile.obj -MD -MP -MF $(DEPDIR)/hextile.Tpo -c -o hextile.obj `if test -f 'vncserver/hextile.c'; then $(CYGPATH_W) 'vncserver/hextile.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/hextile.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/hextile.Tpo $(DEPDIR)/hextile.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/hextile.c' object='hextile.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o hextile.obj `if test -f 'vncserver/hextile.c'; then $(CYGPATH_W) 'vncserver/hextile.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/hextile.c'; fi`
+
+httpd.o: vncserver/httpd.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT httpd.o -MD -MP -MF $(DEPDIR)/httpd.Tpo -c -o httpd.o `test -f 'vncserver/httpd.c' || echo '$(srcdir)/'`vncserver/httpd.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/httpd.Tpo $(DEPDIR)/httpd.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/httpd.c' object='httpd.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o httpd.o `test -f 'vncserver/httpd.c' || echo '$(srcdir)/'`vncserver/httpd.c
+
+httpd.obj: vncserver/httpd.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT httpd.obj -MD -MP -MF $(DEPDIR)/httpd.Tpo -c -o httpd.obj `if test -f 'vncserver/httpd.c'; then $(CYGPATH_W) 'vncserver/httpd.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/httpd.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/httpd.Tpo $(DEPDIR)/httpd.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/httpd.c' object='httpd.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o httpd.obj `if test -f 'vncserver/httpd.c'; then $(CYGPATH_W) 'vncserver/httpd.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/httpd.c'; fi`
+
 main.o: vncserver/main.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT main.o -MD -MP -MF $(DEPDIR)/main.Tpo -c -o main.o `test -f 'vncserver/main.c' || echo '$(srcdir)/'`vncserver/main.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/main.Tpo $(DEPDIR)/main.Po
@@ -414,20 +544,6 @@ main.obj: vncserver/main.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/main.c' object='main.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o main.obj `if test -f 'vncserver/main.c'; then $(CYGPATH_W) 'vncserver/main.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/main.c'; fi`
-
-rfbserver.o: vncserver/rfbserver.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT rfbserver.o -MD -MP -MF $(DEPDIR)/rfbserver.Tpo -c -o rfbserver.o `test -f 'vncserver/rfbserver.c' || echo '$(srcdir)/'`vncserver/rfbserver.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/rfbserver.Tpo $(DEPDIR)/rfbserver.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/rfbserver.c' object='rfbserver.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o rfbserver.o `test -f 'vncserver/rfbserver.c' || echo '$(srcdir)/'`vncserver/rfbserver.c
-
-rfbserver.obj: vncserver/rfbserver.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT rfbserver.obj -MD -MP -MF $(DEPDIR)/rfbserver.Tpo -c -o rfbserver.obj `if test -f 'vncserver/rfbserver.c'; then $(CYGPATH_W) 'vncserver/rfbserver.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/rfbserver.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/rfbserver.Tpo $(DEPDIR)/rfbserver.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/rfbserver.c' object='rfbserver.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o rfbserver.obj `if test -f 'vncserver/rfbserver.c'; then $(CYGPATH_W) 'vncserver/rfbserver.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/rfbserver.c'; fi`
 
 rfbregion.o: vncserver/rfbregion.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT rfbregion.o -MD -MP -MF $(DEPDIR)/rfbregion.Tpo -c -o rfbregion.o `test -f 'vncserver/rfbregion.c' || echo '$(srcdir)/'`vncserver/rfbregion.c
@@ -443,19 +559,61 @@ rfbregion.obj: vncserver/rfbregion.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o rfbregion.obj `if test -f 'vncserver/rfbregion.c'; then $(CYGPATH_W) 'vncserver/rfbregion.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/rfbregion.c'; fi`
 
-auth.o: vncserver/auth.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT auth.o -MD -MP -MF $(DEPDIR)/auth.Tpo -c -o auth.o `test -f 'vncserver/auth.c' || echo '$(srcdir)/'`vncserver/auth.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/auth.Tpo $(DEPDIR)/auth.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/auth.c' object='auth.o' libtool=no @AMDEPBACKSLASH@
+rfbserver.o: vncserver/rfbserver.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT rfbserver.o -MD -MP -MF $(DEPDIR)/rfbserver.Tpo -c -o rfbserver.o `test -f 'vncserver/rfbserver.c' || echo '$(srcdir)/'`vncserver/rfbserver.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/rfbserver.Tpo $(DEPDIR)/rfbserver.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/rfbserver.c' object='rfbserver.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o auth.o `test -f 'vncserver/auth.c' || echo '$(srcdir)/'`vncserver/auth.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o rfbserver.o `test -f 'vncserver/rfbserver.c' || echo '$(srcdir)/'`vncserver/rfbserver.c
 
-auth.obj: vncserver/auth.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT auth.obj -MD -MP -MF $(DEPDIR)/auth.Tpo -c -o auth.obj `if test -f 'vncserver/auth.c'; then $(CYGPATH_W) 'vncserver/auth.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/auth.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/auth.Tpo $(DEPDIR)/auth.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/auth.c' object='auth.obj' libtool=no @AMDEPBACKSLASH@
+rfbserver.obj: vncserver/rfbserver.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT rfbserver.obj -MD -MP -MF $(DEPDIR)/rfbserver.Tpo -c -o rfbserver.obj `if test -f 'vncserver/rfbserver.c'; then $(CYGPATH_W) 'vncserver/rfbserver.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/rfbserver.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/rfbserver.Tpo $(DEPDIR)/rfbserver.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/rfbserver.c' object='rfbserver.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o auth.obj `if test -f 'vncserver/auth.c'; then $(CYGPATH_W) 'vncserver/auth.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/auth.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o rfbserver.obj `if test -f 'vncserver/rfbserver.c'; then $(CYGPATH_W) 'vncserver/rfbserver.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/rfbserver.c'; fi`
+
+rre.o: vncserver/rre.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT rre.o -MD -MP -MF $(DEPDIR)/rre.Tpo -c -o rre.o `test -f 'vncserver/rre.c' || echo '$(srcdir)/'`vncserver/rre.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/rre.Tpo $(DEPDIR)/rre.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/rre.c' object='rre.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o rre.o `test -f 'vncserver/rre.c' || echo '$(srcdir)/'`vncserver/rre.c
+
+rre.obj: vncserver/rre.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT rre.obj -MD -MP -MF $(DEPDIR)/rre.Tpo -c -o rre.obj `if test -f 'vncserver/rre.c'; then $(CYGPATH_W) 'vncserver/rre.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/rre.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/rre.Tpo $(DEPDIR)/rre.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/rre.c' object='rre.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o rre.obj `if test -f 'vncserver/rre.c'; then $(CYGPATH_W) 'vncserver/rre.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/rre.c'; fi`
+
+scale.o: vncserver/scale.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT scale.o -MD -MP -MF $(DEPDIR)/scale.Tpo -c -o scale.o `test -f 'vncserver/scale.c' || echo '$(srcdir)/'`vncserver/scale.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/scale.Tpo $(DEPDIR)/scale.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/scale.c' object='scale.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o scale.o `test -f 'vncserver/scale.c' || echo '$(srcdir)/'`vncserver/scale.c
+
+scale.obj: vncserver/scale.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT scale.obj -MD -MP -MF $(DEPDIR)/scale.Tpo -c -o scale.obj `if test -f 'vncserver/scale.c'; then $(CYGPATH_W) 'vncserver/scale.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/scale.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/scale.Tpo $(DEPDIR)/scale.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/scale.c' object='scale.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o scale.obj `if test -f 'vncserver/scale.c'; then $(CYGPATH_W) 'vncserver/scale.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/scale.c'; fi`
+
+selbox.o: vncserver/selbox.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT selbox.o -MD -MP -MF $(DEPDIR)/selbox.Tpo -c -o selbox.o `test -f 'vncserver/selbox.c' || echo '$(srcdir)/'`vncserver/selbox.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/selbox.Tpo $(DEPDIR)/selbox.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/selbox.c' object='selbox.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o selbox.o `test -f 'vncserver/selbox.c' || echo '$(srcdir)/'`vncserver/selbox.c
+
+selbox.obj: vncserver/selbox.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT selbox.obj -MD -MP -MF $(DEPDIR)/selbox.Tpo -c -o selbox.obj `if test -f 'vncserver/selbox.c'; then $(CYGPATH_W) 'vncserver/selbox.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/selbox.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/selbox.Tpo $(DEPDIR)/selbox.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/selbox.c' object='selbox.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o selbox.obj `if test -f 'vncserver/selbox.c'; then $(CYGPATH_W) 'vncserver/selbox.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/selbox.c'; fi`
 
 sockets.o: vncserver/sockets.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT sockets.o -MD -MP -MF $(DEPDIR)/sockets.Tpo -c -o sockets.o `test -f 'vncserver/sockets.c' || echo '$(srcdir)/'`vncserver/sockets.c
@@ -485,48 +643,6 @@ stats.obj: vncserver/stats.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o stats.obj `if test -f 'vncserver/stats.c'; then $(CYGPATH_W) 'vncserver/stats.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/stats.c'; fi`
 
-corre.o: vncserver/corre.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT corre.o -MD -MP -MF $(DEPDIR)/corre.Tpo -c -o corre.o `test -f 'vncserver/corre.c' || echo '$(srcdir)/'`vncserver/corre.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/corre.Tpo $(DEPDIR)/corre.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/corre.c' object='corre.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o corre.o `test -f 'vncserver/corre.c' || echo '$(srcdir)/'`vncserver/corre.c
-
-corre.obj: vncserver/corre.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT corre.obj -MD -MP -MF $(DEPDIR)/corre.Tpo -c -o corre.obj `if test -f 'vncserver/corre.c'; then $(CYGPATH_W) 'vncserver/corre.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/corre.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/corre.Tpo $(DEPDIR)/corre.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/corre.c' object='corre.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o corre.obj `if test -f 'vncserver/corre.c'; then $(CYGPATH_W) 'vncserver/corre.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/corre.c'; fi`
-
-hextile.o: vncserver/hextile.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT hextile.o -MD -MP -MF $(DEPDIR)/hextile.Tpo -c -o hextile.o `test -f 'vncserver/hextile.c' || echo '$(srcdir)/'`vncserver/hextile.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/hextile.Tpo $(DEPDIR)/hextile.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/hextile.c' object='hextile.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o hextile.o `test -f 'vncserver/hextile.c' || echo '$(srcdir)/'`vncserver/hextile.c
-
-hextile.obj: vncserver/hextile.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT hextile.obj -MD -MP -MF $(DEPDIR)/hextile.Tpo -c -o hextile.obj `if test -f 'vncserver/hextile.c'; then $(CYGPATH_W) 'vncserver/hextile.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/hextile.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/hextile.Tpo $(DEPDIR)/hextile.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/hextile.c' object='hextile.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o hextile.obj `if test -f 'vncserver/hextile.c'; then $(CYGPATH_W) 'vncserver/hextile.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/hextile.c'; fi`
-
-rre.o: vncserver/rre.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT rre.o -MD -MP -MF $(DEPDIR)/rre.Tpo -c -o rre.o `test -f 'vncserver/rre.c' || echo '$(srcdir)/'`vncserver/rre.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/rre.Tpo $(DEPDIR)/rre.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/rre.c' object='rre.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o rre.o `test -f 'vncserver/rre.c' || echo '$(srcdir)/'`vncserver/rre.c
-
-rre.obj: vncserver/rre.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT rre.obj -MD -MP -MF $(DEPDIR)/rre.Tpo -c -o rre.obj `if test -f 'vncserver/rre.c'; then $(CYGPATH_W) 'vncserver/rre.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/rre.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/rre.Tpo $(DEPDIR)/rre.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/rre.c' object='rre.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o rre.obj `if test -f 'vncserver/rre.c'; then $(CYGPATH_W) 'vncserver/rre.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/rre.c'; fi`
-
 translate.o: vncserver/translate.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT translate.o -MD -MP -MF $(DEPDIR)/translate.Tpo -c -o translate.o `test -f 'vncserver/translate.c' || echo '$(srcdir)/'`vncserver/translate.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/translate.Tpo $(DEPDIR)/translate.Po
@@ -541,103 +657,19 @@ translate.obj: vncserver/translate.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o translate.obj `if test -f 'vncserver/translate.c'; then $(CYGPATH_W) 'vncserver/translate.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/translate.c'; fi`
 
-cutpaste.o: vncserver/cutpaste.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT cutpaste.o -MD -MP -MF $(DEPDIR)/cutpaste.Tpo -c -o cutpaste.o `test -f 'vncserver/cutpaste.c' || echo '$(srcdir)/'`vncserver/cutpaste.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/cutpaste.Tpo $(DEPDIR)/cutpaste.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/cutpaste.c' object='cutpaste.o' libtool=no @AMDEPBACKSLASH@
+ultra.o: vncserver/ultra.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT ultra.o -MD -MP -MF $(DEPDIR)/ultra.Tpo -c -o ultra.o `test -f 'vncserver/ultra.c' || echo '$(srcdir)/'`vncserver/ultra.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/ultra.Tpo $(DEPDIR)/ultra.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/ultra.c' object='ultra.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o cutpaste.o `test -f 'vncserver/cutpaste.c' || echo '$(srcdir)/'`vncserver/cutpaste.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o ultra.o `test -f 'vncserver/ultra.c' || echo '$(srcdir)/'`vncserver/ultra.c
 
-cutpaste.obj: vncserver/cutpaste.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT cutpaste.obj -MD -MP -MF $(DEPDIR)/cutpaste.Tpo -c -o cutpaste.obj `if test -f 'vncserver/cutpaste.c'; then $(CYGPATH_W) 'vncserver/cutpaste.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/cutpaste.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/cutpaste.Tpo $(DEPDIR)/cutpaste.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/cutpaste.c' object='cutpaste.obj' libtool=no @AMDEPBACKSLASH@
+ultra.obj: vncserver/ultra.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT ultra.obj -MD -MP -MF $(DEPDIR)/ultra.Tpo -c -o ultra.obj `if test -f 'vncserver/ultra.c'; then $(CYGPATH_W) 'vncserver/ultra.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/ultra.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/ultra.Tpo $(DEPDIR)/ultra.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/ultra.c' object='ultra.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o cutpaste.obj `if test -f 'vncserver/cutpaste.c'; then $(CYGPATH_W) 'vncserver/cutpaste.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/cutpaste.c'; fi`
-
-cursor.o: vncserver/cursor.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT cursor.o -MD -MP -MF $(DEPDIR)/cursor.Tpo -c -o cursor.o `test -f 'vncserver/cursor.c' || echo '$(srcdir)/'`vncserver/cursor.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/cursor.Tpo $(DEPDIR)/cursor.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/cursor.c' object='cursor.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o cursor.o `test -f 'vncserver/cursor.c' || echo '$(srcdir)/'`vncserver/cursor.c
-
-cursor.obj: vncserver/cursor.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT cursor.obj -MD -MP -MF $(DEPDIR)/cursor.Tpo -c -o cursor.obj `if test -f 'vncserver/cursor.c'; then $(CYGPATH_W) 'vncserver/cursor.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/cursor.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/cursor.Tpo $(DEPDIR)/cursor.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/cursor.c' object='cursor.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o cursor.obj `if test -f 'vncserver/cursor.c'; then $(CYGPATH_W) 'vncserver/cursor.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/cursor.c'; fi`
-
-font.o: vncserver/font.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT font.o -MD -MP -MF $(DEPDIR)/font.Tpo -c -o font.o `test -f 'vncserver/font.c' || echo '$(srcdir)/'`vncserver/font.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/font.Tpo $(DEPDIR)/font.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/font.c' object='font.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o font.o `test -f 'vncserver/font.c' || echo '$(srcdir)/'`vncserver/font.c
-
-font.obj: vncserver/font.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT font.obj -MD -MP -MF $(DEPDIR)/font.Tpo -c -o font.obj `if test -f 'vncserver/font.c'; then $(CYGPATH_W) 'vncserver/font.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/font.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/font.Tpo $(DEPDIR)/font.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/font.c' object='font.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o font.obj `if test -f 'vncserver/font.c'; then $(CYGPATH_W) 'vncserver/font.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/font.c'; fi`
-
-draw.o: vncserver/draw.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT draw.o -MD -MP -MF $(DEPDIR)/draw.Tpo -c -o draw.o `test -f 'vncserver/draw.c' || echo '$(srcdir)/'`vncserver/draw.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/draw.Tpo $(DEPDIR)/draw.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/draw.c' object='draw.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o draw.o `test -f 'vncserver/draw.c' || echo '$(srcdir)/'`vncserver/draw.c
-
-draw.obj: vncserver/draw.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT draw.obj -MD -MP -MF $(DEPDIR)/draw.Tpo -c -o draw.obj `if test -f 'vncserver/draw.c'; then $(CYGPATH_W) 'vncserver/draw.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/draw.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/draw.Tpo $(DEPDIR)/draw.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/draw.c' object='draw.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o draw.obj `if test -f 'vncserver/draw.c'; then $(CYGPATH_W) 'vncserver/draw.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/draw.c'; fi`
-
-selbox.o: vncserver/selbox.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT selbox.o -MD -MP -MF $(DEPDIR)/selbox.Tpo -c -o selbox.o `test -f 'vncserver/selbox.c' || echo '$(srcdir)/'`vncserver/selbox.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/selbox.Tpo $(DEPDIR)/selbox.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/selbox.c' object='selbox.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o selbox.o `test -f 'vncserver/selbox.c' || echo '$(srcdir)/'`vncserver/selbox.c
-
-selbox.obj: vncserver/selbox.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT selbox.obj -MD -MP -MF $(DEPDIR)/selbox.Tpo -c -o selbox.obj `if test -f 'vncserver/selbox.c'; then $(CYGPATH_W) 'vncserver/selbox.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/selbox.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/selbox.Tpo $(DEPDIR)/selbox.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/selbox.c' object='selbox.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o selbox.obj `if test -f 'vncserver/selbox.c'; then $(CYGPATH_W) 'vncserver/selbox.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/selbox.c'; fi`
-
-cargs.o: vncserver/cargs.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT cargs.o -MD -MP -MF $(DEPDIR)/cargs.Tpo -c -o cargs.o `test -f 'vncserver/cargs.c' || echo '$(srcdir)/'`vncserver/cargs.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/cargs.Tpo $(DEPDIR)/cargs.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/cargs.c' object='cargs.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o cargs.o `test -f 'vncserver/cargs.c' || echo '$(srcdir)/'`vncserver/cargs.c
-
-cargs.obj: vncserver/cargs.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT cargs.obj -MD -MP -MF $(DEPDIR)/cargs.Tpo -c -o cargs.obj `if test -f 'vncserver/cargs.c'; then $(CYGPATH_W) 'vncserver/cargs.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/cargs.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/cargs.Tpo $(DEPDIR)/cargs.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/cargs.c' object='cargs.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o cargs.obj `if test -f 'vncserver/cargs.c'; then $(CYGPATH_W) 'vncserver/cargs.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/cargs.c'; fi`
-
-scale.o: vncserver/scale.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT scale.o -MD -MP -MF $(DEPDIR)/scale.Tpo -c -o scale.o `test -f 'vncserver/scale.c' || echo '$(srcdir)/'`vncserver/scale.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/scale.Tpo $(DEPDIR)/scale.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/scale.c' object='scale.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o scale.o `test -f 'vncserver/scale.c' || echo '$(srcdir)/'`vncserver/scale.c
-
-scale.obj: vncserver/scale.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT scale.obj -MD -MP -MF $(DEPDIR)/scale.Tpo -c -o scale.obj `if test -f 'vncserver/scale.c'; then $(CYGPATH_W) 'vncserver/scale.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/scale.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/scale.Tpo $(DEPDIR)/scale.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/scale.c' object='scale.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o scale.obj `if test -f 'vncserver/scale.c'; then $(CYGPATH_W) 'vncserver/scale.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/scale.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o ultra.obj `if test -f 'vncserver/ultra.c'; then $(CYGPATH_W) 'vncserver/ultra.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/ultra.c'; fi`
 
 zlib.o: vncserver/zlib.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT zlib.o -MD -MP -MF $(DEPDIR)/zlib.Tpo -c -o zlib.o `test -f 'vncserver/zlib.c' || echo '$(srcdir)/'`vncserver/zlib.c
@@ -695,19 +727,19 @@ zrlepalettehelper.obj: vncserver/zrlepalettehelper.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o zrlepalettehelper.obj `if test -f 'vncserver/zrlepalettehelper.c'; then $(CYGPATH_W) 'vncserver/zrlepalettehelper.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/zrlepalettehelper.c'; fi`
 
-tight.o: vncserver/tight.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT tight.o -MD -MP -MF $(DEPDIR)/tight.Tpo -c -o tight.o `test -f 'vncserver/tight.c' || echo '$(srcdir)/'`vncserver/tight.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tight.Tpo $(DEPDIR)/tight.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/tight.c' object='tight.o' libtool=no @AMDEPBACKSLASH@
+vncauth.o: vncserver/common/vncauth.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT vncauth.o -MD -MP -MF $(DEPDIR)/vncauth.Tpo -c -o vncauth.o `test -f 'vncserver/common/vncauth.c' || echo '$(srcdir)/'`vncserver/common/vncauth.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/vncauth.Tpo $(DEPDIR)/vncauth.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/common/vncauth.c' object='vncauth.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o tight.o `test -f 'vncserver/tight.c' || echo '$(srcdir)/'`vncserver/tight.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o vncauth.o `test -f 'vncserver/common/vncauth.c' || echo '$(srcdir)/'`vncserver/common/vncauth.c
 
-tight.obj: vncserver/tight.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT tight.obj -MD -MP -MF $(DEPDIR)/tight.Tpo -c -o tight.obj `if test -f 'vncserver/tight.c'; then $(CYGPATH_W) 'vncserver/tight.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/tight.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tight.Tpo $(DEPDIR)/tight.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/tight.c' object='tight.obj' libtool=no @AMDEPBACKSLASH@
+vncauth.obj: vncserver/common/vncauth.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT vncauth.obj -MD -MP -MF $(DEPDIR)/vncauth.Tpo -c -o vncauth.obj `if test -f 'vncserver/common/vncauth.c'; then $(CYGPATH_W) 'vncserver/common/vncauth.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/common/vncauth.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/vncauth.Tpo $(DEPDIR)/vncauth.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='vncserver/common/vncauth.c' object='vncauth.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o tight.obj `if test -f 'vncserver/tight.c'; then $(CYGPATH_W) 'vncserver/tight.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/tight.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o vncauth.obj `if test -f 'vncserver/common/vncauth.c'; then $(CYGPATH_W) 'vncserver/common/vncauth.c'; else $(CYGPATH_W) '$(srcdir)/vncserver/common/vncauth.c'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique

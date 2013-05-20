@@ -3,10 +3,11 @@ AM_CPPFLAGS = \
     $(libpng_CFLAGS)
 
 AM_LDFLAGS = \
-    $(libpng_LDFLAGS) \
     $(top_srcdir)/build/drivers/common/libgfxcommon.a \
-    $(top_srcdir)/build/drivers/vncfb/libgfxvncfb.a
+    $(top_srcdir)/build/drivers/vncfb/libgfxvncfb.a \
+    $(libpng_LDFLAGS)
 
 bin_PROGRAMS = quicktest
 quicktest_SOURCES = \
     quicktest.c
+

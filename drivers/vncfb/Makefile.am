@@ -8,26 +8,28 @@ AM_CPPFLAGS = \
 lib_LIBRARIES = libgfxvncfb.a
 libgfxvncfb_a_SOURCES = \
   vncfb.c \
-  vncserver/main.c \
-  vncserver/rfbserver.c \
-  vncserver/rfbregion.c \
   vncserver/auth.c \
+  vncserver/cargs.c \
+  vncserver/corre.c \
+  vncserver/cursor.c \
+  vncserver/cutpaste.c \
+  vncserver/draw.c \
+  vncserver/font.c \
+  vncserver/hextile.c \
+  vncserver/httpd.c \
+  vncserver/main.c \
+  vncserver/rfbregion.c \
+  vncserver/rfbserver.c \
+  vncserver/rre.c \
+  vncserver/scale.c \
+  vncserver/selbox.c \
   vncserver/sockets.c \
   vncserver/stats.c \
-  vncserver/corre.c \
-  vncserver/hextile.c \
-  vncserver/rre.c \
   vncserver/translate.c \
-  vncserver/cutpaste.c \
-  vncserver/cursor.c \
-  vncserver/font.c \
-  vncserver/draw.c \
-  vncserver/selbox.c \
-  vncserver/cargs.c \
-  vncserver/scale.c \
+  vncserver/ultra.c \
   vncserver/zlib.c \
   vncserver/zrle.c \
   vncserver/zrleoutstream.c \
   vncserver/zrlepalettehelper.c \
-  vncserver/tight.c
+  vncserver/common/vncauth.c
 

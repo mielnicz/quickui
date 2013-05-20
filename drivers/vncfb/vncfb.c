@@ -10,6 +10,7 @@
 #include <string.h>
 #include <quickgfx.h>
 #include <gfxdriver.h>
+#include <rfb.h>
 
 /** Default framebuffer width */
 #define DEFAULT_DISPLAY_WIDTH  320
@@ -17,11 +18,18 @@
 /** Default framebuffer height */
 #define DEFAULT_DISPLAY_HEIGHT 240
 
-/** The framebuffer */
-static GFX_COLOR *g_pFrameBuffer;
-
-/** Our graphics driver structure */
+/** The global graphics driver structure */
 GFX_DRIVER g_GfxDriver;
+
+/* Internal state
+ */
+static GFX_COLOR       *g_pFrameBuffer;
+static rfbScreenInfoPtr g_pScreenInfo;
+static int              g_paintLevel;
+static int              g_minX;
+static int              g_maxX;
+static int              g_minY;
+static int              g_maxY;
 
 /** Set the color of a single pixel
  */
@@ -33,25 +41,35 @@ static GFX_RESULT gfx_vnc_PutPixel(uint16_t x, uint16_t y, GFX_COLOR color) {
 
 /** Implementation of BeginPaint
  *
- * This does nothing, we have no caching or paging operations to worry about.
  */
 static GFX_RESULT gfx_vnc_BeginPaint() {
-  // Nothing to do
+  g_paintLevel++;
   return GFX_RESULT_OK;
   }
 
 /** Implementation of BeginPaint
  *
- * This does nothing, we have no caching or paging operations to worry about.
  */
 static GFX_RESULT gfx_vnc_EndPaint() {
-  // Nothing to do
+  g_paintLevel--;
+  // Do we need to send an update ?
+  if(g_paintLevel>0)
+	return GFX_RESULT_OK;
+  // Yes, we do - send an update
+  rfbMarkRectAsModified(g_pScreenInfo, g_minX, g_minY, g_maxX, g_maxY);
+  // Clear the region
+  g_minX = 0;
+  g_maxX = 0;
+  g_minY = 0;
+  g_maxY = 0;
+  // And done
   return GFX_RESULT_OK;
   }
 
 /** Check for pending events
  */
 static GFX_RESULT gfx_vnc_CheckEvents(_gfx_HandleEvent pfHandleEvent) {
+  rfbProcessEvents(g_pScreenInfo, 10);
   return GFX_RESULT_OK;
   }
 
@@ -74,10 +92,22 @@ const void *gfx_Framebuffer() {
  * driver SPI structure.
  */
 GFX_RESULT gfx_Init(uint16_t width, uint16_t height) {
+  // Set internal state
+  g_paintLevel = 0;
+  g_minX = 0;
+  g_maxX = 0;
+  g_minY = 0;
+  g_maxY = 0;
+  // Initialise the VNC virtual screen
+  g_pScreenInfo = rfbGetScreen(NULL, NULL, DEFAULT_DISPLAY_WIDTH, DEFAULT_DISPLAY_HEIGHT, 5, 3, 2);
+  if(g_pScreenInfo==NULL)
+	return GFX_RESULT_INTERNAL;
   // Initialise our framebuffer
   g_pFrameBuffer = (GFX_COLOR *)calloc(DEFAULT_DISPLAY_WIDTH * DEFAULT_DISPLAY_HEIGHT, sizeof(GFX_COLOR));
   if(g_pFrameBuffer==NULL)
     return GFX_RESULT_MEMORY;
+  g_pScreenInfo->frameBuffer = (char *)g_pFrameBuffer;
+  rfbInitServer(g_pScreenInfo);
   // Set up the driver API
   g_GfxDriver.m_width = DEFAULT_DISPLAY_WIDTH;
   g_GfxDriver.m_height = DEFAULT_DISPLAY_HEIGHT;

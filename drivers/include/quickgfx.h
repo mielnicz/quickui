@@ -39,9 +39,10 @@ extern "C" {
 /** Return codes
  */
 typedef enum _GFX_RESULT {
-  GFX_RESULT_OK = 0, //! Operation succeeded
-  GFX_RESULT_MEMORY, //! Out of memory
-  GFX_RESULT_FAILED, //! Generic failure (when no other data is available)
+  GFX_RESULT_OK = 0,   //! Operation succeeded
+  GFX_RESULT_MEMORY,   //! Out of memory
+  GFX_RESULT_INTERNAL, //! Internal error (driver specific)
+  GFX_RESULT_FAILED,   //! Generic failure (when no other data is available)
   } GFX_RESULT;
 
 // These structures are all byte aligned (space is at a premium)
