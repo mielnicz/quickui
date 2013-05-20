@@ -1,5 +1,5 @@
-lib_LIBRARIES = gfxcommon
-gfxcommon_SOURCES = \
+lib_LIBRARIES = libgfxcommon.a
+libgfxcommon_a_SOURCES = \
     gfxDrawBox.c \
     gfxDrawIcon.c \
     gfxDrawIconPortion.c \

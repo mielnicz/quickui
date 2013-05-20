@@ -4,7 +4,8 @@ AC_CONFIG_SRCDIR(drivers/common/gfxDrawBox.c)
 
 AM_INIT_AUTOMAKE
 
-AC_PROG_CXX
+AC_PROG_CC
+AC_PROG_RANLIB
 
 AC_OUTPUT(Makefile drivers/Makefile drivers/common/Makefile)
 
