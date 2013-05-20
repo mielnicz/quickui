@@ -65,9 +65,11 @@ const void *gfx_Framebuffer() {
  * This function is implemented by the driver and is required to fill out the
  * driver SPI structure.
  */
-GFX_RESULT gfx_Init() {
+GFX_RESULT gfx_Init(uint16_t width, uint16_t height) {
   // Initialise our framebuffer
-//  memset(g_pFrameBuffer, 0, GENERIC_DISPLAY_WIDTH * GENERIC_DISPLAY_HEIGHT * sizeof(GFX_COLOR));
+  g_pFrameBuffer = (GFX_COLOR *)calloc(DEFAULT_DISPLAY_WIDTH * DEFAULT_DISPLAY_HEIGHT, sizeof(GFX_COLOR));
+  if(g_pFrameBuffer==NULL)
+    return GFX_RESULT_MEMORY;
   // Set up the driver API
   g_GfxDriver.m_width = DEFAULT_DISPLAY_WIDTH;
   g_GfxDriver.m_height = DEFAULT_DISPLAY_HEIGHT;

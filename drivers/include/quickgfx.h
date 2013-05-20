@@ -40,6 +40,7 @@ extern "C" {
  */
 typedef enum _GFX_RESULT {
   GFX_RESULT_OK = 0, //! Operation succeeded
+  GFX_RESULT_MEMORY, //! Out of memory
   GFX_RESULT_FAILED, //! Generic failure (when no other data is available)
   } GFX_RESULT;
 
@@ -178,9 +179,17 @@ extern GFX_DRIVER g_GfxDriver;
 /** Initialise the driver
  *
  * This function is implemented by the driver and is required to fill out the
- * driver SPI structure.
+ * driver SPI structure. You can request a specific size for the framebuffer
+ * but the driver is not required to honor it. Always check the width and
+ * height members for the driver structure to get the actual size.
+ *
+ * @param width the requested width of the framebuffer
+ * @param height the requested height of the framebuffer
+ *
+ * @return GFX_RESULT_OK if the driver is ready to use, another error code if
+ *                       things didn't go well.
  */
-GFX_RESULT gfx_Init();
+GFX_RESULT gfx_Init(uint16_t width, uint16_t height);
 
 /** Get the framebuffer the driver is using
  *
