@@ -7,5 +7,13 @@ AM_INIT_AUTOMAKE
 AC_PROG_CC
 AC_PROG_RANLIB
 
-AC_OUTPUT(Makefile drivers/Makefile drivers/common/Makefile)
+# Check for required libraries
+PKG_CHECK_MODULES([libpng], [libpng])
+
+AC_OUTPUT(
+  Makefile
+  drivers/Makefile
+  drivers/common/Makefile
+  drivers/vncfb/Makefile
+  )
 
