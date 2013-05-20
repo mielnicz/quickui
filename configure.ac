@@ -7,8 +7,26 @@ AM_INIT_AUTOMAKE
 AC_PROG_CC
 AC_PROG_RANLIB
 
+#----------------------------------------------------------------------------
+# Allow driver selection
+#
+# TODO: Need to do a sanity check to make sure at least one driver has been
+#       selected.
+#----------------------------------------------------------------------------
+
+AC_ARG_WITH([vncdriver],
+  AS_HELP_STRING([--with-vncdriver], [Use the VNC based driver]))
+
+#----------------------------------------------------------------------------
 # Check for required libraries
-PKG_CHECK_MODULES([libpng], [libpng])
+#----------------------------------------------------------------------------
+
+AS_IF([test "x$with_vncdriver" == "xyes"],
+      [PKG_CHECK_MODULES([libpng], [libpng])])
+
+#----------------------------------------------------------------------------
+# Generate output files
+#----------------------------------------------------------------------------
 
 AC_OUTPUT(
   Makefile
