@@ -7,5 +7,6 @@ libgfxcommon_a_SOURCES = \
     gfxDrawImage.c \
     gfxDrawImagePortion.c \
     gfxDrawLine.c \
-    gfxFillRegion.c
+    gfxFillRegion.c \
+    gfxCheckEvents.c
 

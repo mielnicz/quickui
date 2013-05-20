@@ -40,6 +40,9 @@ GFX_RESULT gfx_common_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y
 /** Draw a box */
 GFX_RESULT gfx_common_DrawBox(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, GFX_COLOR color);
 
+/** Check for pending events */
+GFX_RESULT gfx_common_CheckEvents(_gfx_HandleEvent pfHandleEvent);
+
 /* Guard for C++ */
 #ifdef __cplusplus
 };

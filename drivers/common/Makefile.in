@@ -98,7 +98,7 @@ libgfxcommon_a_LIBADD =
 am_libgfxcommon_a_OBJECTS = gfxDrawBox.$(OBJEXT) gfxDrawIcon.$(OBJEXT) \
 	gfxDrawIconPortion.$(OBJEXT) gfxDrawImage.$(OBJEXT) \
 	gfxDrawImagePortion.$(OBJEXT) gfxDrawLine.$(OBJEXT) \
-	gfxFillRegion.$(OBJEXT)
+	gfxFillRegion.$(OBJEXT) gfxCheckEvents.$(OBJEXT)
 libgfxcommon_a_OBJECTS = $(am_libgfxcommon_a_OBJECTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -254,7 +254,8 @@ libgfxcommon_a_SOURCES = \
     gfxDrawImage.c \
     gfxDrawImagePortion.c \
     gfxDrawLine.c \
-    gfxFillRegion.c
+    gfxFillRegion.c \
+    gfxCheckEvents.c
 
 all: all-am
 
@@ -332,6 +333,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gfxCheckEvents.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gfxDrawBox.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gfxDrawIcon.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gfxDrawIconPortion.Po@am__quote@

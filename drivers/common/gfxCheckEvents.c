@@ -1,17 +1,16 @@
 /*---------------------------------------------------------------------------*
 * Common implementation of graphics functions
 *----------------------------------------------------------------------------*
-* 24-Apr-2013 shaneg
+* 20-May-2013 shaneg
 *
-* This file implements a common version of the function that can be used by
-* any graphics driver.
+* Implements a general implementation of the CheckEvents SPI call.
 *---------------------------------------------------------------------------*/
 #include <stdint.h>
 #include <quickgfx.h>
 #include <gfxdriver.h>
 
-/** Draw an icon to the display
+/** Check for pending events
  */
-GFX_RESULT gfx_common_DrawIcon(uint16_t x, uint16_t y, GFX_ICON *pIcon, GFX_COLOR color) {
+GFX_RESULT gfx_common_CheckEvents(_gfx_HandleEvent pfHandleEvent) {
   return GFX_RESULT_OK;
   }

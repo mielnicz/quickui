@@ -55,6 +55,28 @@ typedef uint16_t GFX_COLOR;
  */
 typedef GFX_COLOR GFX_PALETTE[GFX_PALETTE_SIZE];
 
+/** Event types
+ *
+ * This enum defines the event types we recognise.
+ */
+typedef enum _GFX_EVENT {
+  GFX_EVENT_NONE = 0, //! Used for a NULL events. Can be ignored.
+  GFX_EVENT_KEY_DOWN, //! Key down event
+  GFX_EVENT_KEY_UP,   //! Key up event
+  GFX_EVENT_TOUCH,    //! Touch event
+  GFX_EVENT_RELEASE,  //! Release event
+  } GFX_EVENT;
+
+/** Represents a single event
+ *
+ * This structure holds information about an event.
+ */
+typedef struct _GFX_EVENT_INFO {
+  GFX_EVENT m_event;  //! The type of event that was detected
+  uint16_t  m_param1; //! The first parameter for the event
+  uint16_t  m_param2; //! The second parameter for the event
+  } GFX_EVENT_INFO;
+
 /** Image header information
  *
  * This structure provides common information about an image regardless of
@@ -122,6 +144,13 @@ typedef struct _GFX_ICON {
 // Graphics driver SPI
 //---------------------------------------------------------------------------
 
+/** Handle an event
+ *
+ * An implementation of this function is provided by the calling application
+ * and is used to receive information about events from the driver.
+ */
+typedef GFX_RESULT (*_gfx_HandleEvent)(GFX_EVENT_INFO *pEventInfo);
+
 /** Begin a multipart paint operation */
 typedef GFX_RESULT (*_gfx_BeginPaint)();
 
@@ -152,6 +181,10 @@ typedef GFX_RESULT (*_gfx_DrawLine)(uint16_t x1, uint16_t y1, uint16_t x2, uint1
 /** Draw a box */
 typedef GFX_RESULT (*_gfx_DrawBox)(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, GFX_COLOR color);
 
+/** Process pending events
+ */
+typedef GFX_RESULT (*_gfx_CheckEvents)(_gfx_HandleEvent pfHandleEvent);
+
 /** The graphics driver API
  */
 typedef struct _GFX_DRIVER {
@@ -167,6 +200,7 @@ typedef struct _GFX_DRIVER {
   _gfx_DrawImagePortion m_pfDrawImagePortion; //! Draw a portion of an image
   _gfx_DrawLine         m_pfDrawLine;         //! Draw a line
   _gfx_DrawBox          m_pfDrawBox;          //! Draw a box
+  _gfx_CheckEvents      m_pfCheckEvents;      //! Check for pending events
   } GFX_DRIVER;
 
 //---------------------------------------------------------------------------
@@ -242,6 +276,9 @@ const void *gfx_Framebuffer();
 
 /** Draw a box */
 #define gfx_DrawBox(x1, y1, x2, y2, color) (*g_GfxDriver.m_pfDrawBox)(x1, y1, x2, y2, color)
+
+/** Check for pending events */
+#define gfx_CheckEvents(pfHandleEvent) (*g_GfxDriver.m_pfCheckEvents)(pfHandleEvent)
 
 /** Clip a value
  *
