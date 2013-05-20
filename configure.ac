@@ -33,5 +33,7 @@ AC_OUTPUT(
   drivers/Makefile
   drivers/common/Makefile
   drivers/vncfb/Makefile
+  testing/Makefile
+  testing/simple/Makefile
   )
 

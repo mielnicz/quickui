@@ -3682,7 +3682,7 @@ fi
 # Generate output files
 #----------------------------------------------------------------------------
 
-ac_config_files="$ac_config_files Makefile drivers/Makefile drivers/common/Makefile drivers/vncfb/Makefile"
+ac_config_files="$ac_config_files Makefile drivers/Makefile drivers/common/Makefile drivers/vncfb/Makefile testing/Makefile testing/simple/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -4430,6 +4430,8 @@ do
     "drivers/Makefile") CONFIG_FILES="$CONFIG_FILES drivers/Makefile" ;;
     "drivers/common/Makefile") CONFIG_FILES="$CONFIG_FILES drivers/common/Makefile" ;;
     "drivers/vncfb/Makefile") CONFIG_FILES="$CONFIG_FILES drivers/vncfb/Makefile" ;;
+    "testing/Makefile") CONFIG_FILES="$CONFIG_FILES testing/Makefile" ;;
+    "testing/simple/Makefile") CONFIG_FILES="$CONFIG_FILES testing/simple/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
