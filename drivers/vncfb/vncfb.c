@@ -25,7 +25,7 @@ GFX_DRIVER g_GfxDriver;
 
 /** Set the color of a single pixel
  */
-static GFX_RESULT gfx_generic_PutPixel(uint16_t x, uint16_t y, GFX_COLOR color) {
+static GFX_RESULT gfx_vnc_PutPixel(uint16_t x, uint16_t y, GFX_COLOR color) {
   if(GFX_CLIP(x, y))
     g_pFrameBuffer[(y * g_GfxDriver.m_width) + x] = color;
   return GFX_RESULT_OK;
@@ -35,16 +35,24 @@ static GFX_RESULT gfx_generic_PutPixel(uint16_t x, uint16_t y, GFX_COLOR color) 
  *
  * This does nothing, we have no caching or paging operations to worry about.
  */
-static GFX_RESULT gfx_generic_BeginPaint() {
+static GFX_RESULT gfx_vnc_BeginPaint() {
   // Nothing to do
+  return GFX_RESULT_OK;
   }
 
 /** Implementation of BeginPaint
  *
  * This does nothing, we have no caching or paging operations to worry about.
  */
-static GFX_RESULT gfx_generic_EndPaint() {
+static GFX_RESULT gfx_vnc_EndPaint() {
   // Nothing to do
+  return GFX_RESULT_OK;
+  }
+
+/** Check for pending events
+ */
+static GFX_RESULT gfx_vnc_CheckEvents(_gfx_HandleEvent pfHandleEvent) {
+  return GFX_RESULT_OK;
   }
 
 /** Get the framebuffer the driver is using
@@ -73,9 +81,9 @@ GFX_RESULT gfx_Init(uint16_t width, uint16_t height) {
   // Set up the driver API
   g_GfxDriver.m_width = DEFAULT_DISPLAY_WIDTH;
   g_GfxDriver.m_height = DEFAULT_DISPLAY_HEIGHT;
-  g_GfxDriver.m_pfBeginPaint = gfx_generic_BeginPaint;
-  g_GfxDriver.m_pfEndPaint = gfx_generic_EndPaint;
-  g_GfxDriver.m_pfPutPixel = gfx_generic_PutPixel;
+  g_GfxDriver.m_pfBeginPaint = gfx_vnc_BeginPaint;
+  g_GfxDriver.m_pfEndPaint = gfx_vnc_EndPaint;
+  g_GfxDriver.m_pfPutPixel = gfx_vnc_PutPixel;
   g_GfxDriver.m_pfFillRegion = gfx_common_FillRegion;
   g_GfxDriver.m_pfDrawIcon = gfx_common_DrawIcon;
   g_GfxDriver.m_pfDrawIconPortion = gfx_common_DrawIconPortion;
@@ -83,7 +91,7 @@ GFX_RESULT gfx_Init(uint16_t width, uint16_t height) {
   g_GfxDriver.m_pfDrawImagePortion = gfx_common_DrawImagePortion;
   g_GfxDriver.m_pfDrawLine = gfx_common_DrawLine;
   g_GfxDriver.m_pfDrawBox = gfx_common_DrawBox;
-  g_GfxDriver.m_pfCheckEvents = gfx_common_CheckEvents;
+  g_GfxDriver.m_pfCheckEvents = gfx_vnc_CheckEvents;
   // All done
   return GFX_RESULT_OK;
   }
