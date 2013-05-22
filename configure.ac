@@ -1,11 +1,29 @@
 AC_INIT(quickui, 0.1, shane@thegaragelab.com)
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_SRCDIR(drivers/common/gfxDrawBox.c)
+AC_CANONICAL_SYSTEM
 
 AM_INIT_AUTOMAKE
 
 AC_PROG_CC
 AC_PROG_RANLIB
+
+AC_PROG_TRY_JAVAC
+AC_PROG_TRY_JAVAH
+AC_PROG_TRY_JAVADOC
+AC_PROG_TRY_JAR
+
+#----------------------------------------------------------------------------
+# Do some Java specific stuff
+#----------------------------------------------------------------------------
+
+have_java=yes
+have_java=yes
+if test -z "$JAVAC"; then have_java=no; fi
+if test -z "$JAVAH"; then have_java=no; fi
+if test -z "$JAR"; then have_java=no; fi
+AM_CONDITIONAL([HAVE_JAVA],
+  [test "x$have_java" = xyes])
 
 #----------------------------------------------------------------------------
 # Allow driver selection
