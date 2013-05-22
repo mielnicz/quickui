@@ -39,6 +39,10 @@ static GFX_PALETTE g_Palette = {
   GFX_COLOR_FROM_RGB(255, 255, 255),
   };
 
+GFX_COLOR COLOR_RED   = GFX_COLOR_FROM_RGB(255, 0, 0);
+GFX_COLOR COLOR_GREEN = GFX_COLOR_FROM_RGB(0, 255, 0);
+GFX_COLOR COLOR_BLUE  = GFX_COLOR_FROM_RGB(0, 0, 255);
+
 /** Get the current time stamp in milliseconds
  *
  */
@@ -69,6 +73,12 @@ int main(int argc, char *argv[]) {
 	if(!(now%250))
 	  gfx_CheckEvents(NULL);
 	// Draw a rectangle
+	if(!(now%5000)) {
+	  w = g_GfxDriver.m_width / 3;
+	  gfx_FillRegion(0, 0, w, g_GfxDriver.m_height, COLOR_RED);
+	  gfx_FillRegion(w, 0, w * 2, g_GfxDriver.m_height, COLOR_GREEN);
+	  gfx_FillRegion(w * 2, 0, g_GfxDriver.m_width, g_GfxDriver.m_height, COLOR_BLUE);
+	  }
 	if(!(now%1000)) {
 	  // Pick a size and position for the rectangle
 	  w = (rand() % (MAX_RECT_WIDTH - MIN_RECT_WIDTH)) + MIN_RECT_WIDTH;
