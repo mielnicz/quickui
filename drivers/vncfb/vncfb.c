@@ -36,6 +36,12 @@ static int              g_maxY;
 static GFX_RESULT gfx_vnc_PutPixel(uint16_t x, uint16_t y, GFX_COLOR color) {
   if(GFX_CLIP(x, y))
     g_pFrameBuffer[(y * g_GfxDriver.m_width) + x] = color;
+  // Change the current update region
+  g_minX = (x<g_minX)?x:g_minX;
+  g_minY = (y<g_minY)?y:g_minY;
+  g_maxX = (x>g_maxX)?x:g_maxX;
+  g_maxY = (y>g_maxY)?y:g_maxY;
+  // All done
   return GFX_RESULT_OK;
   }
 
@@ -69,7 +75,7 @@ static GFX_RESULT gfx_vnc_EndPaint() {
 /** Check for pending events
  */
 static GFX_RESULT gfx_vnc_CheckEvents(_gfx_HandleEvent pfHandleEvent) {
-  rfbProcessEvents(g_pScreenInfo, 10);
+  rfbProcessEvents(g_pScreenInfo, 10000);
   return GFX_RESULT_OK;
   }
 

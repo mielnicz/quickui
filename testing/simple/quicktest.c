@@ -66,10 +66,8 @@ int main(int argc, char *argv[]) {
   while(true) {
 	now = currentTimeMillis();
 	// Check for input events
-	if(!(now%250)) {
-	  printf("Checking for input events.\n");
+	if(!(now%250))
 	  gfx_CheckEvents(NULL);
-	  }
 	// Draw a rectangle
 	if(!(now%1000)) {
 	  // Pick a size and position for the rectangle
@@ -77,7 +75,6 @@ int main(int argc, char *argv[]) {
 	  h = (rand() % (MAX_RECT_HEIGHT - MIN_RECT_HEIGHT)) + MIN_RECT_HEIGHT;
 	  x = rand() % (g_GfxDriver.m_width - w);
 	  y = rand() % (g_GfxDriver.m_height - h);
-	  printf("Drawing a rectangle @ %i, %i (%i x %i).\n", x, y, w, h);
 	  gfx_FillRegion(x, y, x + w, y + h, g_Palette[rand() % GFX_PALETTE_SIZE]);
 	  }
     }
