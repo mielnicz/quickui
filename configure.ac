@@ -1,12 +1,13 @@
 AC_INIT(quickui, 0.1, shane@thegaragelab.com)
 AC_CONFIG_AUX_DIR(config)
+AC_CONFIG_MACRO_DIR(m4)
 AC_CONFIG_SRCDIR(drivers/common/gfxDrawBox.c)
 AC_CANONICAL_SYSTEM
 
 AM_INIT_AUTOMAKE
+LT_INIT
 
 AC_PROG_CC
-AC_PROG_RANLIB
 
 AC_PROG_TRY_JAVAC
 AC_PROG_TRY_JAVAH
@@ -54,6 +55,7 @@ AC_OUTPUT(
   drivers/Makefile
   drivers/common/Makefile
   drivers/vncfb/Makefile
+  drivers/jnilib/Makefile
   testing/Makefile
   testing/simple/Makefile
   )
