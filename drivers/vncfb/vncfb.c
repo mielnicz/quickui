@@ -105,9 +105,13 @@ GFX_RESULT gfx_Init(uint16_t width, uint16_t height) {
   g_minY = 0;
   g_maxY = 0;
   // Initialise the VNC virtual screen
+  rfbLogEnable(0);
   g_pScreenInfo = rfbGetScreen(NULL, NULL, DEFAULT_DISPLAY_WIDTH, DEFAULT_DISPLAY_HEIGHT, 5, 3, 2);
   if(g_pScreenInfo==NULL)
 	return GFX_RESULT_INTERNAL;
+  g_pScreenInfo->serverFormat.redShift = 11;
+  g_pScreenInfo->serverFormat.greenShift = 6;
+  g_pScreenInfo->serverFormat.blueShift = 0;
   // Initialise our framebuffer
   g_pFrameBuffer = (GFX_COLOR *)calloc(DEFAULT_DISPLAY_WIDTH * DEFAULT_DISPLAY_HEIGHT, sizeof(GFX_COLOR));
   if(g_pFrameBuffer==NULL)
