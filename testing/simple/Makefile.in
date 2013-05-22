@@ -190,8 +190,10 @@ infodir = @infodir@
 install_sh = @install_sh@
 libdir = @libdir@
 libexecdir = @libexecdir@
-libpng_CFLAGS = @libpng_CFLAGS@
-libpng_LIBS = @libpng_LIBS@
+libjpeg_CFLAGS = @libjpeg_CFLAGS@
+libjpeg_LIBS = @libjpeg_LIBS@
+libz_CFLAGS = @libz_CFLAGS@
+libz_LIBS = @libz_LIBS@
 localedir = @localedir@
 localstatedir = @localstatedir@
 mandir = @mandir@
@@ -210,13 +212,12 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = \
-    -I$(top_srcdir)/drivers/include \
-    $(libpng_CFLAGS)
+    -I$(top_srcdir)/drivers/include
 
 AM_LDFLAGS = \
     $(top_srcdir)/build/drivers/common/libgfxcommon.a \
     $(top_srcdir)/build/drivers/vncfb/libgfxvncfb.a \
-    $(libpng_LDFLAGS)
+    -ljpeg -lz
 
 quicktest_SOURCES = \
     quicktest.c

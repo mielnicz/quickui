@@ -22,7 +22,10 @@ AC_ARG_WITH([vncdriver],
 #----------------------------------------------------------------------------
 
 AS_IF([test "x$with_vncdriver" == "xyes"],
-      [PKG_CHECK_MODULES([libpng], [libpng])])
+      [PKG_CHECK_MODULES([libjpeg], [libjpeg])])
+
+AS_IF([test "x$with_vncdriver" == "xyes"],
+      [PKG_CHECK_MODULES([libz], [libz])])
 
 #----------------------------------------------------------------------------
 # Generate output files
