@@ -16,4 +16,4 @@ if [ ! -d ${CLASS_DIR} ]; then
 fi
 
 # Generate the JNI header file
-javah -classpath ${CLASS_DIR} -o ${JNI_DIR}/jnidriver.h com.thegaragelab.quickui.driver.Driver
+javah -classpath ${CLASS_DIR} -o ${JNI_DIR}/jnidriver.h com.thegaragelab.quickui.Driver

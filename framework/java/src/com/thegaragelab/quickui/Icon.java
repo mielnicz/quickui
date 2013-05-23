@@ -5,7 +5,7 @@
 * 
 * Initial version
 *---------------------------------------------------------------------------*/
-package com.thegaragelab.quickui.driver;
+package com.thegaragelab.quickui;
 
 /** Represent an icon
  */
