@@ -19,12 +19,19 @@ AC_PROG_TRY_JAR
 #----------------------------------------------------------------------------
 
 have_java=yes
-have_java=yes
 if test -z "$JAVAC"; then have_java=no; fi
 if test -z "$JAVAH"; then have_java=no; fi
 if test -z "$JAR"; then have_java=no; fi
 AM_CONDITIONAL([HAVE_JAVA],
   [test "x$have_java" = xyes])
+
+# Set include directories for JNI
+AX_JNI_INCLUDE_DIR
+
+for JNI_INCLUDE_DIR in $JNI_INCLUDE_DIRS
+do
+    CPPFLAGS="$CPPFLAGS -I$JNI_INCLUDE_DIR"
+done
 
 #----------------------------------------------------------------------------
 # Allow driver selection

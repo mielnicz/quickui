@@ -1,5 +1,4 @@
 AM_CPPFLAGS = \
-    -I/System/Library/Frameworks/JavaVM.framework/Headers \
     -I$(top_srcdir)/drivers/include
 
 AM_LDFLAGS = \
