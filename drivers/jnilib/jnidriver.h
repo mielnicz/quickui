@@ -33,6 +33,14 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxEndPaint
 
 /*
  * Class:     com_thegaragelab_quickui_Driver
+ * Method:    gfxSetClip
+ * Signature: (IIII)I
+ */
+JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxSetClip
+  (JNIEnv *, jobject, jint, jint, jint, jint);
+
+/*
+ * Class:     com_thegaragelab_quickui_Driver
  * Method:    gfxPutPixel
  * Signature: (III)I
  */

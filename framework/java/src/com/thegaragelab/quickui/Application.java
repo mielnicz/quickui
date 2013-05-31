@@ -114,6 +114,7 @@ public class Application extends Container {
    * This method is used to signal the start of a complex paint operation.
    * It is used to help the driver optimise updates to the physical display.
    */
+  @Override
   public void beginPaint() {
     m_driver.beginPaint();
     }
@@ -122,8 +123,18 @@ public class Application extends Container {
    * 
    * This method is used to signal the end of a complex paint operation.
    */
+  @Override
   public void endPaint() {
     m_driver.endPaint();
+    }
+
+  /** Set the clipping region for future operations
+   * 
+   * @param rect the Rectangle describing the clipping region.
+   */
+  @Override
+  public void setClip(IRectangle rect) {
+    m_driver.setClip(rect);
     }
 
   /** Display a single pixel.
@@ -131,7 +142,8 @@ public class Application extends Container {
    * @param point the Point at which to display the pixel.
    * @param color the Color to set the pixel to.
    */
-  public void putPixel(Point point, Color color) {
+  @Override
+  public void putPixel(IPoint point, Color color) {
     m_driver.putPixel(point, color);
     }
 
@@ -140,7 +152,8 @@ public class Application extends Container {
    * @param rect the Rectangle describing the area to fill.
    * @param color the Color to fill the rectangle with.
    */
-  public void fillRect(Rectangle rect, Color color) {
+  @Override
+  public void fillRect(IRectangle rect, Color color) {
     m_driver.fillRect(rect, color);
     }
   
@@ -150,7 +163,8 @@ public class Application extends Container {
    * @param end the ending point for the line.
    * @param color the color to draw the line in.
    */
-  public void drawLine(Point start, Point end, Color color) {
+  @Override
+  public void drawLine(IPoint start, IPoint end, Color color) {
     m_driver.drawLine(start, end, color);
     }
   
@@ -159,7 +173,8 @@ public class Application extends Container {
    * @param rect the Rectangle to draw the box around.
    * @param color the Color to draw the box in.
    */
-  public void drawBox(Rectangle rect, Color color) {
+  @Override
+  public void drawBox(IRectangle rect, Color color) {
     m_driver.drawBox(rect, color);
     }
 
@@ -169,7 +184,8 @@ public class Application extends Container {
    * @param icon the Icon to display.
    * @param color the Color to use for the solid parts of the icon.
    */
-  public void drawIcon(Point point, Icon icon, Color color) {
+  @Override
+  public void drawIcon(IPoint point, Icon icon, Color color) {
     m_driver.drawIcon(point, icon, color);
     }
 
@@ -180,7 +196,8 @@ public class Application extends Container {
    * @param color the Color to use for the solid parts of the icon.
    * @param portion a Rectangle specifying the portion of the icon to draw.
    */
-  public void drawIcon(Point point, Icon icon, Color color, Rectangle portion) {
+  @Override
+  public void drawIcon(IPoint point, Icon icon, Color color, IRectangle portion) {
     m_driver.drawIcon(point, icon, color, portion);
     }
   
@@ -190,7 +207,8 @@ public class Application extends Container {
    * @param image the Image to display.
    * @param palette the Palette to use to display the image.
    */
-  public void drawImage(Point point, Image image, Palette palette) {
+  @Override
+  public void drawImage(IPoint point, Image image, Palette palette) {
     m_driver.drawImage(point, image, palette);
     }
   
@@ -201,7 +219,8 @@ public class Application extends Container {
    * @param palette the Palette to use to display the image.
    * @param portion the Rectangle describing the portion of the image to display.
    */
-  public void drawImage(Point point, Image image, Palette palette, Rectangle portion) {
+  @Override
+  public void drawImage(IPoint point, Image image, Palette palette, IRectangle portion) {
     m_driver.drawImage(point, image, palette, portion);
     }
   

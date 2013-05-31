@@ -25,19 +25,25 @@ public interface ISurface extends IDimension {
    */
   public void endPaint();
 
+  /** Set the clipping region for future operations
+   * 
+   * @param rect the Rectangle describing the clipping region.
+   */
+  public void setClip(IRectangle rect);
+  
   /** Display a single pixel.
    * 
    * @param point the Point at which to display the pixel.
    * @param color the Color to set the pixel to.
    */
-  public void putPixel(Point point, Color color);
+  public void putPixel(IPoint point, Color color);
 
   /** Fill a rectangle with a specific color.
    * 
    * @param rect the Rectangle describing the area to fill.
    * @param color the Color to fill the rectangle with.
    */
-  public void fillRect(Rectangle rect, Color color);
+  public void fillRect(IRectangle rect, Color color);
   
   /** Draw a line from one point to another 
    * 
@@ -45,14 +51,14 @@ public interface ISurface extends IDimension {
    * @param end the ending point for the line.
    * @param color the color to draw the line in.
    */
-  public void drawLine(Point start, Point end, Color color);
+  public void drawLine(IPoint start, IPoint end, Color color);
   
   /** Draw a box around a rectangle.
    * 
    * @param rect the Rectangle to draw the box around.
    * @param color the Color to draw the box in.
    */
-  public void drawBox(Rectangle rect, Color color);
+  public void drawBox(IRectangle rect, Color color);
 
   /** Draw an Icon to the screen.
    * 
@@ -60,7 +66,7 @@ public interface ISurface extends IDimension {
    * @param icon the Icon to display.
    * @param color the Color to use for the solid parts of the icon.
    */
-  public void drawIcon(Point point, Icon icon, Color color);
+  public void drawIcon(IPoint point, Icon icon, Color color);
 
   /** Draw a portion of an Icon to the screen.
    * 
@@ -69,7 +75,7 @@ public interface ISurface extends IDimension {
    * @param color the Color to use for the solid parts of the icon.
    * @param portion a Rectangle specifying the portion of the icon to draw.
    */
-  public void drawIcon(Point point, Icon icon, Color color, Rectangle portion);
+  public void drawIcon(IPoint point, Icon icon, Color color, IRectangle portion);
   
   /** Draw an Image to the screen.
    * 
@@ -77,7 +83,7 @@ public interface ISurface extends IDimension {
    * @param image the Image to display.
    * @param palette the Palette to use to display the image.
    */
-  public void drawImage(Point point, Image image, Palette palette);
+  public void drawImage(IPoint point, Image image, Palette palette);
   
   /** Draw a portion of an Image to the screen.
    * 
@@ -86,6 +92,6 @@ public interface ISurface extends IDimension {
    * @param palette the Palette to use to display the image.
    * @param portion the Rectangle describing the portion of the image to display.
    */
-  public void drawImage(Point point, Image image, Palette palette, Rectangle portion);
+  public void drawImage(IPoint point, Image image, Palette palette, IRectangle portion);
 
   }

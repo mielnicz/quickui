@@ -62,6 +62,10 @@ class Driver implements ISurface {
    */
   private native int gfxEndPaint();
 
+  /** Set the clipping region
+   */
+  private native int gfxSetClip(int x1, int y1, int x2, int y2);
+  
   /** Set the color of a single pixel 
    */
   private native int gfxPutPixel(int x, int y, int color);
@@ -173,13 +177,24 @@ class Driver implements ISurface {
     gfxEndPaint();
     }
 
+  /** Set the clipping region for future paint operations
+   * 
+   * @param x1 the X co-ordinate of the top left corner of the region
+   * @param y1 the Y co-ordinate of the top left corner of the region
+   * @param x2 the X co-ordinate of the top right corner of the region
+   * @param y2 the Y co-ordinate of the top right corner of the region
+   */
+  public void setClip(IRectangle rect) {
+    gfxSetClip(rect.getX(), rect.getY(), rect.getX() + rect.getWidth() - 1, rect.getY() + rect.getHeight() - 1);
+    }
+
   /** Display a single pixel.
    * 
    * @param point the Point at which to display the pixel.
    * @param color the Color to set the pixel to.
    */
-  public void putPixel(Point point, Color color) {
-    gfxPutPixel(point.x, point.y, color.getNativeFormat());
+  public void putPixel(IPoint point, Color color) {
+    gfxPutPixel(point.getX(), point.getY(), color.getNativeFormat());
     }
 
   /** Fill a rectangle with a specific color.
@@ -187,8 +202,8 @@ class Driver implements ISurface {
    * @param rect the Rectangle describing the area to fill.
    * @param color the Color to fill the rectangle with.
    */
-  public void fillRect(Rectangle rect, Color color) {
-    gfxFillRegion(rect.x, rect.y, rect.x + rect.width - 1, rect.y + rect.height - 1, color.getNativeFormat());
+  public void fillRect(IRectangle rect, Color color) {
+    gfxFillRegion(rect.getX(), rect.getY(), rect.getX() + rect.getWidth() - 1, rect.getY() + rect.getHeight() - 1, color.getNativeFormat());
     }
   
   /** Draw a line from one point to another 
@@ -197,8 +212,8 @@ class Driver implements ISurface {
    * @param end the ending point for the line.
    * @param color the color to draw the line in.
    */
-  public void drawLine(Point start, Point end, Color color) {
-    gfxDrawLine(start.x, start.y, end.x, end.y, color.getNativeFormat());
+  public void drawLine(IPoint start, IPoint end, Color color) {
+    gfxDrawLine(start.getX(), start.getY(), end.getX(), end.getY(), color.getNativeFormat());
     }
   
   /** Draw a box around a rectangle.
@@ -206,8 +221,8 @@ class Driver implements ISurface {
    * @param rect the Rectangle to draw the box around.
    * @param color the Color to draw the box in.
    */
-  public void drawBox(Rectangle rect, Color color) {
-    gfxDrawBox(rect.x, rect.y, rect.x + rect.width - 1, rect.y + rect.height - 1, color.getNativeFormat());
+  public void drawBox(IRectangle rect, Color color) {
+    gfxDrawBox(rect.getX(), rect.getY(), rect.getX() + rect.getWidth() - 1, rect.getY() + rect.getHeight() - 1, color.getNativeFormat());
     }
 
   /** Draw an Icon to the screen.
@@ -216,7 +231,7 @@ class Driver implements ISurface {
    * @param icon the Icon to display.
    * @param color the Color to use for the solid parts of the icon.
    */
-  public void drawIcon(Point point, Icon icon, Color color) {
+  public void drawIcon(IPoint point, Icon icon, Color color) {
     }
 
   /** Draw a portion of an Icon to the screen.
@@ -226,7 +241,7 @@ class Driver implements ISurface {
    * @param color the Color to use for the solid parts of the icon.
    * @param portion a Rectangle specifying the portion of the icon to draw.
    */
-  public void drawIcon(Point point, Icon icon, Color color, Rectangle portion) {
+  public void drawIcon(IPoint point, Icon icon, Color color, IRectangle portion) {
     }
   
   /** Draw an Image to the screen.
@@ -235,7 +250,7 @@ class Driver implements ISurface {
    * @param image the Image to display.
    * @param palette the Palette to use to display the image.
    */
-  public void drawImage(Point point, Image image, Palette palette) {
+  public void drawImage(IPoint point, Image image, Palette palette) {
     }
   
   /** Draw a portion of an Image to the screen.
@@ -245,7 +260,7 @@ class Driver implements ISurface {
    * @param palette the Palette to use to display the image.
    * @param portion the Rectangle describing the portion of the image to display.
    */
-  public void drawImage(Point point, Image image, Palette palette, Rectangle portion) {
+  public void drawImage(IPoint point, Image image, Palette palette, IRectangle portion) {
     }
   
   //-------------------------------------------------------------------------
