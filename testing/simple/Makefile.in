@@ -74,7 +74,9 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_quicktest_OBJECTS = quicktest.$(OBJEXT)
 quicktest_OBJECTS = $(am_quicktest_OBJECTS)
-quicktest_LDADD = $(LDADD)
+quicktest_DEPENDENCIES =  \
+	$(top_srcdir)/build/drivers/vncfb/libgfxvncfb.la \
+	$(top_srcdir)/build/drivers/common/libgfxcommon.la
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
 am__depfiles_maybe = depfiles
@@ -231,9 +233,11 @@ AM_CPPFLAGS = \
     -I$(top_srcdir)/drivers/include
 
 AM_LDFLAGS = \
-    $(top_srcdir)/build/drivers/vncfb/libgfxvncfb.a \
-    $(top_srcdir)/build/drivers/common/libgfxcommon.a \
     -ljpeg -lz -lpthread
+
+quicktest_LDADD = \
+    $(top_srcdir)/build/drivers/vncfb/libgfxvncfb.la \
+    $(top_srcdir)/build/drivers/common/libgfxcommon.la
 
 quicktest_SOURCES = \
     quicktest.c

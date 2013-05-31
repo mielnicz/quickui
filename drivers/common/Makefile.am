@@ -1,6 +1,8 @@
 AM_CPPFLAGS = -I$(top_srcdir)/drivers/include
-lib_LIBRARIES = libgfxcommon.a
-libgfxcommon_a_SOURCES = \
+
+noinst_LTLIBRARIES = libgfxcommon.la
+
+libgfxcommon_la_SOURCES = \
     gfxDrawBox.c \
     gfxDrawIcon.c \
     gfxDrawIconPortion.c \

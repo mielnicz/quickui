@@ -2,11 +2,14 @@ AM_CPPFLAGS = \
     -I$(top_srcdir)/drivers/include
 
 AM_LDFLAGS = \
-    $(top_srcdir)/build/drivers/common/libgfxcommon.a \
-    $(top_srcdir)/build/drivers/vncfb/libgfxvncfb.a \
     -ljpeg -lz
 
 lib_LTLIBRARIES = libjniquickgfx.la
+
+libjniquickgfx_la_LIBADD = \
+    $(top_srcdir)/build/drivers/vncfb/libgfxvncfb.la \
+    $(top_srcdir)/build/drivers/common/libgfxcommon.la
+
 libjniquickgfx_la_SOURCES = \
     jnidriver.c
 
