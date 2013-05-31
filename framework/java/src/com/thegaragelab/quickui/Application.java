@@ -17,6 +17,7 @@ public class Application extends Container {
   //--- Instance variables
   private Driver     m_driver;     //! The graphics driver instance
   private EventQueue m_eventQueue; //! The incoming event queue
+  private Point      m_offset;     //! The offset for painting operations
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -30,7 +31,7 @@ public class Application extends Container {
    */
   public Application() {
     // We have no parent and we have the dimensions of the display driver.
-    super(null, Driver.getInstance());
+    super(null, new Rectangle(Point.ORIGIN, Driver.getInstance()));
     m_driver = Driver.getInstance();
     m_eventQueue = new EventQueue();
     }
@@ -82,8 +83,20 @@ public class Application extends Container {
     }
 
   //-------------------------------------------------------------------------
-  // Implementation of Container
+  // Internal event and painting helpers
   //-------------------------------------------------------------------------
+
+  /** Set the offset for this window
+   * 
+   * @param offset the offset to use for future painting operations
+   */
+  @Override
+  void setOffset(IPoint offset) {
+    if(offset==null)
+      m_offset = Point.ORIGIN;
+    else
+      m_offset = new Point(offset);
+    }
   
   /** Called to do an update of the window.
    * 
@@ -144,6 +157,7 @@ public class Application extends Container {
    */
   @Override
   public void putPixel(IPoint point, Color color) {
+    point = point.translate(m_offset);
     m_driver.putPixel(point, color);
     }
 
@@ -154,6 +168,7 @@ public class Application extends Container {
    */
   @Override
   public void fillRect(IRectangle rect, Color color) {
+    rect = (IRectangle)rect.translate(m_offset);
     m_driver.fillRect(rect, color);
     }
   
@@ -165,6 +180,8 @@ public class Application extends Container {
    */
   @Override
   public void drawLine(IPoint start, IPoint end, Color color) {
+    start = start.translate(m_offset);
+    end = end.translate(m_offset);
     m_driver.drawLine(start, end, color);
     }
   
@@ -175,6 +192,7 @@ public class Application extends Container {
    */
   @Override
   public void drawBox(IRectangle rect, Color color) {
+    rect = (IRectangle)rect.translate(m_offset);
     m_driver.drawBox(rect, color);
     }
 
@@ -186,6 +204,7 @@ public class Application extends Container {
    */
   @Override
   public void drawIcon(IPoint point, Icon icon, Color color) {
+    point = point.translate(m_offset);
     m_driver.drawIcon(point, icon, color);
     }
 
@@ -198,6 +217,7 @@ public class Application extends Container {
    */
   @Override
   public void drawIcon(IPoint point, Icon icon, Color color, IRectangle portion) {
+    point = point.translate(m_offset);
     m_driver.drawIcon(point, icon, color, portion);
     }
   
@@ -209,6 +229,7 @@ public class Application extends Container {
    */
   @Override
   public void drawImage(IPoint point, Image image, Palette palette) {
+    point = point.translate(m_offset);
     m_driver.drawImage(point, image, palette);
     }
   
@@ -221,6 +242,7 @@ public class Application extends Container {
    */
   @Override
   public void drawImage(IPoint point, Image image, Palette palette, IRectangle portion) {
+    point = point.translate(m_offset);
     m_driver.drawImage(point, image, palette, portion);
     }
   
@@ -241,6 +263,8 @@ public class Application extends Container {
       m_driver.grabEvents(null);
       // Do any updates
       doUpdate();
+      // Repaint what is needed
+      doRepaint();
       }
     }
 

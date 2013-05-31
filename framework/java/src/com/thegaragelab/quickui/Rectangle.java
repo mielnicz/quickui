@@ -128,6 +128,20 @@ public class Rectangle extends Point implements IRectangle {
     }
   
   //-------------------------------------------------------------------------
+  // Implementation of IPoint
+  //-------------------------------------------------------------------------
+  
+  /** Translate the point so the given point is the origin
+   * 
+   * @point origin the new origin for the co-ordinates
+   * 
+   * @return IPoint the translated instance.
+   */
+  public IPoint translate(IPoint origin) {
+    return new Rectangle(x + origin.getX(), y + origin.getY(), width, height);
+    }
+  
+  //-------------------------------------------------------------------------
   // Implementation of IRectangle
   //-------------------------------------------------------------------------
   

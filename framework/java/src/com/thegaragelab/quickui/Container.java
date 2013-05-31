@@ -30,25 +30,6 @@ public class Container extends Window {
     super(parent, rect);
     }
 
-  /** Constructor with a parent Window and a Dimension describing it's size.
-   * 
-   * @param parent the parent window for this instance.
-   * @param dimension the dimension of the new window.
-   */
-  public Container(Container parent, IDimension dimension) {
-    super(parent, dimension);
-    }
-  
-  /** Constructor with a parent Window and a width and height.
-   * 
-   * @param parent the parent Window for this instance.
-   * @param width the width of the window in pixels.
-   * @param height the height of the window in pixels.
-   */
-  public Container(Container parent, int width, int height) {
-    super(parent, width, height);
-    }
-
   //-------------------------------------------------------------------------
   // Implementation of Window
   //-------------------------------------------------------------------------
@@ -119,7 +100,7 @@ public class Container extends Window {
         region = new Rectangle(this);
         if(areFlagsSet(Window.WFLAG_ERASE_BACKGROUND))
           onEraseBackground(region);
-        onPaint(region);
+        onPaint();
         }
       return;
       }
@@ -132,7 +113,7 @@ public class Container extends Window {
       region = new Rectangle(child);
       if(areFlagsSet(Window.WFLAG_ERASE_BACKGROUND))
         onEraseBackground(region);
-      onPaint(region);
+      onPaint();
       child.doRepaint();
       }
     }

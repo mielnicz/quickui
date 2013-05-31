@@ -46,35 +46,6 @@ public class Window implements IRectangle, ISurface, IFlags {
     onCreate();
     }
 
-  /** Constructor with a parent Window and a Dimension describing it's size.
-   * 
-   * @param parent the parent window for this instance.
-   * @param dimension the dimension of the new window.
-   */
-  public Window(Container parent, IDimension dimension) {
-    m_parent = parent;
-    if(m_parent!=null)
-      m_root = m_parent.getRoot();
-    m_rectangle = new Rectangle(Point.ORIGIN, dimension);
-    initialiseState();
-    onCreate();
-    }
-  
-  /** Constructor with a parent Window and a width and height.
-   * 
-   * @param parent the parent Window for this instance.
-   * @param width the width of the window in pixels.
-   * @param height the height of the window in pixels.
-   */
-  public Window(Container parent, int width, int height) {
-    m_parent = parent;
-    if(m_parent!=null)
-      m_root = m_parent.getRoot();
-    m_rectangle = new Rectangle(Point.ORIGIN, width, height);
-    initialiseState();
-    onCreate();
-    }
-
   /** Initialise the state
    * 
    *  This method is used to initialise the state for the type of window
@@ -178,28 +149,37 @@ public class Window implements IRectangle, ISurface, IFlags {
     }
   
   //-------------------------------------------------------------------------
-  // Internal event methods
+  // Internal event and painting helpers
   //-------------------------------------------------------------------------
 
-  /** Called to do a repaint of the window
+  /** Set the offset for this window
    * 
+   * @param offset the offset to use for future painting operations
+   */
+  void setOffset(IPoint offset) {
+    if(m_root!=null)
+      m_root.setOffset(offset);
+    }
+  
+  /** Called to do a repaint of the window
    */
   void doRepaint() {
     // If we are not dirty, don't do anything
     if(!isDirty())
       return;
-    // Erase the background if needed
-    boolean doEraseBackground = areFlagsSet(Window.WFLAG_ERASE_BACKGROUND);
+    // Start the paint operation
     Rectangle region = new Rectangle(this);
-    if(doEraseBackground) {
-      beginPaint();
+    beginPaint();
+    // Erase the background if needed
+    if(areFlagsSet(Window.WFLAG_ERASE_BACKGROUND)) {
       onEraseBackground(region);
       }
     // Repaint the window
-    onPaint(region);
+    getRoot().setClip(region);
+    getRoot().setOffset(region);
+    onPaint();
     // Finish the paint operation
-    if(doEraseBackground)
-      endPaint();
+    endPaint();
     }
   
   /** Called to do an update of the window
@@ -231,11 +211,8 @@ public class Window implements IRectangle, ISurface, IFlags {
   /** Called when the window needs to be painted
    * 
    *  This method is called to redraw the window.
-   * 
-   *  @param region the rectangle describing the area to repaint. If this is
-   *                null the entire window should be repainted.
    */
-  public void onPaint(Rectangle region) {
+  public void onPaint() {
     // Do nothing in this instance
     }
   
@@ -262,7 +239,7 @@ public class Window implements IRectangle, ISurface, IFlags {
     }
   
   //-------------------------------------------------------------------------
-  // Implementation of IRectangle
+  // Implementation of IPoint and IRectangle
   //-------------------------------------------------------------------------
 
   /** Get the X co-ordinate for this point.
@@ -295,6 +272,16 @@ public class Window implements IRectangle, ISurface, IFlags {
    */
   public void setY(int ny) {
     m_rectangle.y = ny;
+    }
+  
+  /** Translate the point so the given point is the origin
+   * 
+   * @point origin the new origin for the co-ordinates
+   * 
+   * @return IPoint the translated instance.
+   */
+  public IPoint translate(IPoint origin) {
+    return m_rectangle.translate(origin);
     }
   
   /** Get the width of the rectangle.

@@ -75,5 +75,15 @@ public class Point implements IPoint {
   public void setY(int ny) {
     y = ny;
     }
+
+  /** Translate the point so the given point is the origin
+   * 
+   * @point origin the new origin for the co-ordinates
+   * 
+   * @return IPoint the translated instance.
+   */
+  public IPoint translate(IPoint origin) {
+    return new Point(x + origin.getX(), y + origin.getY());
+    }
   
   }
