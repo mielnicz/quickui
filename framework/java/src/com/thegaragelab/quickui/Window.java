@@ -34,6 +34,7 @@ public class Window implements IRectangle, ISurface, IFlags {
    */
   Window(Rectangle rect) {
     m_rectangle = new Rectangle(rect);
+    m_root = this;
     initialiseState();
     // Call the creation method
     onCreate();
@@ -62,6 +63,13 @@ public class Window implements IRectangle, ISurface, IFlags {
   void initialiseState() {
     // Always start as dirty
     m_dirty = true;
+    // Add ourselves to the parent (if we have one)
+    if(m_parent!=null) {
+      // Translate our co-ordinates from relative to absolute
+      m_rectangle = (Rectangle)m_rectangle.translate(m_parent);
+      // Add ourselves to the parent
+      m_parent.add(this);
+      }
     }
   
   //-------------------------------------------------------------------------
@@ -160,6 +168,13 @@ public class Window implements IRectangle, ISurface, IFlags {
    * 
    */
   public void onCreate() {
+    // Do nothing in this instance
+    }
+  
+  /** Called when the window is closed
+   * 
+   */
+  public void onClose() {
     // Do nothing in this instance
     }
   

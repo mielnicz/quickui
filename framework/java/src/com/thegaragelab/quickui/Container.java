@@ -38,6 +38,18 @@ public class Container extends Window {
     super(parent, rect);
     }
 
+  /** Initialise the state
+   * 
+   *  This method is used to initialise the state for the type of window
+   *  being created. Child classes may override this to set their own
+   *  initial state but must call the parent implementation.
+   */
+  void initialiseState() {
+    super.initialiseState();
+    // Create our list of child elements
+    m_children = new ArrayList<Window>();
+    }
+  
   //-------------------------------------------------------------------------
   // Implementation of Window
   //-------------------------------------------------------------------------
@@ -72,14 +84,19 @@ public class Container extends Window {
    * 
    * @param window the Window to add as a child.
    */
-  public void addChild(Window child) {
-    synchronized(this) {
-      if(m_children==null)
-        m_children = new ArrayList<Window>();
-      m_children.add(child);
-      }
+  void add(Window child) {
+    m_children.add(child);
     }
   
+  /** Remove a child window from this container
+   * 
+   * @param window the Window to remove
+   */
+  public void remove(Window child) {
+    if(m_children.remove(child))
+      child.onClose();
+    }
+    
   //-------------------------------------------------------------------------
   // Internal event methods
   //-------------------------------------------------------------------------
