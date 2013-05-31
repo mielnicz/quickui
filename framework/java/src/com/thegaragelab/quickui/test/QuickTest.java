@@ -40,7 +40,6 @@ public class QuickTest extends Application implements TimedEvent.Listener {
    *              it should have happened.
    */
   public void onTimer(TimedEvent timer, long delay) {
-    System.out.println(delay);
     setDirty(true);
     }
 
