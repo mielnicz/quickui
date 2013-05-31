@@ -93,29 +93,7 @@ public class Container extends Window {
    * walk through all of them and repaint. 
    */
   void doRepaint() {
-    Rectangle region;
-    // Do we have any children ?
-    if((m_children==null)||(m_children.size()==0)) {
-      if(isDirty()) {
-        region = new Rectangle(this);
-        if(areFlagsSet(Window.WFLAG_ERASE_BACKGROUND))
-          onEraseBackground(region);
-        onPaint();
-        }
-      return;
-      }
-    // Check our children and repaint as needed
-    if(m_children==null)
-      return;
-    for(Window child: m_children) {
-      if(!child.isDirty())
-        continue;
-      region = new Rectangle(child);
-      if(areFlagsSet(Window.WFLAG_ERASE_BACKGROUND))
-        onEraseBackground(region);
-      onPaint();
-      child.doRepaint();
-      }
+    super.doRepaint();
     }
   
   /** Called to do an update of the window.

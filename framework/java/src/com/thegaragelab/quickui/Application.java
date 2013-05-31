@@ -250,17 +250,31 @@ public class Application extends Container {
   // Application specific operations
   //-------------------------------------------------------------------------
   
+  /** Called to initialise the application
+   *
+   * This method is called after the window management functions have been
+   * called but before the event loop starts. Application implementations
+   * should use this to set up their state, create all required windows,
+   * etc.
+   */
+  public void onInitialise() {
+    // Nothing to do in this implementation
+    }
+  
   /** Run the application
    * 
    *  This method enters an endless loop that runs the application and sends
    *  updates to the physical display.
    */
-  public void run() {
+  public final void run() {
+    onInitialise();
     while(true) {
       // Send any window updates
       doRepaint();
       // Process pending events
       m_driver.grabEvents(null);
+      // Process timers
+      TimedEvent.update();
       // Do any updates
       doUpdate();
       // Repaint what is needed

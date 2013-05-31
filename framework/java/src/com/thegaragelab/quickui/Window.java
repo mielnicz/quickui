@@ -180,6 +180,7 @@ public class Window implements IRectangle, ISurface, IFlags {
     onPaint();
     // Finish the paint operation
     endPaint();
+    setDirty(false);
     }
   
   /** Called to do an update of the window
