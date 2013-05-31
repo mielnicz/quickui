@@ -348,6 +348,8 @@ public class Window implements IRectangle, ISurface, IFlags {
    * @param flags the bit values to set
    */
   public void setFlags(int flags) {
+    if(m_flags==null)
+      m_flags = new Flags();
     m_flags.setFlags(flags);
     }
   
