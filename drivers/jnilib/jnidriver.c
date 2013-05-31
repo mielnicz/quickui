@@ -16,7 +16,7 @@
  * Signature: (II)I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxInit(JNIEnv *pEnv, jobject obj, jint width, jint height) {
-  return (jint)GFX_RESULT_INTERNAL;
+  return (jint)gfx_Init(width, height);
   }
 
 /*
@@ -25,7 +25,7 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxInit(JNIEnv *pEnv
  * Signature: ()I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxBeginPaint(JNIEnv *pEnv, jobject obj) {
-  return (jint)GFX_RESULT_INTERNAL;
+  return (jint)gfx_BeginPaint();
   }
 
 /*
@@ -34,7 +34,7 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxBeginPaint(JNIEnv
  * Signature: ()I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxEndPaint(JNIEnv *pEnv, jobject obj) {
-  return (jint)GFX_RESULT_INTERNAL;
+  return (jint)gfx_EndPaint();
   }
 
 /*
@@ -43,7 +43,7 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxEndPaint(JNIEnv *
  * Signature: (III)I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxPutPixel(JNIEnv *pEnv, jobject obj, jint x, jint y, jint color) {
-  return (jint)GFX_RESULT_INTERNAL;
+  return (jint)gfx_PutPixel(x, y, color);
   }
 
 /*
@@ -52,7 +52,7 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxPutPixel(JNIEnv *
  * Signature: (IIIII)I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxFillRegion(JNIEnv *pEnv, jobject obj, jint x1, jint y1, jint x2, jint y2, jint color) {
-  return (jint)GFX_RESULT_INTERNAL;
+  return (jint)gfx_FillRegion(x1, y1, x2, y2, color);
   }
 
 /*
@@ -97,7 +97,7 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawImagePortion(
  * Signature: (IIIII)I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawLine(JNIEnv *pEnv, jobject obj, jint x1, jint y1, jint x2, jint y2, jint color) {
-  return (jint)GFX_RESULT_INTERNAL;
+  return (jint)gfx_DrawLine(x1, y1, x2, y2, color);
   }
 
 /*
@@ -106,7 +106,16 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawLine(JNIEnv *
  * Signature: (IIIII)I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawBox(JNIEnv *pEnv, jobject obj, jint x1, jint y1, jint x2, jint y2, jint color) {
-  return (jint)GFX_RESULT_INTERNAL;
+  return (jint)gfx_DrawBox(x1, y1, x2, y2, color);
+  }
+
+/** Handle an event
+ *
+ * An implementation of this function is provided by the calling application
+ * and is used to receive information about events from the driver.
+ */
+static GFX_RESULT internal_HandleEvent(GFX_EVENT_INFO *pEventInfo) {
+  return GFX_RESULT_OK;
   }
 
 /*
@@ -115,7 +124,7 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawBox(JNIEnv *p
  * Signature: ()I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxCheckEvents(JNIEnv *pEnv, jobject obj) {
-  return (jint)GFX_RESULT_INTERNAL;
+  return (jint)gfx_CheckEvents(internal_HandleEvent);
   }
 
 /*
@@ -133,7 +142,7 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxRegisterAsset (JN
  * Signature: ()I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxGetWidth(JNIEnv *pEnv, jobject obj) {
-  return (jint)GFX_RESULT_INTERNAL;
+  return (jint)g_GfxDriver.m_width;
   }
 
 /*
@@ -142,5 +151,5 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxGetWidth(JNIEnv *
  * Signature: ()I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxGetHeight(JNIEnv *pEnv, jobject obj) {
-  return (jint)GFX_RESULT_INTERNAL;
+  return (jint)g_GfxDriver.m_height;
   }
