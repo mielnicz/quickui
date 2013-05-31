@@ -21,6 +21,14 @@ public class Container extends Window {
   // Construction and initialisation
   //-------------------------------------------------------------------------
 
+  /** Constructor with a Rectangle describing its area.
+   * 
+   * @param rect the Rectangle describing the location and size of the window.
+   */
+  Container(Rectangle rect) {
+    super(rect);
+    }
+
   /** Constructor with a parent Window and a Rectangle describing it position.
    * 
    * @param parent the parent window for this instance.
@@ -33,16 +41,6 @@ public class Container extends Window {
   //-------------------------------------------------------------------------
   // Implementation of Window
   //-------------------------------------------------------------------------
-  
-  /** Get the focused window
-   * 
-   * @return the window that currently has focus.
-   */
-  public Window getFocusedWindow() {
-    if(!hasFocus())
-      return null;
-    return this;
-    }
   
   /** Get a window by location
    * 

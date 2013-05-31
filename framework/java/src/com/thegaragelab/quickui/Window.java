@@ -16,21 +16,28 @@ import com.thegaragelab.quickui.utils.*;
  * provides the basic functionality required for all visual elements.
  */
 public class Window implements IRectangle, ISurface, IFlags {
-  //--- Constants
-  public static final int WFLAG_IS_DIRTY         = 0x0001;
-  public static final int WFLAG_ERASE_BACKGROUND = 0x0002;
-  public static final int WFLAG_HAS_FOCUS        = 0x0004;
-  public static final int WFLAG_CAN_HAVE_FOCUS   = 0x0008;
-  
   //--- Instance variables
-  private Container m_parent;    //! The parent Window
-  private Window    m_root;      //! The root Window
-  private Rectangle m_rectangle; //! Position and size of the window
-  private Flags     m_flags;     //! Current flags
+  private Container m_parent;     //! The parent Window
+  private Window    m_root;       //! The root Window
+  private Rectangle m_rectangle;  //! Position and size of the window
+  private Flags     m_flags;      //! Current flags
+  private boolean   m_dirty;      //! The dirty flag for this window
+  private Color     m_background; //! The background color for the window
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
   //-------------------------------------------------------------------------
+
+  /** Constructor with a Rectangle describing its area.
+   * 
+   * @param rect the Rectangle describing the location and size of the window.
+   */
+  Window(Rectangle rect) {
+    m_rectangle = new Rectangle(rect);
+    initialiseState();
+    // Call the creation method
+    onCreate();
+    }
 
   /** Constructor with a parent Window and a Rectangle describing it position.
    * 
@@ -39,10 +46,10 @@ public class Window implements IRectangle, ISurface, IFlags {
    */
   public Window(Container parent, Rectangle rect) {
     m_parent = parent;
-    if(m_parent!=null)
-      m_root = m_parent.getRoot();
+    m_root = m_parent.getRoot();
     m_rectangle = new Rectangle(rect);
     initialiseState();
+    // Call the creation method
     onCreate();
     }
 
@@ -52,12 +59,9 @@ public class Window implements IRectangle, ISurface, IFlags {
    *  being created. Child classes may override this to set their own
    *  initial state but must call the parent implementation.
    */
-  protected void initialiseState() {
-    // Set default flags
-    setFlags(
-      Window.WFLAG_IS_DIRTY | 
-      Window.WFLAG_CAN_HAVE_FOCUS
-      );
+  void initialiseState() {
+    // Always start as dirty
+    m_dirty = true;
     }
   
   //-------------------------------------------------------------------------
@@ -85,10 +89,7 @@ public class Window implements IRectangle, ISurface, IFlags {
    * @param dirty true if the window is dirty, false if not
    */
   public void setDirty(boolean dirty) {
-    if(dirty)
-      setFlags(Window.WFLAG_IS_DIRTY);
-    else
-      clearFlags(Window.WFLAG_IS_DIRTY);
+    m_dirty = dirty;
     }
   
   /** Determine if the window is dirty (needs to be repainted)
@@ -96,44 +97,7 @@ public class Window implements IRectangle, ISurface, IFlags {
    * @return true if the window is dirty and needs to be repainted.
    */
   public boolean isDirty() {
-    return areFlagsSet(Window.WFLAG_IS_DIRTY);
-    }
-  
-  /** Set or remove focus from this window
-   * 
-   * @param focus true if this window now has focus, false if not
-   */
-  public void setFocus(boolean focus) {
-    // Can we have focus ?
-    if(!areFlagsSet(Window.WFLAG_CAN_HAVE_FOCUS))
-      return;
-    // Has the focus changed ?
-    if(focus==areFlagsSet(Window.WFLAG_CAN_HAVE_FOCUS | Window.WFLAG_HAS_FOCUS))
-      return;
-    // Change the focus
-    if(focus)
-      setFlags(Window.WFLAG_HAS_FOCUS);
-    else
-      clearFlags(Window.WFLAG_HAS_FOCUS);
-    onFocus();
-    }
-  
-  /** Determine if we have focus
-   * 
-   * @return true if we currently have focus
-   */
-  public boolean hasFocus() {
-    return areFlagsSet(Window.WFLAG_CAN_HAVE_FOCUS | Window.WFLAG_HAS_FOCUS);
-    }
-  
-  /** Get the focused window
-   * 
-   * @return the window that currently has focus.
-   */
-  public Window getFocusedWindow() {
-    if(!hasFocus())
-      return null;
-    return this;
+    return m_dirty;
     }
   
   /** Get a window by location
@@ -169,13 +133,12 @@ public class Window implements IRectangle, ISurface, IFlags {
       return;
     // Start the paint operation
     Rectangle region = new Rectangle(this);
+    getRoot().setClip(region);
     beginPaint();
     // Erase the background if needed
-    if(areFlagsSet(Window.WFLAG_ERASE_BACKGROUND)) {
-      onEraseBackground(region);
-      }
+    if(m_background!=null)
+      fillRect(region, m_background);
     // Repaint the window
-    getRoot().setClip(region);
     getRoot().setOffset(region);
     onPaint();
     // Finish the paint operation
@@ -193,19 +156,17 @@ public class Window implements IRectangle, ISurface, IFlags {
   // Public event methods
   //-------------------------------------------------------------------------
 
+  /** Called when the window is created
+   * 
+   */
+  public void onCreate() {
+    // Do nothing in this instance
+    }
+  
   /** Called to update the window
    * 
    */
   public void onUpdate() {
-    // Do nothing in this instance
-    }
-  
-  /** Called when the window is being created.
-   * 
-   * This method can be overwritten to provide creation specific operations
-   * outside of the framework.
-   */
-  public void onCreate() {
     // Do nothing in this instance
     }
   
@@ -214,28 +175,6 @@ public class Window implements IRectangle, ISurface, IFlags {
    *  This method is called to redraw the window.
    */
   public void onPaint() {
-    // Do nothing in this instance
-    }
-  
-  /** Called to erase the background for the window.
-   * 
-   *  This method is invoked to clear all or part of the window area prior to
-   *  painting. The implementation must not change anything outside of the
-   *  rectangle specified.
-   *  
-   *  @param region the rectangle describing the area to repaint. If this is
-   *                null the entire window should be repainted.
-   */
-  public void onEraseBackground(Rectangle region) {
-    // Do nothing in this instance
-    }
-  
-  /** Called when the window focus has changed.
-   * 
-   * This method is invoked when the window focus state has changed. The
-   * window may need to redraw itself when that happens.
-   */
-  public void onFocus() {
     // Do nothing in this instance
     }
   

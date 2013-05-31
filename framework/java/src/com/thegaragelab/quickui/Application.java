@@ -31,9 +31,22 @@ public class Application extends Container {
    */
   public Application() {
     // We have no parent and we have the dimensions of the display driver.
-    super(null, new Rectangle(Point.ORIGIN, Driver.getInstance()));
+    super(new Rectangle(Point.ORIGIN, Driver.getInstance()));
+    }
+  
+  /** Initialise the state
+   * 
+   *  This method is used to initialise the state for the type of window
+   *  being created. Child classes may override this to set their own
+   *  initial state but must call the parent implementation.
+   */
+  @Override
+  void initialiseState() {
+    super.initialiseState();
+    // Initialise our own state
     m_driver = Driver.getInstance();
     m_eventQueue = new EventQueue();
+    m_offset = Point.ORIGIN;
     }
   
   //-------------------------------------------------------------------------
