@@ -125,6 +125,10 @@ public class Container extends Window {
    */
   @Override
   void doRepaint(boolean force) {
+    // Don't do anything if we are not visible
+    if(!isVisible())
+      return;
+    // Even if we are not dirty we may have to repaint some child windows
     if(isDirty()||force) {
       beginPaint();
       // Do our painting

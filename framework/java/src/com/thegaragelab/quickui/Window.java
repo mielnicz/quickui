@@ -18,12 +18,15 @@ import com.thegaragelab.quickui.utils.*;
  * provides the basic functionality required for all visual elements.
  */
 public class Window implements IRectangle, ISurface, IFlags {
+  //--- Constants
+  private static final int WIN_FLAG_DIRTY   = 0x0001;
+  private static final int WIN_FLAG_VISIBLE = WIN_FLAG_DIRTY << 1;
+  
   //--- Instance variables
   private Container m_parent;     //! The parent Window
   private Window    m_root;       //! The root Window
   private Rectangle m_rectangle;  //! Position and size of the window
   private Flags     m_flags;      //! Current flags
-  private boolean   m_dirty;      //! The dirty flag for this window
   private Color     m_background; //! The background color for the window
   
   //-------------------------------------------------------------------------
@@ -37,6 +40,7 @@ public class Window implements IRectangle, ISurface, IFlags {
   Window(Rectangle rect) {
     m_rectangle = new Rectangle(rect);
     m_root = this;
+    m_flags = new Flags();
     initialiseState();
     // Call the creation method
     onCreate();
@@ -50,6 +54,7 @@ public class Window implements IRectangle, ISurface, IFlags {
   public Window(Container parent, Rectangle rect) {
     m_parent = parent;
     m_root = m_parent.getRoot();
+    m_flags = new Flags();
     m_rectangle = new Rectangle(rect);
     initialiseState();
     // Call the creation method
@@ -63,8 +68,9 @@ public class Window implements IRectangle, ISurface, IFlags {
    *  initial state but must call the parent implementation.
    */
   void initialiseState() {
-    // Always start as dirty
-    m_dirty = true;
+    // Always start as visible and dirty
+    setDirty(true);
+    setVisible(true);
     // Add ourselves to the parent (if we have one)
     if(m_parent!=null) {
       // Translate our co-ordinates from relative to absolute
@@ -110,7 +116,10 @@ public class Window implements IRectangle, ISurface, IFlags {
    * @param dirty true if the window is dirty, false if not
    */
   public void setDirty(boolean dirty) {
-    m_dirty = dirty;
+    if(dirty)
+      m_flags.setFlags(WIN_FLAG_DIRTY);
+    else
+      m_flags.clearFlags(WIN_FLAG_DIRTY);
     }
   
   /** Determine if the window is dirty (needs to be repainted)
@@ -118,7 +127,32 @@ public class Window implements IRectangle, ISurface, IFlags {
    * @return true if the window is dirty and needs to be repainted.
    */
   public boolean isDirty() {
-    return m_dirty;
+    return m_flags.areFlagsSet(WIN_FLAG_DIRTY | WIN_FLAG_VISIBLE);
+    }
+
+  /** Set the visibility of the window
+   * 
+   * @param visible true if the window should be visible, false if not
+   */
+  public void setVisible(boolean visible) {
+    // Any change ?
+    if(m_flags.areFlagsSet(WIN_FLAG_VISIBLE)==visible)
+      return;
+    // Change the flag
+    if(visible)
+      m_flags.setFlags(WIN_FLAG_VISIBLE | WIN_FLAG_DIRTY);
+    else
+      m_flags.clearFlags(WIN_FLAG_VISIBLE);
+    // Let the window know the state has changed
+    onVisible(visible);
+    }
+  
+  /** Determine if we are visible
+   * 
+   * @return true if the window is currently visible, false if not
+   */
+  public boolean isVisible() {
+    return m_flags.areFlagsSet(WIN_FLAG_VISIBLE);
     }
   
   /** Get a window by location
@@ -168,6 +202,9 @@ public class Window implements IRectangle, ISurface, IFlags {
    * @param force if true force a repaint regardless of the 'dirty' state.
    */
   void doRepaint(boolean force) {
+    // If we are not visible, don't do anything
+    if(!isVisible())
+      return;
     // If we are not dirty, don't do anything
     if(!(isDirty()||force))
       return;
@@ -222,6 +259,14 @@ public class Window implements IRectangle, ISurface, IFlags {
    *  This method is called to redraw the window.
    */
   public void onPaint() {
+    // Do nothing in this instance
+    }
+  
+  /** Called when the visibility of the window has changed
+   * 
+   * @param visible true if the window is now visible, false if not
+   */
+  public void onVisible(boolean visible) {
     // Do nothing in this instance
     }
   
