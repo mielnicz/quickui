@@ -70,17 +70,9 @@ public class QuickTest extends Application implements TimedEvent.Listener {
         break;
       }
     // Set a random color
-    switch(m_random.nextInt(3)) {
-      case 0:
-        w.setBackground(Color.RED);
-        break;
-      case 1:
-        w.setBackground(Color.GREEN);
-        break;
-      case 2:
-        w.setBackground(Color.BLUE);
-        break;
-      }
+    Palette palette = Application.getInstance().getPalette();
+    if(palette!=null)
+      w.setBackground(palette.getColor(m_random.nextInt(Palette.PALETTE_SIZE)));
     }
 
   /** Called to initialise the application
