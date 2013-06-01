@@ -61,12 +61,13 @@ static GFX_RESULT gfx_vnc_EndPaint() {
   // Do we need to send an update ?
   if(g_paintLevel>0)
 	return GFX_RESULT_OK;
-  // Yes, we do - send an update
-  rfbMarkRectAsModified(g_pScreenInfo, g_minX, g_minY, g_maxX, g_maxY);
+  // Yes, we do - send an update (if one is available)
+  if((g_maxX>0)&&(g_maxY>0))
+    rfbMarkRectAsModified(g_pScreenInfo, g_minX, g_minY, g_maxX + 1, g_maxY + 1);
   // Clear the region
-  g_minX = 0;
+  g_minX = g_GfxDriver.m_width;
   g_maxX = 0;
-  g_minY = 0;
+  g_minY = g_GfxDriver.m_height;
   g_maxY = 0;
   // And done
   return GFX_RESULT_OK;
