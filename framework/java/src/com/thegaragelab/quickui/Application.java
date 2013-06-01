@@ -30,8 +30,25 @@ public class Application extends Container {
    * no parent and set ourselves as the root window.
    */
   public Application() {
-    // We have no parent and we have the dimensions of the display driver.
+    // We have no parent and we use the dimensions of the display driver.
     super(new Rectangle(Point.ORIGIN, Driver.getInstance()));
+    }
+  
+  /** Constructor with a preferred size
+   * 
+   * The default constructor uses the dimensions of the display driver as
+   * it's size and origin (0, 0) as it's top left co-ordinate. We have
+   * no parent and set ourselves as the root window.
+   * 
+   * This version of the constructor allows you to specify a preferred size
+   * for the display (which may be ignored).
+   * 
+   * @param width the preferred width of the display in pixels.
+   * @param height the preferred height of the display in pixels.
+   */
+  public Application(int width, int height) {
+    // We have no parent and we use the dimensions of the display driver.
+    super(new Rectangle(Point.ORIGIN, Driver.getInstance(width, height)));
     }
   
   /** Initialise the state

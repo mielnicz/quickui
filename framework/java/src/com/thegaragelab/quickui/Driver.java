@@ -28,8 +28,17 @@ class Driver implements ISurface {
   
   /** Get the current instance
    * 
+   * Get the current instance of the driver (or create one if it doesn't
+   * exist). This implementation of the method allows you to request a
+   * display size - this request will be ignored if the driver has already
+   * been created or doesn't support such requests.
+   * 
+   * @param width the preferred width of the display in pixels
+   * @param height the preferred height of the display in pixels
+   * 
+   * @return the Driver instance or null if an error occurred.
    */
-  public static final Driver getInstance() {
+  public static final Driver getInstance(int width, int height) {
     synchronized(Driver.class) {
       // If we already have an instance, return it
       if(m_instance!=null)
@@ -37,7 +46,7 @@ class Driver implements ISurface {
       // Create a new instance and initialise it
       m_instance = new Driver();
       // TODO: Determine the width and height to request
-      if(m_instance.gfxInit(0, 0)!=0) {
+      if(m_instance.gfxInit(width, height)!=0) {
         // Failed to initialise driver
         m_instance = null;
         }
@@ -46,6 +55,18 @@ class Driver implements ISurface {
       }
     }
   
+  /** Get the current instance
+   * 
+   * Get the current instance of the driver (or create one if it doesn't
+   * exist). This implementation of the method will use the drivers default
+   * size if it needs to be created.
+   * 
+   * @return the Driver instance or null if an error occurred.
+   */
+  public static final Driver getInstance() {
+    return getInstance(0, 0);
+    }
+
   //-------------------------------------------------------------------------
   // Native methods
   //-------------------------------------------------------------------------

@@ -15,7 +15,11 @@ import com.thegaragelab.quickui.*;
  *
  */
 public class QuickTest extends Application implements TimedEvent.Listener {
-  //--- Constants
+  //--- Display preferences
+  private static final int SCREEN_WIDTH  = 480; // Preferred width of the window
+  private static final int SCREEN_HEIGHT = 272; // Preferred height of the window
+  
+  //--- Constants for child windows
   private static final int WINDOW_WIDTH  = 25; // Width of the child window
   private static final int WINDOW_HEIGHT = 25; // Height of the child window
   private static final int WINDOW_OFFSET = 10; // Offset for window placement
@@ -35,7 +39,7 @@ public class QuickTest extends Application implements TimedEvent.Listener {
    * 
    */
   public QuickTest() {
-    super();
+    super(SCREEN_WIDTH, SCREEN_HEIGHT);
     }
   
   //-------------------------------------------------------------------------
