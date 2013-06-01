@@ -97,6 +97,20 @@ public class Container extends Window {
       child.onClose();
     }
     
+  /** Find all dirty children of this container
+   * 
+   */
+  void findDirtyChildren(List<Window> children) {
+    // If we are dirty simply add ourselves
+    if(isDirty())
+      children.add(this);
+    else {
+      // Walk through our children and add them
+      for(Window child: m_children)
+        child.findDirtyChildren(children);
+      }
+    }
+  
   //-------------------------------------------------------------------------
   // Internal event methods
   //-------------------------------------------------------------------------
@@ -106,9 +120,34 @@ public class Container extends Window {
    * Containers are treated differently here. Even though the container itself
    * may not be dirty one or more of it's child windows may be so we have to
    * walk through all of them and repaint. 
+   * 
+   * @param force if true force a repaint regardless of the 'dirty' state.
    */
-  void doRepaint() {
-    super.doRepaint();
+  @Override
+  void doRepaint(boolean force) {
+    if(isDirty()||force) {
+      beginPaint();
+      // Do our painting
+      super.doRepaint(true);
+      // Repaint everything
+      for(Window child: m_children) {
+        setOffset(this);
+        child.doRepaint(true);
+        }
+      endPaint();
+      }
+    else {
+      // Only repaint child windows that need it
+      List<Window> children = new ArrayList<Window>();
+      findDirtyChildren(children);
+      for(Window child: children) {
+        beginPaint();
+        // TODO: Should repaint our background before painting the child
+        setOffset(this);
+        child.doRepaint(false);
+        endPaint();
+        }
+      }
     }
   
   /** Called to do an update of the window.

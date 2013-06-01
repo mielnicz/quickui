@@ -7,6 +7,8 @@
 *---------------------------------------------------------------------------*/
 package com.thegaragelab.quickui;
 
+import java.util.*;
+
 //--- Imports
 import com.thegaragelab.quickui.utils.*;
 
@@ -91,6 +93,17 @@ public class Window implements IRectangle, ISurface, IFlags {
   public Window getRoot() {
     return m_root;
     }
+
+  /** Set the background color for this window
+   * 
+   * @param color the background color to use. If null the window will not
+   *              paint a background on redraw.
+   */
+  public void setBackground(Color color) {
+    if(m_background!=color)
+      setDirty(true);
+    m_background = color;
+    }
   
   /** Mark the window as 'dirty' (needs to be repainted)
    * 
@@ -124,6 +137,18 @@ public class Window implements IRectangle, ISurface, IFlags {
   // Internal event and painting helpers
   //-------------------------------------------------------------------------
 
+  /** Find all dirty child windows
+   * 
+   * As we have no child windows we simply add ourselves to the list (if we
+   * are dirty).
+   * 
+   * @param children the list of dirty children
+   */
+  void findDirtyChildren(List<Window> children) {
+    if(isDirty())
+      children.add(this);
+    }
+  
   /** Set the offset for this window
    * 
    * @param offset the offset to use for future painting operations
@@ -134,10 +159,17 @@ public class Window implements IRectangle, ISurface, IFlags {
     }
   
   /** Called to do a repaint of the window
+   * 
+   * This is an internal helper to manage the painting process. Child
+   * windows should only override the onPaint() method and do custom
+   * painting there - it will be called as needed by the internal logic
+   * of the framework.
+   * 
+   * @param force if true force a repaint regardless of the 'dirty' state.
    */
-  void doRepaint() {
+  void doRepaint(boolean force) {
     // If we are not dirty, don't do anything
-    if(!isDirty())
+    if(!(isDirty()||force))
       return;
     // Start the paint operation
     Rectangle region = new Rectangle(this);
@@ -147,7 +179,7 @@ public class Window implements IRectangle, ISurface, IFlags {
     if(m_background!=null)
       fillRect(region, m_background);
     // Repaint the window
-    getRoot().setOffset(region);
+    setOffset(region);
     onPaint();
     // Finish the paint operation
     endPaint();

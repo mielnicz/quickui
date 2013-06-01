@@ -135,6 +135,23 @@ public class Application extends Container {
   // Implementation of ISurface
   //-------------------------------------------------------------------------
   
+  /** Called to do a repaint of the window
+   * 
+   * This is an internal helper to manage the painting process. Child
+   * windows should only override the onPaint() method and do custom
+   * painting there - it will be called as needed by the internal logic
+   * of the framework.
+   * 
+   * @param force if true force a repaint regardless of the 'dirty' state.
+   */
+  @Override
+  void doRepaint(boolean force) {
+    // Set the offset to origin
+    setOffset(Point.ORIGIN);
+    // And start the repaint sequence
+    super.doRepaint(force);
+    }
+
   /** Begin a paint operation.
    * 
    * This method is used to signal the start of a complex paint operation.
@@ -282,16 +299,14 @@ public class Application extends Container {
   public final void run() {
     onInitialise();
     while(true) {
-      // Send any window updates
-      doRepaint();
       // Process pending events
       m_driver.grabEvents(null);
       // Process timers
       TimedEvent.update();
       // Do any updates
       doUpdate();
-      // Repaint what is needed
-      doRepaint();
+      // Repaint what is needed.
+      doRepaint(false);
       }
     }
 
