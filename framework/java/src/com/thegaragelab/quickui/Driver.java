@@ -288,6 +288,24 @@ class Driver implements ISurface {
   // Driver specific operations
   //-------------------------------------------------------------------------
   
+  /** Register an asset
+   * 
+   * @param type the type of the asset being registered.
+   * @param data the byte array containing the data for the asset.
+   * @param offset the offset into the data array where the asset is.
+   * @param size the size of the asset in bytes.
+   * 
+   * @return a positive integer representing a handle for the asset or -1
+   *         if an error occurs.
+   */
+  int registerAsset(int type, byte[] data, int offset, int size) {
+    // Verify the data being passed in
+    if((offset + size)>data.length)
+      return -1;
+    // Now register it
+    return gfxRegisterAsset(type, data, offset, size);
+    }
+  
   /** Process any input events.
    * 
    */
