@@ -14,10 +14,17 @@ package com.thegaragelab.quickui;
  *  this class to implement application specific functionality.
  */
 public class Application extends Container {
+  //--- Constants
+  private static final String SYSTEM_RESOURCE = "system";
+  
+  //--- Class variables
+  private static Application m_instance;
+  
   //--- Instance variables
   private Driver     m_driver;     //! The graphics driver instance
   private EventQueue m_eventQueue; //! The incoming event queue
   private Point      m_offset;     //! The offset for painting operations
+  private Palette    m_palette;    //! The system palette
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -32,6 +39,7 @@ public class Application extends Container {
   public Application() {
     // We have no parent and we use the dimensions of the display driver.
     super(new Rectangle(Point.ORIGIN, Driver.getInstance()));
+    m_instance = this;
     }
   
   /** Constructor with a preferred size
@@ -49,6 +57,7 @@ public class Application extends Container {
   public Application(int width, int height) {
     // We have no parent and we use the dimensions of the display driver.
     super(new Rectangle(Point.ORIGIN, Driver.getInstance(width, height)));
+    m_instance = this;
     }
   
   /** Initialise the state
@@ -64,6 +73,20 @@ public class Application extends Container {
     m_driver = Driver.getInstance();
     m_eventQueue = new EventQueue();
     m_offset = Point.ORIGIN;
+    // Load our assets
+    m_palette = Asset.loadPalette(SYSTEM_RESOURCE);
+    }
+  
+  //-------------------------------------------------------------------------
+  // Singleton management
+  //-------------------------------------------------------------------------
+  
+  /** Get the current application instance
+   * 
+   * @return the running application
+   */
+  public static final Application getInstance() {
+    return m_instance;
     }
   
   //-------------------------------------------------------------------------
@@ -296,6 +319,14 @@ public class Application extends Container {
   //-------------------------------------------------------------------------
   // Application specific operations
   //-------------------------------------------------------------------------
+
+  /** Get the current system palette
+   * 
+   * @return the palette defined as the system palette.
+   */
+  public Palette getPalette() {
+    return m_palette;
+    }
   
   /** Called to initialise the application
    *
