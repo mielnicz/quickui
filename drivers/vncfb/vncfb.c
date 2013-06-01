@@ -12,11 +12,17 @@
 #include <gfxdriver.h>
 #include <rfb.h>
 
-/** Default framebuffer width */
+/* Default size for the framebuffer */
 #define DEFAULT_DISPLAY_WIDTH  320
-
-/** Default framebuffer height */
 #define DEFAULT_DISPLAY_HEIGHT 240
+
+/* Minimum size for the framebuffer */
+#define MIN_DISPLAY_WIDTH  128
+#define MIN_DISPLAY_HEIGHT 128
+
+/* Maximum size for the framebuffer */
+#define MAX_DISPLAY_WIDTH  1024
+#define MAX_DISPLAY_HEIGHT 768
 
 /** The global graphics driver structure */
 GFX_DRIVER g_GfxDriver;
@@ -105,23 +111,36 @@ GFX_RESULT gfx_Init(uint16_t width, uint16_t height) {
   g_maxX = 0;
   g_minY = 0;
   g_maxY = 0;
+  // Verify the width and height requested
+  if(width<=0)
+    width = DEFAULT_DISPLAY_WIDTH;
+  if(width<MIN_DISPLAY_WIDTH)
+    width = MIN_DISPLAY_WIDTH;
+  if(width>MAX_DISPLAY_WIDTH)
+    width = MAX_DISPLAY_WIDTH;
+  if(height<=0)
+    height = DEFAULT_DISPLAY_HEIGHT;
+  if(height<MIN_DISPLAY_HEIGHT)
+    height = MIN_DISPLAY_HEIGHT;
+  if(height>MAX_DISPLAY_HEIGHT)
+    height = MAX_DISPLAY_HEIGHT;
   // Initialise the VNC virtual screen
   rfbLogEnable(0);
-  g_pScreenInfo = rfbGetScreen(NULL, NULL, DEFAULT_DISPLAY_WIDTH, DEFAULT_DISPLAY_HEIGHT, 5, 3, 2);
+  g_pScreenInfo = rfbGetScreen(NULL, NULL, width, height, 5, 3, 2);
   if(g_pScreenInfo==NULL)
 	return GFX_RESULT_INTERNAL;
   g_pScreenInfo->serverFormat.redShift = 11;
   g_pScreenInfo->serverFormat.greenShift = 6;
   g_pScreenInfo->serverFormat.blueShift = 0;
   // Initialise our framebuffer
-  g_pFrameBuffer = (GFX_COLOR *)calloc(DEFAULT_DISPLAY_WIDTH * DEFAULT_DISPLAY_HEIGHT, sizeof(GFX_COLOR));
+  g_pFrameBuffer = (GFX_COLOR *)calloc(width * height, sizeof(GFX_COLOR));
   if(g_pFrameBuffer==NULL)
     return GFX_RESULT_MEMORY;
   g_pScreenInfo->frameBuffer = (char *)g_pFrameBuffer;
   rfbInitServer(g_pScreenInfo);
   // Set up the driver API
-  g_GfxDriver.m_width = DEFAULT_DISPLAY_WIDTH;
-  g_GfxDriver.m_height = DEFAULT_DISPLAY_HEIGHT;
+  g_GfxDriver.m_width = width;
+  g_GfxDriver.m_height = height;
   g_GfxDriver.m_pfBeginPaint = gfx_vnc_BeginPaint;
   g_GfxDriver.m_pfEndPaint = gfx_vnc_EndPaint;
   g_GfxDriver.m_pfPutPixel = gfx_vnc_PutPixel;
