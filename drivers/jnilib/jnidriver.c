@@ -10,6 +10,40 @@
 #include <quickgfx.h>
 #include "jnidriver.h"
 
+/*--------------------------------------------------------------------------*
+* These functions are used to help manage assets used by the system.
+*--------------------------------------------------------------------------*/
+
+static uint8_t *g_assets    = NULL; //! Raw asset data
+static int32_t  g_nextIndex = 0;    //! Next index for new asset
+
+/** Add data to the assets table.
+ *
+ */
+static int addAsset(JNIEnv *pEnv, jbyteArray data, jint offset, jint size) {
+  int32_t handle = g_nextIndex;
+  // Try and reallocate the array to fit the new data
+  uint8_t *pNew = (uint8_t *)realloc(g_assets, g_nextIndex + size);
+  if(pNew==NULL)
+    return -1;
+  g_assets = pNew;
+  // Try and map the Java byte array into memory
+  pNew = (uint8_t *)(*pEnv)->GetByteArrayElements(pEnv, data, NULL);
+  if(pNew==NULL)
+    return -1;
+  // Now copy the data across and update the index
+  memcpy(&g_assets[g_nextIndex], &pNew[offset], size);
+  g_nextIndex += size;
+  // Release the Java array
+  (*pEnv)->ReleaseByteArrayElements(pEnv, data, pNew, JNI_ABORT);
+  // All done
+  return handle;
+  }
+
+/*--------------------------------------------------------------------------*
+* Java function interface to the library.
+*--------------------------------------------------------------------------*/
+
 /*
  * Class:     com_thegaragelab_quickui_Driver
  * Method:    gfxInit
@@ -70,7 +104,11 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxFillRegion(JNIEnv
  * Signature: (IIII)I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawIcon(JNIEnv *pEnv, jobject obj, jint x, jint y, jint icon, jint color) {
-  return (jint)GFX_RESULT_INTERNAL;
+  // Make sure the asset is at least in range
+  if((icon<0)||(icon>=g_nextIndex))
+    return (jint)GFX_RESULT_INTERNAL;
+  // Now draw it
+  return (jint)gfx_DrawIcon(x, y, (GFX_ICON *)&g_assets[icon], color);
   }
 
 /*
@@ -79,7 +117,10 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawIcon(JNIEnv *
  * Signature: (IIIIIIII)I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawIconPortion(JNIEnv *pEnv, jobject obj, jint x, jint y, jint icon, jint sx, jint sy, jint w, jint h, jint color) {
-  return (jint)GFX_RESULT_INTERNAL;
+  if((icon<0)||(icon>=g_nextIndex))
+    return (jint)GFX_RESULT_INTERNAL;
+  // Now draw it
+  return (jint)gfx_DrawIconPortion(x, y, (GFX_ICON *)&g_assets[icon], sx, sy, w, h, color);
   }
 
 /*
@@ -142,7 +183,7 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxCheckEvents(JNIEn
  * Signature: (I[BII)I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxRegisterAsset (JNIEnv *pEnv, jobject obj, jint type, jbyteArray data, jint offset, jint size) {
-  return (jint)GFX_RESULT_INTERNAL;
+  return (jint)addAsset(pEnv, data, offset, size);
   }
 
 /*

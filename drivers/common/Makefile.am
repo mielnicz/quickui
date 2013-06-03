@@ -5,7 +5,6 @@ noinst_LTLIBRARIES = libgfxcommon.la
 libgfxcommon_la_SOURCES = \
     gfxDrawBox.c \
     gfxDrawIcon.c \
-    gfxDrawIconPortion.c \
     gfxDrawImage.c \
     gfxDrawImagePortion.c \
     gfxDrawLine.c \

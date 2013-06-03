@@ -84,7 +84,7 @@ typedef struct _GFX_EVENT_INFO {
  * it's format.
  */
 typedef struct _GFX_IMAGE_HEADER {
-  uint8_t m_width; //! Width of the image in pixels
+  uint8_t m_width;  //! Width of the image in pixels
   uint8_t m_height; //! Height of the image in pixels
   } GFX_IMAGE_HEADER;
 

@@ -72,8 +72,8 @@ CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libgfxcommon_la_LIBADD =
 am_libgfxcommon_la_OBJECTS = gfxDrawBox.lo gfxDrawIcon.lo \
-	gfxDrawIconPortion.lo gfxDrawImage.lo gfxDrawImagePortion.lo \
-	gfxDrawLine.lo gfxFillRegion.lo gfxCheckEvents.lo
+	gfxDrawImage.lo gfxDrawImagePortion.lo gfxDrawLine.lo \
+	gfxFillRegion.lo gfxCheckEvents.lo
 libgfxcommon_la_OBJECTS = $(am_libgfxcommon_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
@@ -232,7 +232,6 @@ noinst_LTLIBRARIES = libgfxcommon.la
 libgfxcommon_la_SOURCES = \
     gfxDrawBox.c \
     gfxDrawIcon.c \
-    gfxDrawIconPortion.c \
     gfxDrawImage.c \
     gfxDrawImagePortion.c \
     gfxDrawLine.c \
@@ -294,7 +293,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gfxCheckEvents.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gfxDrawBox.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gfxDrawIcon.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gfxDrawIconPortion.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gfxDrawImage.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gfxDrawImagePortion.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gfxDrawLine.Plo@am__quote@
