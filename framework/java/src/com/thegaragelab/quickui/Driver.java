@@ -253,6 +253,7 @@ class Driver implements ISurface {
    * @param color the Color to use for the solid parts of the icon.
    */
   public void drawIcon(IPoint point, Icon icon, Color color) {
+    gfxDrawIcon(point.getX(), point.getY(), icon.getHandle(), color.getNativeFormat());
     }
 
   /** Draw a portion of an Icon to the screen.
@@ -263,6 +264,7 @@ class Driver implements ISurface {
    * @param portion a Rectangle specifying the portion of the icon to draw.
    */
   public void drawIcon(IPoint point, Icon icon, Color color, IRectangle portion) {
+    gfxDrawIconPortion(point.getX(), point.getY(), icon.getHandle(), portion.getX(), portion.getY(), portion.getWidth(), portion.getHeight(), color.getNativeFormat());
     }
   
   /** Draw an Image to the screen.

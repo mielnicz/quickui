@@ -17,6 +17,26 @@ public class Application extends Container {
   //--- Constants
   private static final String SYSTEM_RESOURCE = "system";
   
+  //--- System icons
+  public static final  int SYSTEM_ICON_SIZE = 16; //! Size of system icons
+  public static final  int ICON_HOME        = 0;  //! The home icon
+  public static final  int ICON_UP          = 1;  //! Icon pointing up
+  public static final  int ICON_UP_RIGHT    = 2;  //! Icon pointing up and right
+  public static final  int ICON_RIGHT       = 3;  //! Icon pointing right
+  public static final  int ICON_DOWN_RIGHT  = 4;  //! Icon pointing down and right
+  public static final  int ICON_DOWN        = 5;  //! Icon pointing down
+  public static final  int ICON_DOWN_LEFT   = 6;  //! Icon pointing down and left
+  public static final  int ICON_LEFT        = 7;  //! Icon pointing left
+  public static final  int ICON_UP_LEFT     = 8;  //! Icon pointing up and left
+  public static final  int ICON_ALERT       = 9;  //! Alert icon
+  public static final  int ICON_ERROR       = 10; //! Error icon
+  public static final  int ICON_INFO        = 11; //! Information icon
+  public static final  int ICON_OK          = 12; //! Showing OK
+  public static final  int ICON_CANCEL      = 13; //! Showing Cancel or Bad
+  public static final  int ICON_TAG         = 14; //! Tag (partial save)
+  public static final  int ICON_SAVE        = 15; //! Save (save everything)
+  private static final int SYSTEM_ICON_MAX = ICON_SAVE; //! Maximum ID for system icons
+  
   //--- Class variables
   private static Application m_instance;
   
@@ -25,6 +45,8 @@ public class Application extends Container {
   private EventQueue m_eventQueue; //! The incoming event queue
   private Point      m_offset;     //! The offset for painting operations
   private Palette    m_palette;    //! The system palette
+  private Icon       m_icons;      //! The system icons
+  private Font       m_font;       //! The system font
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -75,6 +97,8 @@ public class Application extends Container {
     m_offset = Point.ORIGIN;
     // Load our assets
     m_palette = Asset.loadPalette(SYSTEM_RESOURCE);
+    m_icons = Asset.loadIcon(SYSTEM_RESOURCE);
+    m_font = Asset.loadFont(SYSTEM_RESOURCE);
     }
   
   //-------------------------------------------------------------------------
@@ -320,6 +344,48 @@ public class Application extends Container {
   // Application specific operations
   //-------------------------------------------------------------------------
 
+  /** Get the system icons
+   *
+   * @return the Icon asset containing the system icons
+   */
+  public Icon getIcons() {
+    return m_icons;
+    }
+  
+  /** Draw a particular system icon at the given location
+   * 
+   * @param position where to draw the icon
+   * @param icon the name of the icon
+   */
+  public void drawSystemIcon(IPoint position, int icon, Color color) {
+    // Check boundaries
+    if((icon<0)||(icon>SYSTEM_ICON_MAX)||(m_icons==null))
+      return;
+    // Show the icon
+    drawIcon(position, m_icons, color, new Rectangle(icon * SYSTEM_ICON_SIZE, 0, SYSTEM_ICON_SIZE, SYSTEM_ICON_SIZE));
+    }
+  
+  /** Get the system font
+   * 
+   * @return the Font asset for the system font.
+   */
+  public Font getFont() {
+    return m_font;
+    }
+  
+  /** Set the system font
+   * 
+   * @param font the new font to use as the system font.
+   */
+  public void setFont(Font font) {
+    // If there is no change, ignore it
+    if(font==m_font)
+      return;
+    // Save the new font and trigger a global repaint
+    m_font = font;
+    setDirty(true);
+    }
+  
   /** Get the current system palette
    * 
    * @return the palette defined as the system palette.
