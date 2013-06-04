@@ -44,7 +44,7 @@ def writeImageHeader(output, width, height):
 """
 def readImageHeader(input):
   width, height = unpack("BB", input[:2])
-  return input[2:], width, height
+  return input[2:], width + 1, height + 1
 
 """ Write icon data
 """
@@ -73,8 +73,29 @@ def writeIconData(output, width, height, bits):
 
 """ Read icon data
 """
-def readIconData(input):
-  return None
+def readIconData(input, width, height):
+  # Calculate the number of bytes we should have
+  size = int(width / 8)
+  if (width % 8) > 0:
+    size = size + 1
+  size = size * height
+  # Verify the size of the data we have been given
+  if len(input) < size:
+    print "ERROR: Not enough data for a %i x %i icon." % (width, height)
+    print "       Wanted %i bytes, got %i." % (size, len(input))
+    exit(1)
+  # Now read the data
+  bits = ""
+  for index in range(size):
+    data = ord(input[index])
+    for bit in range(8):
+      if data & 0x80:
+        bits = bits + "1"
+      else:
+        bits = bits + "0"
+      data = data << 1
+  # All done
+  return input[index:], bits
 
 """ Write a font header
 """
@@ -83,7 +104,7 @@ def writeFontHeader(output, numchars, height, default, charmap):
   output.write(pack("BBBB", numchars - 1, height - 1, default, 0))
   # Write the character map
   for ch in charmap:
-    output.write(pack("BBBB", *ch))
+    output.write(pack("BBBB", ch[0], ch[1] - 1, ch[2], ch[3] ))
 
 """ Read a font header
 """
@@ -121,12 +142,14 @@ def readIcon(filename):
   input = ""
   # Read the input
   with open(filename, "rb") as content:
-    while (data = content.read()) <> '':
+    data = content.read()
+    while data <> '':
       input = input + data
+      data = content.read()
   # Read the image header
   input, width, height = readImageHeader(input)
   # Now read the data for the Icon
-  bits = ""
+  input, bits = readIconData(input, width, height)
   return width, height, bits
 
 """ Write an icon resource to a file
@@ -156,7 +179,7 @@ def writeFont(filename, numchars, height, default, charmap, imgwidth, imgheight,
   # Write the icon header
   writeImageHeader(output, imgwidth, imgheight)
   # Write the icon data
-  writeIconData(output, width, height, bits)
+  writeIconData(output, imgwidth, imgheight, bits)
   # All done
   output.close()
 
