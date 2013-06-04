@@ -43,7 +43,7 @@ def processRGBA(image):
 
 """ Process a monochrome image file
 """
-def processMono(image):
+def processMono(image, oncolor):
   width, height = image.size
   width = min(width, MAX_IMAGE_WIDTH)
   height = min(height, MAX_IMAGE_HEIGHT)
@@ -53,7 +53,7 @@ def processMono(image):
     line = ""
     for x in range(width):
       color = image.getpixel((x, y))
-      if color == 0:
+      if color == oncolor:
         bits = bits + "1"
       else:
         bits = bits + "0"
@@ -66,7 +66,7 @@ def processMono(image):
 
 """ Process a single image file
 """
-def processImage(filename):
+def processImage(filename, oncolor):
   # Make sure the file exists
   if not exists(filename):
     print "ERROR: The file '%s' does not exist." % filename
@@ -89,7 +89,7 @@ def processImage(filename):
   if image.mode == "RGBA":
     return processRGBA(image)
   if image.mode == "1":
-    return processMono(image)
+    return processMono(image, oncolor)
   # If we get here, we failed
   print "  ERROR: Unsupported graphics mode '%s'." % image.mode
   exit(1)
@@ -101,7 +101,7 @@ def processImage(filename):
 USAGE = """
 Usage:
 
-    %s input-files
+%s [options] input-files
 
 Description:
 
@@ -109,6 +109,15 @@ Description:
     input files may be in a wide range of formats (jpg, png, bmp, etc) and
     the generated icon resource will have the same name as the input with the
     extension changed to '.qco'.
+
+Options:
+
+    --invert
+
+      This option only applies to monochrome images. It inverts the the meaning
+      of the foreground color. Without the option any white pixels are set as
+      the foreground, with the option applied black pixels are considered the
+      foreground.
 """
 
 if __name__ == "__main__":
@@ -116,9 +125,19 @@ if __name__ == "__main__":
   if len(argv) <= 1:
     print USAGE % argv[0]
     exit(1)
+  # Collect options
+  oncolor = 255
+  index = 1
+  while argv[index].startswith("--"):
+    if argv[index] == "--invert":
+      oncolor = 0
+      index = index + 1
+    else:
+      print "ERROR: Unrecognised option '%s'" % argv[index]
+      exit(1)
   # Process the input files
-  for filename in argv[1:]:
-    width, height, bits = processImage(filename)
+  for filename in argv[index:]:
+    width, height, bits = processImage(filename, oncolor)
     outname = splitext(filename)[0] + EXTENSION_ICON
     print "  Writing resource '%s'" % outname
     writeIcon(outname, width, height, bits)
