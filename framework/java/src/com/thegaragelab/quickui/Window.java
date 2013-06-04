@@ -506,4 +506,26 @@ public class Window implements IRectangle, ISurface, IFlags {
     getRoot().drawImage(point, image, palette, portion);
     }
   
+  /** Draw a single character using the given font.
+   * 
+   * @param font the Font to use to render the character.
+   * @param point the location to draw the character at.
+   * @param color the Color to draw the character with.
+   * @param ch the character to draw.
+   */
+  public void drawChar(Font font, IPoint point, Color color, char ch) {
+    font.drawChar(this, point, color, ch);
+    }
+
+  /** Draw a string using the given font.
+   * 
+   * @param font the Font to use to render the character.
+   * @param point the location to draw the character at.
+   * @param color the Color to draw the character with.
+   * @param string the string to draw.
+   */
+  public void drawString(Font font, IPoint point, Color color, String string) {
+    font.drawString(this, point, color, string);
+    }
+
   }

@@ -140,7 +140,7 @@ public class Asset {
     if(size<0)
       return null;
     // Now create the instance
-    icon = new Icon(m_buffer, size);
+    icon = new Icon(m_buffer, 0, size);
     if(icon.getHandle()<0)
       return null;
     // And register it in the cache of assets
@@ -165,7 +165,7 @@ public class Asset {
     if(size<0)
       return null;
     // Now create the instance
-    image = new Image(m_buffer, size);
+    image = new Image(m_buffer, 0, size);
     if(image.getHandle()<0)
       return null;
     // And register it in the cache of assets
@@ -215,7 +215,7 @@ public class Asset {
     if(size<0)
       return null;
     // Now create the instance
-    font = new Font(m_buffer, size);
+    font = new Font(m_buffer, 0, size);
     if(font.getHandle()<0)
       return null;
     // And register it in the cache of assets

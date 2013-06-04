@@ -33,10 +33,10 @@ public class Icon extends Asset implements IDimension {
    * @param data the raw data for the asset.
    * @param size the number of bytes in the data array for the asset.
    */
-  Icon(byte[] data, int size) {
+  Icon(byte[] data, int offset, int size) {
     super();
     // Verify the data
-    ByteBuffer buffer = ByteBuffer.wrap(data, 0, size);
+    ByteBuffer buffer = ByteBuffer.wrap(data, offset, size);
     buffer.order(ByteOrder.LITTLE_ENDIAN);
     m_width = (buffer.get() & 0xFF) + 1;
     m_height = (buffer.get() & 0xFF) + 1;
