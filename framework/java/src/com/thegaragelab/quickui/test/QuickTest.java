@@ -30,6 +30,7 @@ public class QuickTest extends Application implements TimedEvent.Listener {
   private Window m_winTR; // Window in the top right corner
   private Window m_winBL; // Window in the bottom left corner
   private Window m_winBR; // Window in the bottom right corner
+  private Icon   m_icon;  // The icon to paint
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -73,6 +74,8 @@ public class QuickTest extends Application implements TimedEvent.Listener {
     Palette palette = Application.getInstance().getPalette();
     if(palette!=null)
       w.setBackground(palette.getColor(m_random.nextInt(Palette.PALETTE_SIZE)));
+    // Invalidate the application window
+    setDirty(true);
     }
 
   /** Called to initialise the application
@@ -83,6 +86,8 @@ public class QuickTest extends Application implements TimedEvent.Listener {
    * etc.
    */
    public void onCreate() {
+     // Load our assets
+     m_icon = Asset.loadIcon("cga");
      // Create our child windows
      Rectangle screen = new Rectangle(this);
      m_winTL = new Window(this, new Rectangle(
@@ -115,10 +120,26 @@ public class QuickTest extends Application implements TimedEvent.Listener {
      m_winBR.setBackground(Color.WHITE);
      // Hide the bottom right one to test it.
      m_winBR.setVisible(false);
+     // Set a background color for the main window
+     setBackground(Color.WHITE);
      // Set up our timer
      TimedEvent.repeat(250L, this);
      }
    
+   /**
+    * @see com.thegaragelab.quickui.Window#onPaint()
+    */
+   @Override
+   public void onPaint() {
+     super.onPaint();
+     // Draw a random system icon
+     drawIcon(
+       new Point(m_random.nextInt(getWidth() - 8),m_random.nextInt(getWidth() - 8)),
+       m_icon,
+       Color.RED
+       );
+     }
+
   //-------------------------------------------------------------------------
   // Main program
   //-------------------------------------------------------------------------

@@ -7,10 +7,24 @@
 *---------------------------------------------------------------------------*/
 package com.thegaragelab.quickui;
 
-/** Represents a font
+//--- Imports
+import java.nio.*;
+import java.util.*;
+
+/** Represents a Font
+ * 
+ * A font is essentially an Icon (which is how the asset is registered) with
+ * some additional metadata. The metadata describes which characters are
+ * provided, their width and height and where they are located within the
+ * Icon asset.
  *
  */
 public class Font extends Asset {
+  //--- Constants
+  private static int MAX_CHAR = 127; //! Highest ASCII character code
+  
+  //--- Instance variables
+
   //-------------------------------------------------------------------------
   // Construction and initialisation
   //-------------------------------------------------------------------------

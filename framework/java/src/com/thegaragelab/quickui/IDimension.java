@@ -39,6 +39,5 @@ public interface IDimension {
    * @param h the new height of the dimension.
    */
   public void setHeight(int h);
-  
 
   }
