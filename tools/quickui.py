@@ -43,7 +43,52 @@ def writeImageHeader(output, width, height):
 """ Read an image header
 """
 def readImageHeader(input):
-  pass
+  width, height = unpack("BB", input[:2])
+  return input[2:], width, height
+
+""" Write icon data
+"""
+def writeIconData(output, width, height, bits):
+  # Make sure we have enough bits
+  size = width * height
+  if len(bits) <> size:
+    print "ERROR: Insufficient data provided for icon (Wanted %i, got %i)" % (size, len(bits))
+    exit(1)
+  # Write out the data
+  byte = 0
+  count = 0
+  for ch in bits:
+    # Update the data in the byte
+    byte = byte << 1
+    if ch == "0":
+      byte = byte & 0xFE
+    else:
+      byte = byte | 0x01
+    # Move to the next bit
+    count = count + 1
+    if count == 8:
+      output.write(pack("B", byte & 0xFF))
+      count = 0
+      byte = 0
+
+""" Read icon data
+"""
+def readIconData(input):
+  return None
+
+""" Write a font header
+"""
+def writeFontHeader(output, numchars, height, default, charmap):
+  # Write the header
+  output.write(pack("BBBB", numchars - 1, height - 1, default, 0))
+  # Write the character map
+  for ch in charmap:
+    output.write(pack("BBBB", *ch))
+
+""" Read a font header
+"""
+def readFontHeader(input):
+  return None
 
 #----------------------------------------------------------------------------
 # Read/Write operations for resources
@@ -73,7 +118,16 @@ def writePalette(filename, palette):
 """ Read an icon image from a file
 """
 def readIcon(filename):
-  return None
+  input = ""
+  # Read the input
+  with open(filename, "rb") as content:
+    while (data = content.read()) <> '':
+      input = input + data
+  # Read the image header
+  input, width, height = readImageHeader(input)
+  # Now read the data for the Icon
+  bits = ""
+  return width, height, bits
 
 """ Write an icon resource to a file
 """
@@ -82,28 +136,27 @@ def writeIcon(filename, width, height, bits):
   output = open(filename, "wb")
   # Write the header
   writeImageHeader(output, width, height)
-  # Make sure we have enough bits
-  size = width * height
-  if len(bits) <> size:
-    print "ERROR: Insufficient data provided for icon (Wanted %i, got %i)" % (size, len(bits))
-    exit(1)
-  # Write out the data
-  byte = 0
-  count = 0
-  for ch in bits:
-    # Update the data in the byte
-    byte = byte << 1
-    if ch == "0":
-      byte = byte & 0xFE
-    else:
-      byte = byte | 0x01
-    # Move to the next bit
-    count = count + 1
-    if count == 8:
-      print "%02x" % byte
-      output.write(pack("B", byte & 0xFF))
-      count = 0
-      byte = 0
+  # Write the data
+  writeIconData(output, width, height, bits)
+  # All done
+  output.close()
+
+""" Read a font resource from a file
+"""
+def readFont(filename):
+  return None
+
+""" Write a font resource to a file
+"""
+def writeFont(filename, numchars, height, default, charmap, imgwidth, imgheight, bits):
+  # Open the file
+  output = open(filename, "wb")
+  # Write the font header
+  writeFontHeader(output, numchars, height, default, charmap)
+  # Write the icon header
+  writeImageHeader(output, imgwidth, imgheight)
+  # Write the icon data
+  writeIconData(output, width, height, bits)
   # All done
   output.close()
 
