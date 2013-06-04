@@ -2,3 +2,9 @@
 .project
 build
 autom4te.cache
+INSTALL
+Makefile.in
+aclocal.m4
+config
+configure
+m4/libtool.m4
