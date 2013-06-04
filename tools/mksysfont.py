@@ -80,8 +80,11 @@ if __name__ == "__main__":
       chend = int(argv[index + 1])
       index = index + 2
     elif argv[index] == "--output":
-      output = argv[index + 1]
+      outname = argv[index + 1]
       index = index + 2
+    else:
+      print "ERROR: Unsupported option '%s'" % argv[index]
+      exit(1)
   # Verify what we have
   if index >= len(argv):
     print "ERROR: No files have been specified on the command line."
