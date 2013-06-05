@@ -75,7 +75,13 @@ public class QuickTest extends Application implements TimedEvent.Listener {
     if(palette!=null)
       w.setBackground(palette.getColor(m_random.nextInt(Palette.PALETTE_SIZE)));
     // Invalidate the application window
-    setDirty(true);
+//    setDirty(true);
+    drawString(
+        getFont(),
+        new Point(m_random.nextInt(getWidth() - 8),m_random.nextInt(getWidth() - 8)),
+        Color.RED,
+        "This is a sample string. How does it look?"
+        );
     }
 
   /** Called to initialise the application
@@ -86,8 +92,6 @@ public class QuickTest extends Application implements TimedEvent.Listener {
    * etc.
    */
    public void onCreate() {
-     // Load our assets
-     m_icon = Asset.loadIcon("cga");
      // Create our child windows
      Rectangle screen = new Rectangle(this);
      m_winTL = new Window(this, new Rectangle(
@@ -132,11 +136,11 @@ public class QuickTest extends Application implements TimedEvent.Listener {
    @Override
    public void onPaint() {
      super.onPaint();
-     // Draw a random system icon
-     drawIcon(
-       new Point(m_random.nextInt(getWidth() - 8),m_random.nextInt(getWidth() - 8)),
-       m_icon,
-       Color.RED
+     drawChar(
+       getFont(),
+       new Point(m_random.nextInt(getWidth() - 8), m_random.nextInt(getHeight() - 8)),
+       Color.RED,
+       '?'
        );
      }
 

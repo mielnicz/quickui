@@ -48,8 +48,9 @@ public class Font extends Asset {
     int chars = (buffer.get() & 0xFF) + 1;
     m_height = (buffer.get() & 0xFF) + 1;
     int defchar = buffer.get() & 0xFF;
+    buffer.get(); // Skip a spacer byte
     // Make sure we have enough data
-    if(size<((chars * 4) + 2))
+    if(size<((chars * 4) + 4))
       return;
     // Read the character map
     m_widths = new int[MAX_CHAR + 1];
@@ -72,7 +73,7 @@ public class Font extends Asset {
         m_ypos[index] = m_ypos[defchar];
         }
     // Now load the Icon resource itself
-    m_icon = new Icon(data, offset + ((chars * 4) + 2), size - ((chars * 4) + 2));
+    m_icon = new Icon(data, offset + ((chars * 4) + 4), size - ((chars * 4) + 4));
     }
 
   //-------------------------------------------------------------------------

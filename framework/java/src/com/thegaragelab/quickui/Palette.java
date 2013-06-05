@@ -29,15 +29,16 @@ public class Palette extends Asset {
   /** Constructor
    * 
    * @param data the raw data for the asset.
+   * @param offset the offset into the data for the start of the asset.
    * @param size the number of bytes in the data array for the asset.
    */
-  Palette(byte[] data, int size) {
+  Palette(byte[] data, int offset, int size) {
     super();
     // Verify the data
     if(size!=(2 * PALETTE_SIZE))
       return;
     // Try and register it
-    m_handle = Driver.getInstance().registerAsset(Asset.PALETTE, data, 0, size);
+    m_handle = Driver.getInstance().registerAsset(Asset.PALETTE, data, offset, size);
     if(m_handle<0)
       return;
     // Now build up our internal state

@@ -46,7 +46,7 @@ public class Icon extends Asset implements IDimension {
     if(size!=(expected + 2))
       return;
     // Try and register it
-    m_handle = Driver.getInstance().registerAsset(Asset.ICON, data, 0, size);
+    m_handle = Driver.getInstance().registerAsset(Asset.ICON, data, offset, size);
     if(m_handle<0)
       return;
     }

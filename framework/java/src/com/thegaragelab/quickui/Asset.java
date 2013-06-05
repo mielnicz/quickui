@@ -190,7 +190,7 @@ public class Asset {
     if(size<0)
       return null;
     // Now create the instance
-    palette = new Palette(m_buffer, size);
+    palette = new Palette(m_buffer, 0, size);
     if(palette.getHandle()<0)
       return null;
     // And register it in the cache of assets

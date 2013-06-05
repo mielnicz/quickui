@@ -44,7 +44,7 @@ public class Image extends Asset implements IDimension {
     if(size!=(expected + 2))
       return;
     // Try and register it
-    m_handle = Driver.getInstance().registerAsset(Asset.IMAGE, data, 0, size);
+    m_handle = Driver.getInstance().registerAsset(Asset.IMAGE, data, offset, size);
     if(m_handle<0)
       return;
     }
