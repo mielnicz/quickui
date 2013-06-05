@@ -61,11 +61,11 @@ typedef GFX_COLOR GFX_PALETTE[GFX_PALETTE_SIZE];
  * This enum defines the event types we recognise.
  */
 typedef enum _GFX_EVENT {
-  GFX_EVENT_NONE = 0, //! Used for a NULL events. Can be ignored.
-  GFX_EVENT_KEY_DOWN, //! Key down event
-  GFX_EVENT_KEY_UP,   //! Key up event
-  GFX_EVENT_TOUCH,    //! Touch event
-  GFX_EVENT_RELEASE,  //! Release event
+  GFX_EVENT_KEY_DOWN = 0, //! Key down event
+  GFX_EVENT_KEY_UP,       //! Key up event
+  GFX_EVENT_TOUCH,        //! Touch event
+  GFX_EVENT_DRAG,         //! A drag event (touched and moving)
+  GFX_EVENT_RELEASE,      //! Release event
   } GFX_EVENT;
 
 /** Represents a single event
@@ -186,6 +186,10 @@ typedef GFX_RESULT (*_gfx_DrawBox)(uint16_t x1, uint16_t y1, uint16_t x2, uint16
  */
 typedef GFX_RESULT (*_gfx_CheckEvents)(_gfx_HandleEvent pfHandleEvent);
 
+/** Add a new event to the event queue
+ */
+typedef GFX_RESULT (*_gfx_AddEvent)(GFX_EVENT evType, uint16_t p1, uint16_t p2);
+
 /** The graphics driver API
  */
 typedef struct _GFX_DRIVER {
@@ -202,6 +206,7 @@ typedef struct _GFX_DRIVER {
   _gfx_DrawLine         m_pfDrawLine;         //! Draw a line
   _gfx_DrawBox          m_pfDrawBox;          //! Draw a box
   _gfx_CheckEvents      m_pfCheckEvents;      //! Check for pending events
+  _gfx_AddEvent         m_pfAddEvent;         //! Add a new event to the queue
   } GFX_DRIVER;
 
 //---------------------------------------------------------------------------
@@ -280,6 +285,9 @@ const void *gfx_Framebuffer();
 
 /** Check for pending events */
 #define gfx_CheckEvents(pfHandleEvent) (*g_GfxDriver.m_pfCheckEvents)(pfHandleEvent)
+
+/** Add a new event to the event queue */
+#define gfx_AddEvent(evType, p1, p2) (*g_GfxDriver.m_pfAddEvent)(evType, p1, p2)
 
 /** Clip a value
  *

@@ -7,6 +7,7 @@
 * protocol.
 *---------------------------------------------------------------------------*/
 #include <stdint.h>
+#include <stdbool.h>
 #include <string.h>
 #include <quickgfx.h>
 #include <gfxdriver.h>
@@ -36,6 +37,45 @@ static int              g_minX;
 static int              g_maxX;
 static int              g_minY;
 static int              g_maxY;
+
+//---------------------------------------------------------------------------
+// Event management
+//---------------------------------------------------------------------------
+
+/** Handle key events from the remote client
+ *
+ */
+static void keyevent(rfbBool down, rfbKeySym key, rfbClientPtr cl) {
+  int keynum = 0;
+  switch(key) {
+    case 0x0031:
+    case 0x0032:
+    case 0x0033:
+    case 0x0034:
+      keynum = key - 0x0030;
+      break;
+    }
+  if(keynum!=0)
+    gfx_AddEvent(down?GFX_EVENT_KEY_DOWN:GFX_EVENT_KEY_UP, keynum, 0);
+  }
+
+/** Handle movement/touch events from the remote client
+ *
+ */
+static void ptrevent(int buttonMask, int x, int y, rfbClientPtr cl) {
+  static bool s_last = false;
+  bool state = (buttonMask & 0x01) == 0x01;
+  // If the state has changed, send the new state
+  if(s_last!=state)
+    gfx_AddEvent(state?GFX_EVENT_TOUCH:GFX_EVENT_RELEASE, x, y);
+  else if(state)
+    gfx_AddEvent(GFX_EVENT_DRAG, x, y);
+  s_last = state;
+  }
+
+//---------------------------------------------------------------------------
+// Implementation of Driver functions
+//---------------------------------------------------------------------------
 
 /** Set the color of a single pixel
  */
@@ -83,7 +123,7 @@ static GFX_RESULT gfx_vnc_EndPaint() {
  */
 static GFX_RESULT gfx_vnc_CheckEvents(_gfx_HandleEvent pfHandleEvent) {
   rfbProcessEvents(g_pScreenInfo, 10000);
-  return GFX_RESULT_OK;
+  return gfx_common_CheckEvents(pfHandleEvent);
   }
 
 /** Get the framebuffer the driver is using
@@ -129,9 +169,13 @@ GFX_RESULT gfx_Init(uint16_t width, uint16_t height) {
   g_pScreenInfo = rfbGetScreen(NULL, NULL, width, height, 5, 3, 2);
   if(g_pScreenInfo==NULL)
 	return GFX_RESULT_INTERNAL;
+  // Set the pixel format
   g_pScreenInfo->serverFormat.redShift = 11;
   g_pScreenInfo->serverFormat.greenShift = 6;
   g_pScreenInfo->serverFormat.blueShift = 0;
+  // Add handlers for events
+  g_pScreenInfo->kbdAddEvent = keyevent;
+  g_pScreenInfo->ptrAddEvent = ptrevent;
   // Initialise our framebuffer
   g_pFrameBuffer = (GFX_COLOR *)calloc(width * height, sizeof(GFX_COLOR));
   if(g_pFrameBuffer==NULL)
@@ -152,6 +196,7 @@ GFX_RESULT gfx_Init(uint16_t width, uint16_t height) {
   g_GfxDriver.m_pfDrawLine = gfx_common_DrawLine;
   g_GfxDriver.m_pfDrawBox = gfx_common_DrawBox;
   g_GfxDriver.m_pfCheckEvents = gfx_vnc_CheckEvents;
+  g_GfxDriver.m_pfAddEvent = gfx_common_AddEvent;
   // All done
   return GFX_RESULT_OK;
   }

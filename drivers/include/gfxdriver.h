@@ -43,6 +43,9 @@ GFX_RESULT gfx_common_DrawBox(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2
 /** Check for pending events */
 GFX_RESULT gfx_common_CheckEvents(_gfx_HandleEvent pfHandleEvent);
 
+/** Add a new event to the event queue */
+GFX_RESULT gfx_common_AddEvent(GFX_EVENT evType, uint16_t p1, uint16_t p2);
+
 /* Guard for C++ */
 #ifdef __cplusplus
 };
