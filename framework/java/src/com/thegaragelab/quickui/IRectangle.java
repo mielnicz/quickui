@@ -17,6 +17,6 @@ public interface IRectangle extends IPoint, IDimension {
    * 
    * @return true if the rectangle contains the given point, false otherwise.
    */
-  public boolean contains(Point point) ;
+  public boolean contains(IPoint point) ;
   
   }

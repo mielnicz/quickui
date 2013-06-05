@@ -86,6 +86,26 @@ public class InputEvent implements IPoint {
     }
   
   //-------------------------------------------------------------------------
+  // InputEvent specific operations
+  //-------------------------------------------------------------------------
+  
+  /** Determine if this is a key event
+   * 
+   * @return true if this event is the result of a key press.
+   */
+  public boolean isKeyEvent() {
+    return (m_type==GFX_EVENT_KEY_UP)||(m_type==GFX_EVENT_KEY_DOWN);
+    }
+  
+  /** Determine if this is a touch event
+   * 
+   * @return true if this event is the result of a touch operation
+   */
+  public boolean isTouchEvent() {
+    return (m_type==GFX_EVENT_TOUCH)||(m_type==GFX_EVENT_DRAG)||(m_type==GFX_EVENT_RELEASE);
+    }
+  
+  //-------------------------------------------------------------------------
   // Implementation of IPoint
   //-------------------------------------------------------------------------
   

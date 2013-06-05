@@ -151,10 +151,10 @@ public class Rectangle extends Point implements IRectangle {
    * 
    * @return true if the rectangle contains the given point, false otherwise.
    */
-  public boolean contains(Point point) {
-    if((point.x<x)||((point.x-x)>=width))
+  public boolean contains(IPoint point) {
+    if((point.getX()<x)||((point.getX()-x)>=width))
       return false;
-    if((point.y<y)||((point.y-y)>=height))
+    if((point.getY()<y)||((point.getY()-y)>=height))
       return false;
     return true;
     }

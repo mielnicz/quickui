@@ -123,8 +123,6 @@ public class QuickTest extends Application implements TimedEvent.Listener {
      m_winBR.setBackground(Color.WHITE);
      // Hide the bottom right one to test it.
      m_winBR.setVisible(false);
-     // Set a background color for the main window
-     setBackground(Color.WHITE);
      // Set up our timer
      TimedEvent.repeat(250L, this);
      }

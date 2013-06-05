@@ -46,6 +46,7 @@ public class Application extends Container {
   private Palette    m_palette;    //! The system palette
   private Icon       m_icons;      //! The system icons
   private Font       m_font;       //! The system font
+  private Window     m_focused;    //! The currently focused window
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -147,6 +148,18 @@ public class Application extends Container {
     // This value is immutable for this instance
     }
 
+  /** Called when an input event is targeted to this window
+   * 
+   * This is the default handler for input events, the application will
+   * process any events that cannot be dispatched to a window.
+   * 
+   * @param event the input event sent to this window.
+   */
+  public void onInputEvent(InputEvent event) {
+    // Do nothing in this instance
+    System.err.println("Unhandled event!");
+    }
+  
   //-------------------------------------------------------------------------
   // Implementation of Container
   //-------------------------------------------------------------------------
@@ -189,7 +202,19 @@ public class Application extends Container {
    * @param event the InputEvent to handle
    */
   void doInputEvent(InputEvent event) {
-    // TODO: Implement this
+    // A touch event can change the focus, handle that situation.
+    if(event.getEventType()==InputEvent.GFX_EVENT_TOUCH) {
+      Window window = getWindowByPoint(event);
+      if(window!=null)
+        window = window.canHaveFocus();
+      if(window!=null)
+        window.setFocus(true);
+      }
+    // Now dispatch the input event
+    if(m_focused!=null)
+      m_focused.onInputEvent(event);
+    else
+      onInputEvent(event);
     }
   
   //-------------------------------------------------------------------------
@@ -324,6 +349,31 @@ public class Application extends Container {
   // Application specific operations
   //-------------------------------------------------------------------------
 
+  /** Get the focused window
+   * 
+   * @return a Window instance representing the window that currently has input
+   *         focus.
+   */
+  Window getFocusedWindow() {
+    return m_focused;
+    }
+  
+  /** Set the focused window
+   * 
+   */
+  void setFocusedWindow(Window window) {
+    // Can this window take the focus ?
+    window = window.canHaveFocus();
+    if(window==null)
+      return;
+    // If we have a focused window tell it that it's not anymore
+    if(m_focused!=null)
+      m_focused.setFocus(false);
+    // Now change the focused window to the requested one and let it know
+    m_focused = window;
+    window.setFocus(true);
+    }
+  
   /** Get the system icons
    *
    * @return the Icon asset containing the system icons
