@@ -24,7 +24,6 @@ public class Window implements IRectangle, ISurface, IFlags {
   
   //--- Instance variables
   private Container m_parent;     //! The parent Window
-  private Window    m_root;       //! The root Window
   private Rectangle m_rectangle;  //! Position and size of the window
   private Flags     m_flags;      //! Current flags
   private Color     m_background; //! The background color for the window
@@ -39,7 +38,6 @@ public class Window implements IRectangle, ISurface, IFlags {
    */
   Window(Rectangle rect) {
     m_rectangle = new Rectangle(rect);
-    m_root = this;
     m_flags = new Flags();
     initialiseState();
     // Call the creation method
@@ -53,7 +51,6 @@ public class Window implements IRectangle, ISurface, IFlags {
    */
   public Window(Container parent, Rectangle rect) {
     m_parent = parent;
-    m_root = m_parent.getRoot();
     m_flags = new Flags();
     m_rectangle = new Rectangle(rect);
     initialiseState();
@@ -92,14 +89,6 @@ public class Window implements IRectangle, ISurface, IFlags {
     return m_parent;
     }
   
-  /** Get the root Window
-   * 
-   * @return the Window instance that represents the display.
-   */
-  public Window getRoot() {
-    return m_root;
-    }
-
   /** Set the background color for this window
    * 
    * @param color the background color to use. If null the window will not
@@ -188,8 +177,7 @@ public class Window implements IRectangle, ISurface, IFlags {
    * @param offset the offset to use for future painting operations
    */
   void setOffset(IPoint offset) {
-    if(m_root!=null)
-      m_root.setOffset(offset);
+    Application.getInstance().setOffset(offset);
     }
   
   /** Called to do a repaint of the window
@@ -210,7 +198,7 @@ public class Window implements IRectangle, ISurface, IFlags {
       return;
     // Start the paint operation
     Rectangle region = new Rectangle(this);
-    getRoot().setClip(region);
+    Application.getInstance().setClip(region);
     beginPaint();
     // Erase the background if needed
     if(m_background!=null)
@@ -259,6 +247,18 @@ public class Window implements IRectangle, ISurface, IFlags {
    *  This method is called to redraw the window.
    */
   public void onPaint() {
+    // Do nothing in this instance
+    }
+  
+  /** Called when an input event is targeted to this window
+   * 
+   * An input event represents a key press or activity on the touch screen.
+   * In general, unless you are implementing a control, you don't need to
+   * do anything with these events.
+   * 
+   * @param event the input event sent to this window.
+   */
+  public void onInputEvent(InputEvent event) {
     // Do nothing in this instance
     }
   
@@ -408,7 +408,7 @@ public class Window implements IRectangle, ISurface, IFlags {
    * It is used to help the driver optimise updates to the physical display.
    */
   public void beginPaint() {
-    getRoot().beginPaint();
+    Application.getInstance().beginPaint();
     }
   
   /** End a paint operation.
@@ -416,7 +416,7 @@ public class Window implements IRectangle, ISurface, IFlags {
    * This method is used to signal the end of a complex paint operation.
    */
   public void endPaint() {
-    getRoot().endPaint();
+    Application.getInstance().endPaint();
     }
 
   /** Set the clipping region for future operations
@@ -424,7 +424,7 @@ public class Window implements IRectangle, ISurface, IFlags {
    * @param rect the Rectangle describing the clipping region.
    */
   public void setClip(IRectangle rect) {
-    // Do nothing in this implementation
+    // TODO: Should clip relative to this window.
     }
 
   /** Display a single pixel.
@@ -433,7 +433,7 @@ public class Window implements IRectangle, ISurface, IFlags {
    * @param color the Color to set the pixel to.
    */
   public void putPixel(IPoint point, Color color) {
-    getRoot().putPixel(point, color);
+    Application.getInstance().putPixel(point, color);
     }
 
   /** Fill a rectangle with a specific color.
@@ -442,7 +442,7 @@ public class Window implements IRectangle, ISurface, IFlags {
    * @param color the Color to fill the rectangle with.
    */
   public void fillRect(IRectangle rect, Color color) {
-    getRoot().fillRect(rect, color);
+    Application.getInstance().fillRect(rect, color);
     }
   
   /** Draw a line from one point to another 
@@ -452,7 +452,7 @@ public class Window implements IRectangle, ISurface, IFlags {
    * @param color the color to draw the line in.
    */
   public void drawLine(IPoint start, IPoint end, Color color) {
-    getRoot().drawLine(start, end, color);
+    Application.getInstance().drawLine(start, end, color);
     }
   
   /** Draw a box around a rectangle.
@@ -461,7 +461,7 @@ public class Window implements IRectangle, ISurface, IFlags {
    * @param color the Color to draw the box in.
    */
   public void drawBox(IRectangle rect, Color color) {
-    getRoot().drawBox(rect, color);
+    Application.getInstance().drawBox(rect, color);
     }
 
   /** Draw an Icon to the screen.
@@ -471,7 +471,7 @@ public class Window implements IRectangle, ISurface, IFlags {
    * @param color the Color to use for the solid parts of the icon.
    */
   public void drawIcon(IPoint point, Icon icon, Color color) {
-    getRoot().drawIcon(point, icon, color);
+    Application.getInstance().drawIcon(point, icon, color);
     }
 
   /** Draw a portion of an Icon to the screen.
@@ -482,7 +482,7 @@ public class Window implements IRectangle, ISurface, IFlags {
    * @param portion a Rectangle specifying the portion of the icon to draw.
    */
   public void drawIcon(IPoint point, Icon icon, Color color, IRectangle portion) {
-    getRoot().drawIcon(point, icon, color, portion);
+    Application.getInstance().drawIcon(point, icon, color, portion);
     }
   
   /** Draw an Image to the screen.
@@ -492,7 +492,7 @@ public class Window implements IRectangle, ISurface, IFlags {
    * @param palette the Palette to use to display the image.
    */
   public void drawImage(IPoint point, Image image, Palette palette) {
-    getRoot().drawImage(point, image, palette);
+    Application.getInstance().drawImage(point, image, palette);
     }
   
   /** Draw an Image to the screen.
@@ -503,7 +503,7 @@ public class Window implements IRectangle, ISurface, IFlags {
    * @param portion the Rectangle describing the portion of the image to display.
    */
   public void drawImage(IPoint point, Image image, Palette palette, IRectangle portion) {
-    getRoot().drawImage(point, image, palette, portion);
+    Application.getInstance().drawImage(point, image, palette, portion);
     }
   
   /** Draw a single character using the given font.
