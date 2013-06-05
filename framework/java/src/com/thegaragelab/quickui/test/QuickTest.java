@@ -30,7 +30,6 @@ public class QuickTest extends Application implements TimedEvent.Listener {
   private Window m_winTR; // Window in the top right corner
   private Window m_winBL; // Window in the bottom left corner
   private Window m_winBR; // Window in the bottom right corner
-  private Icon   m_icon;  // The icon to paint
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -91,7 +90,7 @@ public class QuickTest extends Application implements TimedEvent.Listener {
    * should use this to set up their state, create all required windows,
    * etc.
    */
-   public void onCreate() {
+   public void onInitialise() {
      // Create our child windows
      Rectangle screen = new Rectangle(this);
      m_winTL = new Window(this, new Rectangle(

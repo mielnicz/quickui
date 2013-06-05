@@ -42,7 +42,6 @@ public class Application extends Container {
   
   //--- Instance variables
   private Driver     m_driver;     //! The graphics driver instance
-  private EventQueue m_eventQueue; //! The incoming event queue
   private Point      m_offset;     //! The offset for painting operations
   private Palette    m_palette;    //! The system palette
   private Icon       m_icons;      //! The system icons
@@ -93,7 +92,6 @@ public class Application extends Container {
     super.initialiseState();
     // Initialise our own state
     m_driver = Driver.getInstance();
-    m_eventQueue = new EventQueue();
     m_offset = Point.ORIGIN;
     // Load our assets
     m_palette = Asset.loadPalette(SYSTEM_RESOURCE);
@@ -160,43 +158,7 @@ public class Application extends Container {
     }
 
   //-------------------------------------------------------------------------
-  // Internal event and painting helpers
-  //-------------------------------------------------------------------------
-
-  /** Set the offset for this window
-   * 
-   * @param offset the offset to use for future painting operations
-   */
-  @Override
-  void setOffset(IPoint offset) {
-    if(offset==null)
-      m_offset = Point.ORIGIN;
-    else
-      m_offset = new Point(offset);
-    }
-  
-  /** Called to do an update of the window.
-   * 
-   *  In the case of a container we do an update on all child windows as
-   *  well as our own.
-   */
-  void doUpdate() {
-    // Dispatch incoming events to windows
-    if(m_eventQueue!=null) {
-      synchronized(m_eventQueue) {
-        for(InputEvent event: m_eventQueue) {
-          // Process the input event
-          }
-        // Clear pending events
-        m_eventQueue.clear();
-        }
-      }
-    // Process updates
-    super.doUpdate();
-    }
-  
-  //-------------------------------------------------------------------------
-  // Implementation of ISurface
+  // Implementation of Container
   //-------------------------------------------------------------------------
   
   /** Called to do a repaint of the window
@@ -216,6 +178,34 @@ public class Application extends Container {
     super.doRepaint(force);
     }
 
+  //-------------------------------------------------------------------------
+  // Internal event and painting helpers
+  //-------------------------------------------------------------------------
+
+  /** Set the offset for this window
+   * 
+   * @param offset the offset to use for future painting operations
+   */
+  @Override
+  void setOffset(IPoint offset) {
+    if(offset==null)
+      m_offset = Point.ORIGIN;
+    else
+      m_offset = new Point(offset);
+    }
+  
+  /** Process an InputEvent
+   * 
+   * @param event the InputEvent to handle
+   */
+  void doInputEvent(InputEvent event) {
+    // TODO: Implement this
+    }
+  
+  //-------------------------------------------------------------------------
+  // Implementation of ISurface
+  //-------------------------------------------------------------------------
+  
   /** Begin a paint operation.
    * 
    * This method is used to signal the start of a complex paint operation.
@@ -414,7 +404,12 @@ public class Application extends Container {
     onInitialise();
     while(true) {
       // Process pending events
-      m_driver.grabEvents(null);
+      m_driver.grabEvents();
+      InputEvent event = m_driver.nextEvent();
+      while(event!=null) {
+        doInputEvent(event);
+        event = m_driver.nextEvent();
+        }
       // Process timers
       TimedEvent.update();
       // Do any updates
