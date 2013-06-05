@@ -115,16 +115,6 @@ public class Application extends Container {
   // Implementation of Window
   //-------------------------------------------------------------------------
   
-  /** Get the root Window
-   * 
-   * We override this to ensure that we are the root window for all children.
-   * 
-   * @return the Window instance that represents the display.
-   */
-  public Window getRoot() {
-    return this;
-    }
-  
   /** Set the X co-ordinate for this point.
    * 
    * @param nx the new X co-ordinate for this point.
