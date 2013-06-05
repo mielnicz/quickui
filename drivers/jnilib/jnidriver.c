@@ -11,7 +11,7 @@
 #include "jnidriver.h"
 
 /*--------------------------------------------------------------------------*
-* These functions are used to help manage assets used by the system.
+* These globals and functions are used to help manage assets.
 *--------------------------------------------------------------------------*/
 
 static uint8_t *g_assets    = NULL; //! Raw asset data
@@ -38,6 +38,74 @@ static int addAsset(JNIEnv *pEnv, jbyteArray data, jint offset, jint size) {
   (*pEnv)->ReleaseByteArrayElements(pEnv, data, pNew, JNI_ABORT);
   // All done
   return handle;
+  }
+
+/*--------------------------------------------------------------------------*
+* These globals and functions are used to help manage events.
+*--------------------------------------------------------------------------*/
+
+//--- Constants
+#define DRIVER_CLASS "com/thegaragelab/quickui/Driver"
+
+//--- Globals
+static JNIEnv   *g_pEnv   = NULL; //! JNI Environment structure
+static jobject   g_obj    = NULL; //! Calling object
+static jclass    g_class  = NULL; //! The class of the calling object
+static jmethodID g_method = NULL; //! The method to invoke
+
+/** Initialise the event capturing function.
+ *
+ * Ensures the state is set up so the JNI code can call back to the parent
+ * object to post event messages.
+ *
+ * @param pEnv the JNI environment pointer.
+ * @param obj the object calling this method.
+ */
+static void initEventCapture(JNIEnv *pEnv, jobject obj) {
+  if(g_class==NULL) {
+    // Get the class and the method description
+    g_class = (*pEnv)->FindClass(pEnv, DRIVER_CLASS);
+    if(g_class==NULL)
+      return;
+    g_method = (*pEnv)->GetMethodID(pEnv, g_class, "pushEvent", "(III)V");
+    if(g_method==NULL) {
+      g_class = NULL;
+      return;
+      }
+    }
+  // Check the object type
+/*
+  if((*pEnv)->IsInstanceOf(pEnv, obj, g_class)) {
+    // Save state
+    g_pEnv = pEnv;
+    g_obj = obj;
+    }
+*/
+  // Save state
+  g_pEnv = pEnv;
+  g_obj = obj;
+  }
+
+/** Handle an event
+ *
+ * An implementation of this function is provided by the calling application
+ * and is used to receive information about events from the driver.
+ */
+static GFX_RESULT internal_HandleEvent(GFX_EVENT_INFO *pEventInfo) {
+  // Make sure we have the state we need
+  if((g_pEnv==NULL)||(g_obj==NULL)||(g_class==NULL)||(g_method==NULL))
+    return GFX_RESULT_OK;
+  // Invoke the function
+  (*g_pEnv)->CallVoidMethod(g_pEnv, g_obj, g_method, pEventInfo->m_event, pEventInfo->m_param1, pEventInfo->m_param2);
+  return GFX_RESULT_OK;
+  }
+
+/** Finished event handling
+ *
+ */
+static void doneEventCapture() {
+  g_pEnv = NULL;
+  g_obj = NULL;
   }
 
 /*--------------------------------------------------------------------------*
@@ -159,22 +227,17 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawBox(JNIEnv *p
   return (jint)gfx_DrawBox(x1, y1, x2, y2, color);
   }
 
-/** Handle an event
- *
- * An implementation of this function is provided by the calling application
- * and is used to receive information about events from the driver.
- */
-static GFX_RESULT internal_HandleEvent(GFX_EVENT_INFO *pEventInfo) {
-  return GFX_RESULT_OK;
-  }
-
 /*
  * Class:     com_thegaragelab_quickui_Driver
  * Method:    gfxCheckEvents
  * Signature: ()I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxCheckEvents(JNIEnv *pEnv, jobject obj) {
-  return (jint)gfx_CheckEvents(internal_HandleEvent);
+  GFX_RESULT result = GFX_RESULT_OK;
+  initEventCapture(pEnv, obj);
+  result = gfx_CheckEvents(internal_HandleEvent);
+  doneEventCapture();
+  return (jint)result;
   }
 
 /*

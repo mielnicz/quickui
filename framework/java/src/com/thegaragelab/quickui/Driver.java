@@ -7,6 +7,9 @@
 *---------------------------------------------------------------------------*/
 package com.thegaragelab.quickui;
 
+//--- Imports
+import java.util.*;
+
 /** Java interface to the graphics driver.
  *
  * This class defines the interface to the native methods provided by the
@@ -14,6 +17,9 @@ package com.thegaragelab.quickui;
  * The class is a singleton, only one driver can be used at any given time.
  */
 class Driver implements ISurface {
+  //--- Instance variables
+  private Queue<InputEvent> m_events; //! The event queue.
+  
   //-------------------------------------------------------------------------
   // Singleton management
   //-------------------------------------------------------------------------
@@ -67,6 +73,16 @@ class Driver implements ISurface {
     return getInstance(0, 0);
     }
 
+  //-------------------------------------------------------------------------
+  // Construction and initialisation
+  //-------------------------------------------------------------------------
+
+  /** Default constructor
+   */
+  private Driver() {
+    m_events = new LinkedList<InputEvent>();
+    }
+  
   //-------------------------------------------------------------------------
   // Native methods
   //-------------------------------------------------------------------------
@@ -333,8 +349,33 @@ class Driver implements ISurface {
   /** Process any input events.
    * 
    */
-  public void grabEvents(EventQueue eventQueue) {
+  public void grabEvents() {
     gfxCheckEvents();
+    }
+  
+  /** Push an event to the event queue
+   * 
+   * This method is usually called by the native driver code but the it could
+   * also be used by the framework to simulate events if needed.
+   * 
+   * @param evType the type of the event
+   * @param evParam1 the first parameter for the event
+   * @param evParam2 the second parameter for the event
+   */
+  public void pushEvent(int evType, int evParam1, int evParam2) {
+    if(!InputEvent.isValidEvent(evType))
+      return;
+    InputEvent event = new InputEvent(evType, evParam1, evParam2);
+    m_events.add(event);
+    }
+  
+  /** Get the next event
+   * 
+   * @return the InputEvent instance of the next event or null if no events
+   *         are pending.
+   */
+  public InputEvent nextEvent() {
+    return m_events.poll();
     }
   
   }
