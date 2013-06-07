@@ -68,7 +68,7 @@ public class SimpleControl extends Window implements IControl {
     if(text==null)
       text = "";
     // Has the text changed?
-    if(m_text.compareTo(getText())==0) {
+    if((m_text==null)||(m_text.compareTo(getText())==0)) {
       m_text = text;
       setDirty(true);
       }

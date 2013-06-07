@@ -10,6 +10,7 @@ package com.thegaragelab.quickui.test;
 //--- Imports
 import java.util.*;
 import com.thegaragelab.quickui.*;
+import com.thegaragelab.quickui.controls.*;
 
 /** A simple test application for the framework
  *
@@ -111,6 +112,15 @@ public class QuickTest extends Application implements TimedEvent.Listener {
        WINDOW_HEIGHT
        ));
      m_winBR.setBackground(Color.WHITE);
+     // Create a control
+     Label lblTest = new Label(this, new Rectangle(
+       screen.width / 2,
+       screen.height / 2,
+       128,
+       32),
+       "A Control"
+       );
+     lblTest.setBackground(Color.WHITE);
      // Set up our timer
      TimedEvent.repeat(250L, this);
      }

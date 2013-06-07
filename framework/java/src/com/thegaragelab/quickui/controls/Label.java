@@ -41,4 +41,34 @@ public class Label extends SimpleControl {
     setText(text);
     }
 
+  //-------------------------------------------------------------------------
+  // Implementation of IWindow
+  //-------------------------------------------------------------------------
+
+  /** Called when the window needs to be painted
+   * 
+   *  This method is called to redraw the window.
+   */
+  @Override
+  public void onPaint() {
+    super.onPaint();
+    // Get the font to use
+    Font font = Application.getInstance().getFont();
+    if(font==null)
+      return;
+    // Calculate the text location
+    Point where = new Point(
+      0,
+      (getHeight() - font.getHeight()) / 2
+      );
+    // Draw the text
+    this.drawString(
+      font,
+      where,
+      Color.RED,
+      getText()
+      );
+    }
+
+
   }
