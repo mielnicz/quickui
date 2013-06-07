@@ -29,7 +29,18 @@ public class Container extends Window {
     super(rect);
     }
 
-  /** Constructor with a parent Window and a Rectangle describing it position.
+  /** Constructor with a parent Window a position and flags to set or clear.
+   * 
+   * @param parent the parent window for this instance.
+   * @param rect the Rectangle describing the location and size of the window.
+   * @param require additional flags to set
+   * @param exclude flags to mask out
+   */
+  public Container(Container parent, Rectangle rect, int require, int exclude) {
+    super(parent, rect, require, exclude);
+    }
+  
+  /** Constructor with a parent Window and a Rectangle for position and size.
    * 
    * @param parent the parent window for this instance.
    * @param rect the Rectangle describing the location and size of the window.
@@ -61,7 +72,7 @@ public class Container extends Window {
    * @return the smallest window that contains this point.
    */
   @Override
-  public Window getWindowByPoint(IPoint point) {
+  public IWindow getWindowByPoint(IPoint point) {
     if(!contains(point))
       return null;
     // Do we have children ?
@@ -69,8 +80,8 @@ public class Container extends Window {
       return this;
     // Check each child
     Point test = Point.offset(this, point);
-    for(Window child: m_children) {
-      Window result = child.getWindowByPoint(test);
+    for(IWindow child: m_children) {
+      IWindow result = child.getWindowByPoint(test);
       if(result!=null)
         return result;
       }

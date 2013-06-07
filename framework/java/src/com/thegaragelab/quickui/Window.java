@@ -18,11 +18,11 @@ import com.thegaragelab.quickui.utils.*;
  * This is the base class for all visual elements in the Framework. It
  * provides the basic functionality required for all visual elements.
  */
-public class Window implements IRectangle, ISurface {
+public class Window implements IWindow {
   //--- Constants
-  private static final int WIN_FLAG_DIRTY     = 0x0001;
-  private static final int WIN_FLAG_VISIBLE   = WIN_FLAG_DIRTY << 1;
-  private static final int WIN_ACCEPT_TOUCH   = WIN_FLAG_VISIBLE << 1;
+  protected static final int WIN_FLAG_DIRTY     = 0x0001;
+  protected static final int WIN_FLAG_VISIBLE   = WIN_FLAG_DIRTY << 1;
+  protected static final int WIN_ACCEPT_TOUCH   = WIN_FLAG_VISIBLE << 1;
   
   //--- Instance variables
   private Container m_parent;     //! The parent Window
@@ -46,18 +46,32 @@ public class Window implements IRectangle, ISurface {
     onCreate();
     }
 
-  /** Constructor with a parent Window and a Rectangle describing it position.
+  /** Constructor with a parent Window a position and flags to set or clear.
+   * 
+   * @param parent the parent window for this instance.
+   * @param rect the Rectangle describing the location and size of the window.
+   * @param require additional flags to set
+   * @param exclude flags to mask out
+   */
+  public Window(Container parent, Rectangle rect, int require, int exclude) {
+    m_parent = parent;
+    m_flags = new Flags();
+    m_rectangle = new Rectangle(rect);
+    initialiseState();
+    // Adjust flags
+    m_flags.setFlags(require);
+    m_flags.clearFlags(exclude);
+    // Call the creation method
+    onCreate();
+    }
+
+  /** Constructor with a parent Window and a Rectangle for position and size.
    * 
    * @param parent the parent window for this instance.
    * @param rect the Rectangle describing the location and size of the window.
    */
   public Window(Container parent, Rectangle rect) {
-    m_parent = parent;
-    m_flags = new Flags();
-    m_rectangle = new Rectangle(rect);
-    initialiseState();
-    // Call the creation method
-    onCreate();
+    this(parent, rect, 0, 0);
     }
 
   /** Initialise the state
@@ -83,18 +97,15 @@ public class Window implements IRectangle, ISurface {
   // Window specific operations
   //-------------------------------------------------------------------------
 
-  /** Get the parent of this Window
-   * 
-   * @return the Window instance that represents the parent of this window.
+  /**
+   * @see com.thegaragelab.quickui.IWindow#getParent()
    */
-  public Window getParent() {
+  public IWindow getParent() {
     return m_parent;
     }
   
-  /** Set the background color for this window
-   * 
-   * @param color the background color to use. If null the window will not
-   *              paint a background on redraw.
+  /**
+   * @see com.thegaragelab.quickui.IWindow#setBackground(com.thegaragelab.quickui.Color)
    */
   public void setBackground(Color color) {
     if(m_background!=color)
@@ -102,9 +113,8 @@ public class Window implements IRectangle, ISurface {
     m_background = color;
     }
   
-  /** Mark the window as 'dirty' (needs to be repainted)
-   * 
-   * @param dirty true if the window is dirty, false if not
+  /**
+   * @see com.thegaragelab.quickui.IWindow#setDirty(boolean)
    */
   public void setDirty(boolean dirty) {
     if(dirty)
@@ -113,17 +123,15 @@ public class Window implements IRectangle, ISurface {
       m_flags.clearFlags(WIN_FLAG_DIRTY);
     }
   
-  /** Determine if the window is dirty (needs to be repainted)
-   * 
-   * @return true if the window is dirty and needs to be repainted.
+  /**
+   * @see com.thegaragelab.quickui.IWindow#isDirty()
    */
   public boolean isDirty() {
     return m_flags.areFlagsSet(WIN_FLAG_DIRTY | WIN_FLAG_VISIBLE);
     }
 
-  /** Set the visibility of the window
-   * 
-   * @param visible true if the window should be visible, false if not
+  /**
+   * @see com.thegaragelab.quickui.IWindow#setVisible(boolean)
    */
   public void setVisible(boolean visible) {
     // Any change ?
@@ -138,45 +146,33 @@ public class Window implements IRectangle, ISurface {
     onVisible(visible);
     }
   
-  /** Determine if we are visible
-   * 
-   * @return true if the window is currently visible, false if not
+  /**
+   * @see com.thegaragelab.quickui.IWindow#isVisible()
    */
   public boolean isVisible() {
     return m_flags.areFlagsSet(WIN_FLAG_VISIBLE);
     }
   
-  /** Allow the window to receive touch events
-   * 
-   * @param accept true if this Window should accept touch events.
+  /**
+   * @see com.thegaragelab.quickui.IWindow#setAcceptTouch(boolean)
    */
   public void setAcceptTouch(boolean accept) {
     m_flags.setFlags(WIN_ACCEPT_TOUCH);
     }
   
-  /** Get the window that accepts touch events for us
-   * 
-   * If this window will accept and process touch events then we return
-   * ourselves, otherwise we delegate up the list of parent windows until
-   * one accepts the role (the Application instance will always accept
-   * touch events).
-   * 
-   * @return the Window instance that will process touch events on our
-   *         behalf.
+  /**
+   * @see com.thegaragelab.quickui.IWindow#getAcceptTouch()
    */
-  public Window getAcceptTouch() {
+  public IWindow getAcceptTouch() {
     if(m_flags.areFlagsSet(WIN_ACCEPT_TOUCH))
       return this;
     return getParent().getAcceptTouch();
     }
   
-  /** Get a window by location
-   * 
-   * @param point the Point we are searching for.
-   * 
-   * @return the smallest window that contains this point.
+  /**
+   * @see com.thegaragelab.quickui.IWindow#getWindowByPoint(com.thegaragelab.quickui.IPoint)
    */
-  public Window getWindowByPoint(IPoint point) {
+  public IWindow getWindowByPoint(IPoint point) {
     if(!contains(point))
       return null;
     return this;
@@ -247,51 +243,43 @@ public class Window implements IRectangle, ISurface {
   // Public event methods
   //-------------------------------------------------------------------------
 
-  /** Called when the window is created
-   * 
+  /**
+   * @see com.thegaragelab.quickui.IWindow#onCreate()
    */
   public void onCreate() {
     // Do nothing in this instance
     }
   
-  /** Called when the window is closed
-   * 
+  /**
+   * @see com.thegaragelab.quickui.IWindow#onClose()
    */
   public void onClose() {
     // Do nothing in this instance
     }
   
-  /** Called to update the window
-   * 
+  /**
+   * @see com.thegaragelab.quickui.IWindow#onUpdate()
    */
   public void onUpdate() {
     // Do nothing in this instance
     }
   
-  /** Called when the window needs to be painted
-   * 
-   *  This method is called to redraw the window.
+  /**
+   * @see com.thegaragelab.quickui.IWindow#onPaint()
    */
   public void onPaint() {
     // Do nothing in this instance
     }
   
-  /** Called when an input event is targeted to this window
-   * 
-   * An input event represents a key press or activity on the touch screen.
-   * In general, unless you are implementing a control, you don't need to
-   * do anything with these events.
-   * 
-   * @param evType the type of the event
-   * @param where the location of the event (in window co-ordinates)
+  /**
+   * @see com.thegaragelab.quickui.IWindow#onTouchEvent(int, com.thegaragelab.quickui.IPoint)
    */
   public void onTouchEvent(int evType, IPoint where) {
     // Do nothing in this instance
     }
   
-  /** Called when the visibility of the window has changed
-   * 
-   * @param visible true if the window is now visible, false if not
+  /**
+   * @see com.thegaragelab.quickui.IWindow#onVisible(boolean)
    */
   public void onVisible(boolean visible) {
     // Do nothing in this instance

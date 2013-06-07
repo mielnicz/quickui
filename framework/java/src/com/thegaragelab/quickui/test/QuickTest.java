@@ -26,10 +26,10 @@ public class QuickTest extends Application implements TimedEvent.Listener {
   
   //--- Instance variables
   private Random m_random = new Random();
-  private Window m_winTL; // Window in the top left corner
-  private Window m_winTR; // Window in the top right corner
-  private Window m_winBL; // Window in the bottom left corner
-  private Window m_winBR; // Window in the bottom right corner
+  private IWindow m_winTL; // Window in the top left corner
+  private IWindow m_winTR; // Window in the top right corner
+  private IWindow m_winBL; // Window in the bottom left corner
+  private IWindow m_winBR; // Window in the bottom right corner
   private Point  m_where; // Where to draw text
   
   //-------------------------------------------------------------------------
@@ -55,7 +55,7 @@ public class QuickTest extends Application implements TimedEvent.Listener {
    */
   public void onTimer(TimedEvent timer, long delay) {
     // Pick a random window
-    Window w = m_winTL;
+    IWindow w = m_winTL;
     switch(m_random.nextInt(3)) {
       case 0:
         w = m_winTL;

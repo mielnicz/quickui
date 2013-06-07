@@ -46,7 +46,7 @@ public class Application extends Container {
   private Palette    m_palette;    //! The system palette
   private Icon       m_icons;      //! The system icons
   private Font       m_font;       //! The system font
-  private Window     m_target;     //! The window currently accepting touch events.
+  private IWindow    m_target;     //! The window currently accepting touch events.
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -182,7 +182,7 @@ public class Application extends Container {
    *         behalf.
    */
   @Override
-  public final Window getAcceptTouch() {
+  public final IWindow getAcceptTouch() {
     // We will always handle touch events on behalf of any window
     return this;
     }
@@ -231,7 +231,7 @@ public class Application extends Container {
   void doTouchEvent(TouchEvent event) {
     // A touch event can change the focus, handle that situation.
     if(event.getEventType()==TouchEvent.GFX_EVENT_TOUCH) {
-      Window window = getWindowByPoint(event);
+      IWindow window = getWindowByPoint(event);
       if(window!=null)
         m_target = window.getAcceptTouch();
       }
