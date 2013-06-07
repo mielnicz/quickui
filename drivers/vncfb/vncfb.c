@@ -42,27 +42,14 @@ static int              g_maxY;
 // Event management
 //---------------------------------------------------------------------------
 
-/** Handle key events from the remote client
- *
- */
-static void keyevent(rfbBool down, rfbKeySym key, rfbClientPtr cl) {
-  int keynum = 0;
-  switch(key) {
-    case 0x0031:
-    case 0x0032:
-    case 0x0033:
-    case 0x0034:
-      keynum = key - 0x0030;
-      break;
-    }
-  if(keynum!=0)
-    gfx_AddEvent(down?GFX_EVENT_KEY_DOWN:GFX_EVENT_KEY_UP, keynum, 0);
-  }
-
 /** Handle movement/touch events from the remote client
  *
+ * @param buttonMask indicates the state of the pointer buttons.
+ * @param x the X position of the event (in screen co-ordinates).
+ * @param y the Y position of the event (in screen co-ordinates).
+ * @param cl the client sending the event.
  */
-static void ptrevent(int buttonMask, int x, int y, rfbClientPtr cl) {
+static void vnc_PointerEvent(int buttonMask, int x, int y, rfbClientPtr cl) {
   static bool s_last = false;
   bool state = (buttonMask & 0x01) == 0x01;
   // If the state has changed, send the new state
@@ -174,8 +161,7 @@ GFX_RESULT gfx_Init(uint16_t width, uint16_t height) {
   g_pScreenInfo->serverFormat.greenShift = 6;
   g_pScreenInfo->serverFormat.blueShift = 0;
   // Add handlers for events
-  g_pScreenInfo->kbdAddEvent = keyevent;
-  g_pScreenInfo->ptrAddEvent = ptrevent;
+  g_pScreenInfo->ptrAddEvent = vnc_PointerEvent;
   // Initialise our framebuffer
   g_pFrameBuffer = (GFX_COLOR *)calloc(width * height, sizeof(GFX_COLOR));
   if(g_pFrameBuffer==NULL)

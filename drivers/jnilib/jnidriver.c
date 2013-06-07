@@ -91,12 +91,12 @@ static void initEventCapture(JNIEnv *pEnv, jobject obj) {
  * An implementation of this function is provided by the calling application
  * and is used to receive information about events from the driver.
  */
-static GFX_RESULT internal_HandleEvent(GFX_EVENT_INFO *pEventInfo) {
+static GFX_RESULT internal_HandleEvent(GFX_TOUCH_EVENT_INFO *pEventInfo) {
   // Make sure we have the state we need
   if((g_pEnv==NULL)||(g_obj==NULL)||(g_class==NULL)||(g_method==NULL))
     return GFX_RESULT_OK;
   // Invoke the function
-  (*g_pEnv)->CallVoidMethod(g_pEnv, g_obj, g_method, pEventInfo->m_event, pEventInfo->m_param1, pEventInfo->m_param2);
+  (*g_pEnv)->CallVoidMethod(g_pEnv, g_obj, g_method, pEventInfo->m_event, pEventInfo->m_xpos, pEventInfo->m_ypos);
   return GFX_RESULT_OK;
   }
 

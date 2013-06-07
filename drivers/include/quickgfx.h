@@ -58,25 +58,29 @@ typedef GFX_COLOR GFX_PALETTE[GFX_PALETTE_SIZE];
 
 /** Event types
  *
- * This enum defines the event types we recognise.
+ * This enum defines the event types we recognise. The driver is expected to
+ * provide an interface to the touch inputs for the screen as well as drive
+ * the graphical output. As a result it is responsible for generating these
+ * events to feed up to the framework.
+ *
+ * If there is no touch interface available for the screen the driver can
+ * simply not generate any events.
  */
-typedef enum _GFX_EVENT {
-  GFX_EVENT_KEY_DOWN = 0, //! Key down event
-  GFX_EVENT_KEY_UP,       //! Key up event
-  GFX_EVENT_TOUCH,        //! Touch event
+typedef enum _GFX_TOUCH_EVENT {
+  GFX_EVENT_TOUCH = 0,    //! Touch event
   GFX_EVENT_DRAG,         //! A drag event (touched and moving)
   GFX_EVENT_RELEASE,      //! Release event
-  } GFX_EVENT;
+  } GFX_TOUCH_EVENT;
 
 /** Represents a single event
  *
  * This structure holds information about an event.
  */
-typedef struct _GFX_EVENT_INFO {
-  GFX_EVENT m_event;  //! The type of event that was detected
-  uint16_t  m_param1; //! The first parameter for the event
-  uint16_t  m_param2; //! The second parameter for the event
-  } GFX_EVENT_INFO;
+typedef struct _GFX_TOUCH_EVENT_INFO {
+  GFX_TOUCH_EVENT m_event;  //! The type of event that was detected
+  uint16_t        m_xpos;   //! The X position of the event (in screen co-ordinates)
+  uint16_t        m_ypos;   //! The Y position of the event (in screen co-ordinates)
+  } GFX_TOUCH_EVENT_INFO;
 
 /** Image header information
  *
@@ -150,7 +154,7 @@ typedef struct _GFX_ICON {
  * An implementation of this function is provided by the calling application
  * and is used to receive information about events from the driver.
  */
-typedef GFX_RESULT (*_gfx_HandleEvent)(GFX_EVENT_INFO *pEventInfo);
+typedef GFX_RESULT (*_gfx_HandleEvent)(GFX_TOUCH_EVENT_INFO *pEventInfo);
 
 /** Begin a multipart paint operation */
 typedef GFX_RESULT (*_gfx_BeginPaint)();
@@ -188,7 +192,7 @@ typedef GFX_RESULT (*_gfx_CheckEvents)(_gfx_HandleEvent pfHandleEvent);
 
 /** Add a new event to the event queue
  */
-typedef GFX_RESULT (*_gfx_AddEvent)(GFX_EVENT evType, uint16_t p1, uint16_t p2);
+typedef GFX_RESULT (*_gfx_AddEvent)(GFX_TOUCH_EVENT evType, uint16_t x, uint16_t y);
 
 /** The graphics driver API
  */
@@ -287,7 +291,7 @@ const void *gfx_Framebuffer();
 #define gfx_CheckEvents(pfHandleEvent) (*g_GfxDriver.m_pfCheckEvents)(pfHandleEvent)
 
 /** Add a new event to the event queue */
-#define gfx_AddEvent(evType, p1, p2) (*g_GfxDriver.m_pfAddEvent)(evType, p1, p2)
+#define gfx_AddEvent(evType, x, y) (*g_GfxDriver.m_pfAddEvent)(evType, x, y)
 
 /** Clip a value
  *
