@@ -7,6 +7,7 @@
 *---------------------------------------------------------------------------*/
 package com.thegaragelab.quickui;
 
+//--- Imports
 import java.util.*;
 
 //--- Imports
@@ -17,7 +18,7 @@ import com.thegaragelab.quickui.utils.*;
  * This is the base class for all visual elements in the Framework. It
  * provides the basic functionality required for all visual elements.
  */
-public class Window implements IRectangle, ISurface, IFlags {
+public class Window implements IRectangle, ISurface {
   //--- Constants
   private static final int WIN_FLAG_DIRTY     = 0x0001;
   private static final int WIN_FLAG_VISIBLE   = WIN_FLAG_DIRTY << 1;
@@ -293,14 +294,6 @@ public class Window implements IRectangle, ISurface, IFlags {
    * @param visible true if the window is now visible, false if not
    */
   public void onVisible(boolean visible) {
-    // Do nothing in this instance
-    }
-  
-  /** Called when the window focus has changed
-   * 
-   * @param focus true if we now have focus, false if not.
-   */
-  public void onFocus(boolean focus) {
     // Do nothing in this instance
     }
   
