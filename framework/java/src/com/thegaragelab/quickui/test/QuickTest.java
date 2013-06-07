@@ -56,7 +56,7 @@ public class QuickTest extends Application implements TimedEvent.Listener {
   public void onTimer(TimedEvent timer, long delay) {
     // Pick a random window
     Window w = m_winTL;
-    switch(m_random.nextInt(4)) {
+    switch(m_random.nextInt(3)) {
       case 0:
         w = m_winTL;
         break;
@@ -64,9 +64,6 @@ public class QuickTest extends Application implements TimedEvent.Listener {
         w = m_winTR;
         break;
       case 2:
-        w = m_winBR;
-        break;
-      case 3:
         w = m_winBL;
         break;
       }
@@ -107,17 +104,13 @@ public class QuickTest extends Application implements TimedEvent.Listener {
        WINDOW_HEIGHT
        ));
      m_winBL.setBackground(Color.BLUE);
-     m_winBR = new Window(this, new Rectangle(
+     m_winBR = new ToggleWindow(this, new Rectangle(
        screen.width - WINDOW_OFFSET - WINDOW_WIDTH,
        screen.height - WINDOW_OFFSET - WINDOW_HEIGHT,
        WINDOW_WIDTH,
        WINDOW_HEIGHT
        ));
      m_winBR.setBackground(Color.WHITE);
-     // Hide the bottom right one to test it.
-     m_winBR.setVisible(false);
-     // Make sure the top right can have focus
-     m_winTR.setCanHaveFocus(true);
      // Set up our timer
      TimedEvent.repeat(250L, this);
      }
@@ -144,17 +137,13 @@ public class QuickTest extends Application implements TimedEvent.Listener {
     * In general, unless you are implementing a control, you don't need to
     * do anything with these events.
     * 
-    * @param event the input event sent to this window.
+    * @param evType the type of the event
+    * @param where the location of the event (in window co-ordinates)
     */
    @Override
-   public void onTouchEvent(TouchEvent event) {
-     System.out.println(String.format("Got event %d @ %d, %d", new Object[] {
-       new Integer(event.getEventType()),
-       new Integer(event.getX()),
-       new Integer(event.getY())
-       }));
-     if(event.getEventType()!=TouchEvent.GFX_EVENT_RELEASE)
-       m_where = new Point(event);
+   public void onTouchEvent(int evType, IPoint where) {
+     if(evType!=TouchEvent.GFX_EVENT_RELEASE)
+       m_where = new Point(where);
      else
        m_where = null;
      setDirty(true);
