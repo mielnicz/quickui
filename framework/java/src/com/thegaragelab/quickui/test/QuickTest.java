@@ -26,12 +26,12 @@ public class QuickTest extends Application implements TimedEvent.Listener {
   private static final int WINDOW_OFFSET = 10; // Offset for window placement
   
   //--- Instance variables
-  private Random m_random = new Random();
+  private Random  m_random = new Random();
   private IWindow m_winTL; // Window in the top left corner
   private IWindow m_winTR; // Window in the top right corner
   private IWindow m_winBL; // Window in the bottom left corner
   private IWindow m_winBR; // Window in the bottom right corner
-  private Point  m_where; // Where to draw text
+  private Point   m_where; // Where to draw text
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
