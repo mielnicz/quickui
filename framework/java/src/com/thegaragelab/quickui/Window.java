@@ -309,7 +309,7 @@ public class Window implements IRectangle, ISurface, IFlags {
    * 
    * @param event the input event sent to this window.
    */
-  public void onInputEvent(InputEvent event) {
+  public void onTouchEvent(TouchEvent event) {
     // Do nothing in this instance
     }
   

@@ -155,9 +155,21 @@ public class Application extends Container {
    * 
    * @param event the input event sent to this window.
    */
-  public void onInputEvent(InputEvent event) {
+  public void onTouchEvent(TouchEvent event) {
     // Do nothing in this instance
-    System.err.println("Unhandled event!");
+    }
+  
+  /** Determine if we can have focus
+   * 
+   * The application window can always have focus (but doesn't really do
+   * anything with it).
+   * 
+   * @return the window that will take focus or null if no window in the
+   *         heirarchy of this window will accept it.
+   */
+  @Override
+  public Window canHaveFocus() {
+    return this;
     }
   
   //-------------------------------------------------------------------------
@@ -197,13 +209,13 @@ public class Application extends Container {
       m_offset = new Point(offset);
     }
   
-  /** Process an InputEvent
+  /** Process an TouchEvent
    * 
-   * @param event the InputEvent to handle
+   * @param event the TouchEvent to handle
    */
-  void doInputEvent(InputEvent event) {
+  void doTouchEvent(TouchEvent event) {
     // A touch event can change the focus, handle that situation.
-    if(event.getEventType()==InputEvent.GFX_EVENT_TOUCH) {
+    if(event.getEventType()==TouchEvent.GFX_EVENT_TOUCH) {
       Window window = getWindowByPoint(event);
       if(window!=null)
         window = window.canHaveFocus();
@@ -212,9 +224,9 @@ public class Application extends Container {
       }
     // Now dispatch the input event
     if(m_focused!=null)
-      m_focused.onInputEvent(event);
+      m_focused.onTouchEvent(event);
     else
-      onInputEvent(event);
+      onTouchEvent(event);
     }
   
   //-------------------------------------------------------------------------
@@ -445,10 +457,10 @@ public class Application extends Container {
     while(true) {
       // Process pending events
       m_driver.grabEvents();
-      InputEvent event = m_driver.nextEvent();
+      TouchEvent event = m_driver.nextTouchEvent();
       while(event!=null) {
-        doInputEvent(event);
-        event = m_driver.nextEvent();
+        doTouchEvent(event);
+        event = m_driver.nextTouchEvent();
         }
       // Process timers
       TimedEvent.update();

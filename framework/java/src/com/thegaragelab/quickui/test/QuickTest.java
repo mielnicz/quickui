@@ -30,6 +30,7 @@ public class QuickTest extends Application implements TimedEvent.Listener {
   private Window m_winTR; // Window in the top right corner
   private Window m_winBL; // Window in the bottom left corner
   private Window m_winBR; // Window in the bottom right corner
+  private Point  m_where; // Where to draw text
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -73,14 +74,6 @@ public class QuickTest extends Application implements TimedEvent.Listener {
     Palette palette = Application.getInstance().getPalette();
     if(palette!=null)
       w.setBackground(palette.getColor(m_random.nextInt(Palette.PALETTE_SIZE)));
-    // Invalidate the application window
-//    setDirty(true);
-    drawString(
-        getFont(),
-        new Point(m_random.nextInt(getWidth() - 8),m_random.nextInt(getWidth() - 8)),
-        Color.RED,
-        "This is a sample string. How does it look?"
-        );
     }
 
   /** Called to initialise the application
@@ -123,6 +116,8 @@ public class QuickTest extends Application implements TimedEvent.Listener {
      m_winBR.setBackground(Color.WHITE);
      // Hide the bottom right one to test it.
      m_winBR.setVisible(false);
+     // Make sure the top right can have focus
+     m_winTR.setCanHaveFocus(true);
      // Set up our timer
      TimedEvent.repeat(250L, this);
      }
@@ -133,14 +128,38 @@ public class QuickTest extends Application implements TimedEvent.Listener {
    @Override
    public void onPaint() {
      super.onPaint();
-     drawChar(
+     if(m_where==null)
+       return;
+     drawString(
        getFont(),
-       new Point(m_random.nextInt(getWidth() - 8), m_random.nextInt(getHeight() - 8)),
+       m_where,
        Color.RED,
-       '?'
+       "This is some sample text!!!"
        );
      }
 
+   /** Called when an input event is targeted to this window
+    * 
+    * An input event represents a key press or activity on the touch screen.
+    * In general, unless you are implementing a control, you don't need to
+    * do anything with these events.
+    * 
+    * @param event the input event sent to this window.
+    */
+   @Override
+   public void onTouchEvent(TouchEvent event) {
+     System.out.println(String.format("Got event %d @ %d, %d", new Object[] {
+       new Integer(event.getEventType()),
+       new Integer(event.getX()),
+       new Integer(event.getY())
+       }));
+     if(event.getEventType()!=TouchEvent.GFX_EVENT_RELEASE)
+       m_where = new Point(event);
+     else
+       m_where = null;
+     setDirty(true);
+     }
+   
   //-------------------------------------------------------------------------
   // Main program
   //-------------------------------------------------------------------------
@@ -152,6 +171,7 @@ public class QuickTest extends Application implements TimedEvent.Listener {
   public static void main(String[] args) {
     // Simple create and run our application
     Application app = new QuickTest();
+    app.setBackground(Color.BLACK);
     app.run();
     }
 

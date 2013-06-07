@@ -9,21 +9,19 @@ package com.thegaragelab.quickui;
 
 /** Represents an input event
  */
-public class InputEvent implements IPoint {
+public class TouchEvent implements IPoint {
   //--- Event types (these must track ID's defined in quickgfx.h)
-  public static final int GFX_EVENT_KEY_DOWN = 0; //! Key down event
-  public static final int GFX_EVENT_KEY_UP   = 1; //! Key up event
-  public static final int GFX_EVENT_TOUCH    = 2; //! Touch event
-  public static final int GFX_EVENT_DRAG     = 3; //! A drag event (touched and moving)
-  public static final int GFX_EVENT_RELEASE  = 4; //! Release event
+  public static final int GFX_EVENT_TOUCH    = 0; //! Touch event
+  public static final int GFX_EVENT_DRAG     = 1; //! A drag event (touched and moving)
+  public static final int GFX_EVENT_RELEASE  = 2; //! Release event
   
   //--- Highest numbered event type
   private static final int GFX_EVENT_TYPE_MAX = GFX_EVENT_RELEASE;
   
   //--- Instance variables
-  int  m_type;   //! Type of the event
-  int  m_param1; //! First parameter for the event
-  int  m_param2; //! Second parameter for the event
+  int  m_type; //! Type of the event
+  int  m_xpos; //! First parameter for the event
+  int  m_ypos; //! Second parameter for the event
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -34,13 +32,13 @@ public class InputEvent implements IPoint {
    *  Creates a new event instance with the data provided by the driver.
    *  
    *  @param evType the type of the event.
-   *  @param param1 the first parameter of the event.
-   *  @param param2 the second parameter of the event.
+   *  @param xpos the first parameter of the event.
+   *  @param ypos the second parameter of the event.
    */
-  InputEvent(int evType, int param1, int param2) {
+  TouchEvent(int evType, int xpos, int ypos) {
     m_type = evType;
-    m_param1 = param1;
-    m_param2 = param2;
+    m_xpos = xpos;
+    m_ypos = ypos;
     }
 
   //-------------------------------------------------------------------------
@@ -72,39 +70,6 @@ public class InputEvent implements IPoint {
     return m_type;
     }
   
-  /** Get the key that was pressed
-   * 
-   * @return the key number that was pressed.
-   */
-  public int getKey() {
-    switch(m_type) {
-      case GFX_EVENT_KEY_DOWN:
-      case GFX_EVENT_KEY_UP:
-        return m_param1;
-      }
-    return 0;
-    }
-  
-  //-------------------------------------------------------------------------
-  // InputEvent specific operations
-  //-------------------------------------------------------------------------
-  
-  /** Determine if this is a key event
-   * 
-   * @return true if this event is the result of a key press.
-   */
-  public boolean isKeyEvent() {
-    return (m_type==GFX_EVENT_KEY_UP)||(m_type==GFX_EVENT_KEY_DOWN);
-    }
-  
-  /** Determine if this is a touch event
-   * 
-   * @return true if this event is the result of a touch operation
-   */
-  public boolean isTouchEvent() {
-    return (m_type==GFX_EVENT_TOUCH)||(m_type==GFX_EVENT_DRAG)||(m_type==GFX_EVENT_RELEASE);
-    }
-  
   //-------------------------------------------------------------------------
   // Implementation of IPoint
   //-------------------------------------------------------------------------
@@ -114,13 +79,7 @@ public class InputEvent implements IPoint {
    * @return the X co-ordinate for this point.
    */
   public int getX() {
-    switch(m_type) {
-      case GFX_EVENT_TOUCH:
-      case GFX_EVENT_DRAG:
-      case GFX_EVENT_RELEASE:
-        return m_param1;
-      }
-    return 0;
+    return m_xpos;
     }
   
   /** Set the X co-ordinate for this point.
@@ -136,13 +95,7 @@ public class InputEvent implements IPoint {
    * @return the Y co-ordinate for this point.
    */
   public int getY() {
-    switch(m_type) {
-      case GFX_EVENT_TOUCH:
-      case GFX_EVENT_DRAG:
-      case GFX_EVENT_RELEASE:
-        return m_param1;
-      }
-    return 0;
+    return m_ypos;
     }
   
   /** Set the Y co-ordinate for this point.

@@ -18,7 +18,7 @@ import java.util.*;
  */
 class Driver implements ISurface {
   //--- Instance variables
-  private Queue<InputEvent> m_events; //! The event queue.
+  private Queue<TouchEvent> m_events; //! The event queue.
   
   //-------------------------------------------------------------------------
   // Singleton management
@@ -80,7 +80,7 @@ class Driver implements ISurface {
   /** Default constructor
    */
   private Driver() {
-    m_events = new LinkedList<InputEvent>();
+    m_events = new LinkedList<TouchEvent>();
     }
   
   //-------------------------------------------------------------------------
@@ -359,22 +359,22 @@ class Driver implements ISurface {
    * also be used by the framework to simulate events if needed.
    * 
    * @param evType the type of the event
-   * @param evParam1 the first parameter for the event
-   * @param evParam2 the second parameter for the event
+   * @param xpos the first parameter for the event
+   * @param ypos the second parameter for the event
    */
-  public void pushEvent(int evType, int evParam1, int evParam2) {
-    if(!InputEvent.isValidEvent(evType))
+  public void pushEvent(int evType, int xpos, int ypos) {
+    if(!TouchEvent.isValidEvent(evType))
       return;
-    InputEvent event = new InputEvent(evType, evParam1, evParam2);
+    TouchEvent event = new TouchEvent(evType, xpos, ypos);
     m_events.add(event);
     }
   
   /** Get the next event
    * 
-   * @return the InputEvent instance of the next event or null if no events
+   * @return the TouchEvent instance of the next event or null if no events
    *         are pending.
    */
-  public InputEvent nextEvent() {
+  public TouchEvent nextTouchEvent() {
     return m_events.poll();
     }
   
