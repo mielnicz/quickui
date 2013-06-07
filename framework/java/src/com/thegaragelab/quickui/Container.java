@@ -60,15 +60,17 @@ public class Container extends Window {
    * 
    * @return the smallest window that contains this point.
    */
-  public Window getWindowByPoint(Point point) {
+  @Override
+  public Window getWindowByPoint(IPoint point) {
     if(!contains(point))
       return null;
     // Do we have children ?
     if((m_children==null)||(m_children.size()==0))
-      return null;
+      return this;
     // Check each child
+    Point test = Point.offset(this, point);
     for(Window child: m_children) {
-      Window result = child.getWindowByPoint(point);
+      Window result = child.getWindowByPoint(test);
       if(result!=null)
         return result;
       }

@@ -159,4 +159,18 @@ public class Rectangle extends Point implements IRectangle {
     return true;
     }
   
+  //-------------------------------------------------------------------------
+  // Static helpers
+  //-------------------------------------------------------------------------
+  
+  /** Convert an IRectangle into a string for logging or display
+   * 
+   * @param rect the IRectangle to convert
+   * 
+   * @return a string representation of the rectangle.
+   */
+  public static final String toString(IRectangle rect) {
+    return Point.toString(rect) + ", " + Dimension.toString(rect);
+    }
+  
   }

@@ -46,7 +46,7 @@ public class Application extends Container {
   private Palette    m_palette;    //! The system palette
   private Icon       m_icons;      //! The system icons
   private Font       m_font;       //! The system font
-  private Window     m_focused;    //! The currently focused window
+  private Window     m_target;     //! The window currently accepting touch events.
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -150,25 +150,40 @@ public class Application extends Container {
 
   /** Called when an input event is targeted to this window
    * 
-   * This is the default handler for input events, the application will
-   * process any events that cannot be dispatched to a window.
+   * An input event represents a key press or activity on the touch screen.
+   * In general, unless you are implementing a control, you don't need to
+   * do anything with these events.
    * 
-   * @param event the input event sent to this window.
+   * @param evType the type of the event
+   * @param where the location of the event (in window co-ordinates)
    */
-  public void onTouchEvent(TouchEvent event) {
+  @Override
+  public void onTouchEvent(int evType, IPoint where) {
     // Do nothing in this instance
     }
   
-  /** Determine if we can have focus
+  /** Allow the window to receive touch events
    * 
-   * The application window can always have focus (but doesn't really do
-   * anything with it).
-   * 
-   * @return the window that will take focus or null if no window in the
-   *         heirarchy of this window will accept it.
+   * @param accept true if this Window should accept touch events.
    */
   @Override
-  public Window canHaveFocus() {
+  public final void setAcceptTouch(boolean accept) {
+    // Do nothing, we always accept touch events
+    }
+  
+  /** Get the window that accepts touch events for us
+   * 
+   * If this window will accept and process touch events then we return
+   * ourselves, otherwise we delegate up the list of parent windows until
+   * one accepts the role (the Application instance will always accept
+   * touch events).
+   * 
+   * @return the Window instance that will process touch events on our
+   *         behalf.
+   */
+  @Override
+  public final Window getAcceptTouch() {
+    // We will always handle touch events on behalf of any window
     return this;
     }
   
@@ -218,15 +233,13 @@ public class Application extends Container {
     if(event.getEventType()==TouchEvent.GFX_EVENT_TOUCH) {
       Window window = getWindowByPoint(event);
       if(window!=null)
-        window = window.canHaveFocus();
-      if(window!=null)
-        window.setFocus(true);
+        m_target = window.getAcceptTouch();
       }
-    // Now dispatch the input event
-    if(m_focused!=null)
-      m_focused.onTouchEvent(event);
+    // Now dispatch the touch event
+    if(m_target!=null)
+      m_target.onTouchEvent(event.getEventType(), Point.offset(m_target, event));
     else
-      onTouchEvent(event);
+      onTouchEvent(event.getEventType(), event);
     }
   
   //-------------------------------------------------------------------------
@@ -360,31 +373,6 @@ public class Application extends Container {
   //-------------------------------------------------------------------------
   // Application specific operations
   //-------------------------------------------------------------------------
-
-  /** Get the focused window
-   * 
-   * @return a Window instance representing the window that currently has input
-   *         focus.
-   */
-  Window getFocusedWindow() {
-    return m_focused;
-    }
-  
-  /** Set the focused window
-   * 
-   */
-  void setFocusedWindow(Window window) {
-    // Can this window take the focus ?
-    window = window.canHaveFocus();
-    if(window==null)
-      return;
-    // If we have a focused window tell it that it's not anymore
-    if(m_focused!=null)
-      m_focused.setFocus(false);
-    // Now change the focused window to the requested one and let it know
-    m_focused = window;
-    window.setFocus(true);
-    }
   
   /** Get the system icons
    *

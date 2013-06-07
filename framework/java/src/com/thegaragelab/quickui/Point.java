@@ -86,4 +86,41 @@ public class Point implements IPoint {
     return new Point(x + origin.getX(), y + origin.getY());
     }
   
+  //-------------------------------------------------------------------------
+  // Static helpers
+  //-------------------------------------------------------------------------
+  
+  /** Convert an IPoint into a string for logging or display
+   * 
+   * @param point the IPoint to convert
+   * 
+   * @return a string representation of the point.
+   */
+  public static final String toString(IPoint point) {
+    return String.format("X: %d, Y: %d",
+      new Object[] {
+        new Integer(point.getX()),
+        new Integer(point.getY())
+        }
+      );
+    }
+  
+  /** Offset the point
+   * 
+   * This is different from translate in that we want to find the offset of
+   * this point from the given origin in the same co-ordinate space.
+   * 
+   * @param origin the new origin
+   * @param point the point to find the offset of
+   * 
+   * @return a Point instance representing the given point relative to the
+   *         new origin.
+   */
+  public static final Point offset(IPoint origin, IPoint point) {
+    return new Point(
+      point.getX() - origin.getX(),
+      point.getY() - origin.getY()
+      );
+    }
+  
   }

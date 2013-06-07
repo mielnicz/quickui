@@ -21,7 +21,7 @@ public class Window implements IRectangle, ISurface, IFlags {
   //--- Constants
   private static final int WIN_FLAG_DIRTY     = 0x0001;
   private static final int WIN_FLAG_VISIBLE   = WIN_FLAG_DIRTY << 1;
-  private static final int WIN_FLAG_CAN_FOCUS = WIN_FLAG_VISIBLE << 1;
+  private static final int WIN_ACCEPT_TOUCH   = WIN_FLAG_VISIBLE << 1;
   
   //--- Instance variables
   private Container m_parent;     //! The parent Window
@@ -145,54 +145,28 @@ public class Window implements IRectangle, ISurface, IFlags {
     return m_flags.areFlagsSet(WIN_FLAG_VISIBLE);
     }
   
-  /** Determine if we can have focus
+  /** Allow the window to receive touch events
    * 
-   * @return the window that will take focus or null if no window in the
-   *         heirarchy of this window will accept it.
+   * @param accept true if this Window should accept touch events.
    */
-  public Window canHaveFocus() {
-    if(m_flags.areFlagsSet(WIN_FLAG_CAN_FOCUS))
+  public void setAcceptTouch(boolean accept) {
+    m_flags.setFlags(WIN_ACCEPT_TOUCH);
+    }
+  
+  /** Get the window that accepts touch events for us
+   * 
+   * If this window will accept and process touch events then we return
+   * ourselves, otherwise we delegate up the list of parent windows until
+   * one accepts the role (the Application instance will always accept
+   * touch events).
+   * 
+   * @return the Window instance that will process touch events on our
+   *         behalf.
+   */
+  public Window getAcceptTouch() {
+    if(m_flags.areFlagsSet(WIN_ACCEPT_TOUCH))
       return this;
-    if(getParent()==null)
-      return null;
-    return getParent().canHaveFocus();
-    }
-  
-  /** Set the focus availability of this window
-   * 
-   * If a window can have focus that means it will react to input events if
-   * they are given to it.
-   * 
-   * @return true if this window can have focus.
-   */
-  public void setCanHaveFocus(boolean canHaveFocus) {
-    m_flags.setFlags(WIN_FLAG_CAN_FOCUS);
-    }
-  
-  /** Does this window currently have focus?
-   * 
-   * @return true if this window currently has input focus.
-   */
-  public boolean hasFocus() {
-    return Application.getInstance().getFocusedWindow() == this;
-    }
-  
-  /** Tell this window if it has focus or not.
-   * 
-   * @param focus if true, this window should have focus
-   */
-  public void setFocus(boolean focus) {
-    // Can we take focus ?
-    Window window = canHaveFocus();
-    if(window==null)
-      return;
-    // Has the focus state changed ?
-    if(focus==window.hasFocus())
-      return;
-    // Change the focus state and check that it sticked
-    Application.getInstance().setFocusedWindow(focus?window:null);
-    if(focus==window.hasFocus())
-      window.onFocus(focus);
+    return getParent().getAcceptTouch();
     }
   
   /** Get a window by location
@@ -307,9 +281,10 @@ public class Window implements IRectangle, ISurface, IFlags {
    * In general, unless you are implementing a control, you don't need to
    * do anything with these events.
    * 
-   * @param event the input event sent to this window.
+   * @param evType the type of the event
+   * @param where the location of the event (in window co-ordinates)
    */
-  public void onTouchEvent(TouchEvent event) {
+  public void onTouchEvent(int evType, IPoint where) {
     // Do nothing in this instance
     }
   

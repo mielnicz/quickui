@@ -77,4 +77,23 @@ public class Dimension implements IDimension {
     height = h;
     }
   
+  //-------------------------------------------------------------------------
+  // Static helpers
+  //-------------------------------------------------------------------------
+  
+  /** Convert an IDimension into a string for logging or display
+   * 
+   * @param dimension the IDimension to convert
+   * 
+   * @return a string representation of the dimension.
+   */
+  public static final String toString(IDimension dimension) {
+    return String.format("W: %d, H: %d",
+      new Object[] {
+        new Integer(dimension.getWidth()),
+        new Integer(dimension.getHeight())
+        }
+      );
+    }
+  
   }
