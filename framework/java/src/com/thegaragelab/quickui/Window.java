@@ -20,15 +20,15 @@ import com.thegaragelab.quickui.utils.*;
  */
 public class Window implements IWindow {
   //--- Constants
-  protected static final int WIN_FLAG_DIRTY     = 0x0001;
-  protected static final int WIN_FLAG_VISIBLE   = WIN_FLAG_DIRTY << 1;
-  protected static final int WIN_ACCEPT_TOUCH   = WIN_FLAG_VISIBLE << 1;
+  protected static final int WIN_FLAG_DIRTY            = 0x0001;
+  protected static final int WIN_FLAG_VISIBLE          = WIN_FLAG_DIRTY << 1;
+  protected static final int WIN_ACCEPT_TOUCH          = WIN_FLAG_VISIBLE << 1;
+  protected static final int WIN_FLAG_ERASE_BACKGROUND = WIN_ACCEPT_TOUCH << 1;
   
   //--- Instance variables
   private Container m_parent;     //! The parent Window
   private Rectangle m_rectangle;  //! Position and size of the window
   private Flags     m_flags;      //! Current flags
-  private Color     m_background; //! The background color for the window
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -105,15 +105,6 @@ public class Window implements IWindow {
     }
   
   /**
-   * @see com.thegaragelab.quickui.IWindow#setBackground(com.thegaragelab.quickui.Color)
-   */
-  public void setBackground(Color color) {
-    if(m_background!=color)
-      setDirty(true);
-    m_background = color;
-    }
-  
-  /**
    * @see com.thegaragelab.quickui.IWindow#setDirty(boolean)
    */
   public void setDirty(boolean dirty) {
@@ -151,6 +142,29 @@ public class Window implements IWindow {
    */
   public boolean isVisible() {
     return m_flags.areFlagsSet(WIN_FLAG_VISIBLE);
+    }
+  
+  /** Indicate to the Window it should erase it's background on repaint.
+   * 
+   * @param erase true if the Window should erase it's background.
+   */
+  public void setEraseBackground(boolean erase) {
+    // Any change ?
+    if(m_flags.areFlagsSet(WIN_FLAG_ERASE_BACKGROUND)==erase)
+      return;
+    // Change the flag
+    if(erase)
+      m_flags.setFlags(WIN_FLAG_ERASE_BACKGROUND | WIN_FLAG_DIRTY);
+    else
+      m_flags.clearFlags(WIN_FLAG_ERASE_BACKGROUND);
+    }
+  
+  /** Determine if the window should erase it's background on repaint.
+   * 
+   * @return true if the window should erase it's background.
+   */
+  public boolean getEraseBackground() {
+    return m_flags.areFlagsSet(WIN_FLAG_ERASE_BACKGROUND);
     }
   
   /**
@@ -222,11 +236,11 @@ public class Window implements IWindow {
     Rectangle region = new Rectangle(this);
     Application.getInstance().setClip(region);
     beginPaint();
-    // Erase the background if needed
-    if(m_background!=null)
-      fillRect(region, m_background);
-    // Repaint the window
     setOffset(region);
+    // Erase the background if needed
+    if(getEraseBackground())
+      onEraseBackground();
+    // Repaint the window
     onPaint();
     // Finish the paint operation
     endPaint();
@@ -261,6 +275,12 @@ public class Window implements IWindow {
    * @see com.thegaragelab.quickui.IWindow#onUpdate()
    */
   public void onUpdate() {
+    // Do nothing in this instance
+    }
+  
+  /** Called to erase the background of the window.
+   */
+  public void onEraseBackground() {
     // Do nothing in this instance
     }
   

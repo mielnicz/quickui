@@ -16,13 +16,6 @@ public interface IWindow extends IRectangle, ISurface {
    */
   public abstract IWindow getParent();
 
-  /** Set the background color for this window
-   * 
-   * @param color the background color to use. If null the window will not
-   *              paint a background on redraw.
-   */
-  public abstract void setBackground(Color color);
-
   /** Mark the window as 'dirty' (needs to be repainted)
    * 
    * @param dirty true if the window is dirty, false if not
@@ -47,6 +40,18 @@ public interface IWindow extends IRectangle, ISurface {
    */
   public abstract boolean isVisible();
 
+  /** Indicate to the Window it should erase it's background on repaint.
+   * 
+   * @param erase true if the Window should erase it's background.
+   */
+  public abstract void setEraseBackground(boolean erase);
+  
+  /** Determine if the window should erase it's background on repaint.
+   * 
+   * @return true if the window should erase it's background.
+   */
+  public abstract boolean getEraseBackground();
+  
   /** Allow the window to receive touch events
    * 
    * @param accept true if this Window should accept touch events.
@@ -88,6 +93,10 @@ public interface IWindow extends IRectangle, ISurface {
    */
   public abstract void onUpdate();
 
+  /** Called to erase the background of the window.
+   */
+  public abstract void onEraseBackground();
+  
   /** Called when the window needs to be painted
    * 
    *  This method is called to redraw the window.
