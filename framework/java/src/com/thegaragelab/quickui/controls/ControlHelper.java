@@ -8,9 +8,10 @@
 package com.thegaragelab.quickui.controls;
 
 //--- Imports
+import java.util.*;
 import com.thegaragelab.quickui.*;
 
-/** Control event dispatacher
+/** Control event dispatcher
  * 
  * This class provides static methods for allow listening to events from a
  * control and dispatching events to any registered listeners. It is a private
@@ -39,6 +40,7 @@ class ControlHelper {
   
   //--- Static instance variables
   private static Icon m_icons; //! Icons for common controls
+  private static WeakHashMap<ControlEventSource, IControlEventHandler> m_dispatcher;
   
   //-------------------------------------------------------------------------
   // Helper methods
@@ -46,18 +48,43 @@ class ControlHelper {
 
   /** Dispatch a message from a control to any registered listeners.
    * 
+   * @param control the control sending the event.
+   * @param event the event ID being sent.
+   * @param params parameters for the event.
    */
-  public static void fireEvent(IControl source, int event, Object params) {
+  public static synchronized void fireEvent(IControl control, int event, Object params) {
+    // Do we have any handlers registered ?
+    if(m_dispatcher==null)
+      return;
+    // Do we have one for this source and event ?
+    ControlEventSource source = new ControlEventSource(control, event);
+    if(!m_dispatcher.containsKey(source))
+      return;
+    IControlEventHandler handler = m_dispatcher.get(source);
+    if(handler!=null)
+      handler.onEvent(control, event, params);
     }
   
-  /** Add a listener for specific messages from a known source.
+  /** Set the listener for an event.
    * 
+   * @param control the control generating the event.
+   * @param event the event ID to listen to.
+   * @param handler the handler to process the event.
    */
-  public static void listenFor(IControl source, int event, IControlEventHandler handler) {
+  public static synchronized void setEventHandler(IControl control, int event, IControlEventHandler handler) {
+    // Make sure we have something to hold the mapping
+    if(m_dispatcher==null)
+      m_dispatcher = new WeakHashMap<ControlEventSource, IControlEventHandler>();
+    // Add it
+    m_dispatcher.put(new ControlEventSource(control, event), handler);
     }
   
   /** Draw a control icon at the requested co-ordinates
    * 
+   * @param surface the surface to draw on.
+   * @param where where to draw the icon.
+   * @param icon the icon number to draw.
+   * @param color the color to draw the icon in.
    */
   public static void drawControlIcon(ISurface surface, IPoint where, int icon, Color color) {
     // Make sure we have icons

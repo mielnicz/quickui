@@ -36,6 +36,19 @@ public abstract class SimpleControl extends Window implements IControl {
     }
 
   //-------------------------------------------------------------------------
+  // Internal helpers
+  //-------------------------------------------------------------------------
+
+  /** Fire an event
+   * 
+   * @param event the event ID to fire.
+   * @param data the data associated with this event.
+   */
+  protected final void fireEvent(int event, Object data) {
+    ControlHelper.fireEvent(this, event, data);
+    }
+  
+  //-------------------------------------------------------------------------
   // Control specific operations
   //-------------------------------------------------------------------------
 
@@ -64,20 +77,13 @@ public abstract class SimpleControl extends Window implements IControl {
       }
     }
   
-  /** Fire an event
-   * 
-   * @param event the event ID to fire.
-   * @param data the data associated with this event.
-   */
-  public final void fireEvent(int event, Object data) {
-    ControlHelper.fireEvent(this, event, data);
-    }
-  
   /** Add a listener for an event
    * 
+   * @param event the event ID to listen to.
+   * @param handler the handler to process the event.
    */
-  public final void listenFor(int event, IControlEventHandler handler) {
-    ControlHelper.listenFor(this, event, handler);
+  public final void setEventHandler(int event, IControlEventHandler handler) {
+    ControlHelper.setEventHandler(this, event, handler);
     }
   
   }

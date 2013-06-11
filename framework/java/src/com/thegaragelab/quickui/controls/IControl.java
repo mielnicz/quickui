@@ -46,18 +46,14 @@ public interface IControl extends IWindow {
    */
   public int getPreferredHeight();
   
-  /** Fire an event
+  /** Set the listener for a control event
    * 
-   * @param event the event ID to fire.
-   * @param data the data associated with this event.
-   */
-  public void fireEvent(int event, Object data);
-  
-  /** Add a listener for an event
+   * Only a single listener may be set for any event, if you set a new event
+   * handler the previous ones will no longer be called.
    * 
    * @param event the event ID to listen for.
    * @param handler the handler to evoke when the event occurs.
    */
-  public void listenFor(int event, IControlEventHandler handler);
+  public void setEventHandler(int event, IControlEventHandler handler);
   
   }

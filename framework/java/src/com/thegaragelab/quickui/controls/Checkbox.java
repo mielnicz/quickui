@@ -14,6 +14,11 @@ import com.thegaragelab.quickui.*;
  *
  */
 public class Checkbox extends SimpleControl {
+  //--- Control events
+  public static final int EVENT_CHECKED   = 0; //! Sent when the control is checked
+  public static final int EVENT_UNCHECKED = 1; //! Sent when the control is unchecked
+  public static final int EVENT_CHANGED   = 2; //! The state has changed
+  
   //--- Instance variables
   private boolean m_checked; //! Current state of the control
   
@@ -76,9 +81,9 @@ public class Checkbox extends SimpleControl {
     Point where = ControlHelper.getPosition(this, size, getPadding(), getHorizontalAlignment(), getVerticalAlignment());
     // Draw the icon
     if(isChecked())
-      ControlHelper.drawControlIcon(this, where, ControlHelper.ICON_CHECK_EMPTY, getForeground());
-    else
       ControlHelper.drawControlIcon(this, where, ControlHelper.ICON_CHECK_SELECTED, getForeground());
+    else
+      ControlHelper.drawControlIcon(this, where, ControlHelper.ICON_CHECK_EMPTY, getForeground());
     // Adjust to handle where the text should go
     where.x = where.x + ControlHelper.ICON_WIDTH + ControlHelper.ICON_PADDING;
     where.y = where.y + (ControlHelper.ICON_HEIGHT - font.getHeight()) / 2;
@@ -123,6 +128,13 @@ public class Checkbox extends SimpleControl {
       return;
     // Save the state, set the dirty flag
     m_checked = checked;
+    Boolean args = new Boolean(m_checked);
+    if(isChecked())
+      fireEvent(EVENT_CHECKED, null);
+    else
+      fireEvent(EVENT_UNCHECKED, null);
+    fireEvent(EVENT_CHANGED, args);
+    // Set it as dirty
     setDirty(true);
     }
   
