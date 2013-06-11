@@ -24,24 +24,15 @@ public abstract class SimpleControl extends Window implements IControl {
   // Construction and initialisation
   //-------------------------------------------------------------------------
 
-  /** Constructor with a parent Window a position and flags to set or clear.
-   * 
-   * @param parent the parent window for this instance.
-   * @param rect the Rectangle describing the location and size of the window.
-   * @param require additional flags to set
-   * @param exclude flags to mask out
-   */
-  public SimpleControl(Container parent, Rectangle rect, int require, int exclude) {
-    super(parent, rect, Window.WIN_ACCEPT_TOUCH | require, exclude);    
-    }
-
   /** Constructor with a parent Window and a Rectangle for position and size.
    * 
    * @param parent the parent window for this instance.
    * @param rect the Rectangle describing the location and size of the window.
+   * @param text the text for this control.
    */
-  public SimpleControl(Container parent, Rectangle rect) {
+  public SimpleControl(Container parent, Rectangle rect, String text) {
     super(parent, rect, Window.WIN_ACCEPT_TOUCH, 0);
+    setText(text);
     }
 
   //-------------------------------------------------------------------------

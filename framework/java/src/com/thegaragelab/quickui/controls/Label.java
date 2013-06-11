@@ -20,15 +20,6 @@ public class Label extends SimpleControl {
   // Construction and initialisation
   //-------------------------------------------------------------------------
 
-  /** Constructor with a parent Window and a Rectangle for position and size.
-   * 
-   * @param parent the parent window for this instance.
-   * @param rect the Rectangle describing the location and size of the window.
-   */
-  public Label(Container parent, Rectangle rect) {
-    super(parent, rect);
-    }
-
   /** Constructor with a parent, position and size as well as text.
    * 
    * @param parent the parent window for this instance.
@@ -36,8 +27,7 @@ public class Label extends SimpleControl {
    * @param text the initial text to display
    */
   public Label(Container parent, Rectangle rect, String text) {
-    super(parent, rect);
-    setText(text);
+    super(parent, rect, text);
     }
 
   //-------------------------------------------------------------------------
