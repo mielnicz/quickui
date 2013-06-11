@@ -101,7 +101,7 @@ public class Checkbox extends SimpleControl {
    */
   @Override
   public void onTouchEvent(int evType, IPoint where) {
-    if(evType==TouchEvent.GFX_EVENT_TOUCH)
+    if(evType==TouchEvent.GFX_EVENT_RELEASE)
       setChecked(!isChecked());
     }
 
