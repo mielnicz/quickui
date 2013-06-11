@@ -123,7 +123,10 @@ public class QuickTest extends Application implements SimpleTimer.Listener {
        32),
        "A Control"
        );
+     cbTest.setBackground(Color.GREEN);
      cbTest.setEraseBackground(true);
+     cbTest.setWidth(cbTest.getPreferredWidth());
+     cbTest.setHeight(cbTest.getPreferredHeight());
      cbTest.setEventHandler(
        Checkbox.EVENT_CHECKED,
        new IControlEventHandler() {
