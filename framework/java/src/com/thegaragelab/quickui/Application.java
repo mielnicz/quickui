@@ -500,7 +500,7 @@ public class Application extends Container {
         event = m_driver.nextTouchEvent();
         }
       // Process timers
-      TimedEvent.update();
+      SimpleTimer.update();
       // Do any updates
       doUpdate();
       // Repaint what is needed.

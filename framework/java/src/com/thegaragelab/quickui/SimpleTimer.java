@@ -13,18 +13,18 @@ import java.util.*;
 /** Represents a timer that can be used to trigger events at a later date
  *
  */
-public class TimedEvent {
+public class SimpleTimer {
   /** The listener to use for timer events
    * 
    */
   public interface Listener {
     /** Called when a timer event is triggered.
      * 
-     * @param timer the timer that caused the event.
+     * @param simpleTimer the timer that caused the event.
      * @param delay the delay (in milliseconds) between this event and when
      *              it should have happened.
      */
-    public void onTimer(TimedEvent timer, long delay);
+    public void onTimer(SimpleTimer simpleTimer, long delay);
     
     };
 
@@ -33,7 +33,7 @@ public class TimedEvent {
   //-------------------------------------------------------------------------
 
   //--- Class variables
-  private static Set<TimedEvent> m_timers = new HashSet<TimedEvent>();
+  private static Set<SimpleTimer> m_simpleTimers = new HashSet<SimpleTimer>();
   
   //--- Instance variables
   private boolean  m_repeat;   //! True if this timer repeats
@@ -47,7 +47,7 @@ public class TimedEvent {
    * @param listener the listener to receive events.
    * @param repeat true if we should repeat events rather than just send one.
    */
-  private TimedEvent(long wait, Listener listener, boolean repeat) {
+  private SimpleTimer(long wait, Listener listener, boolean repeat) {
     m_last = System.currentTimeMillis();
     m_wait = wait;
     m_repeat = repeat;
@@ -66,10 +66,10 @@ public class TimedEvent {
    * @param wait how long to wait (in milliseconds) before triggering an event
    * @param listener the listener for the event.
    */
-  public static final synchronized TimedEvent once(long wait, Listener listener) {
-    TimedEvent timer = new TimedEvent(wait, listener, false);
-    m_timers.add(timer);
-    return timer;
+  public static final synchronized SimpleTimer once(long wait, Listener listener) {
+    SimpleTimer simpleTimer = new SimpleTimer(wait, listener, false);
+    m_simpleTimers.add(simpleTimer);
+    return simpleTimer;
     }
   
   /** Create a repeating timer
@@ -79,30 +79,35 @@ public class TimedEvent {
    * @param wait how long to wait (in milliseconds) between events
    * @param listener the listener for the event.
    */
-  public static final TimedEvent repeat(long wait, Listener listener) {
-    TimedEvent timer = new TimedEvent(wait, listener, true);
-    m_timers.add(timer);
-    return timer;
+  public static final SimpleTimer repeat(long wait, Listener listener) {
+    SimpleTimer simpleTimer = new SimpleTimer(wait, listener, true);
+    m_simpleTimers.add(simpleTimer);
+    return simpleTimer;
     }
   
   //-------------------------------------------------------------------------
-  // TimedEvent management
+  // SimpleTimer management
   //-------------------------------------------------------------------------
 
   /** Remove a timer
    * 
+   * Remove a periodic timer. Once removed a periodic timer will no longer
+   * send events to the listener.
+   * 
+   * @param simpleTimer the timer to remove.
    */
-  private static final synchronized void remove(TimedEvent timer) {
-    m_timers.remove(timer);
+  private static final synchronized void remove(SimpleTimer simpleTimer) {
+    m_simpleTimers.remove(simpleTimer);
     }
   
   /** Update all timers
    * 
+   * This helper updates all timers and calls the listeners as needed.
    */
   static final synchronized void update() {
     // Create a copy of the set of timers as an array
-    TimedEvent[] timers = new TimedEvent[m_timers.size()];
-    timers = m_timers.toArray(timers);
+    SimpleTimer[] timers = new SimpleTimer[m_simpleTimers.size()];
+    timers = m_simpleTimers.toArray(timers);
     // Get the current time and use that to trigger timers
     long now = System.currentTimeMillis();
     for(int i=0; i<timers.length; i++)
@@ -125,7 +130,7 @@ public class TimedEvent {
       // Reset state
       m_last = now;
       if(!m_repeat)
-        TimedEvent.remove(this);
+        SimpleTimer.remove(this);
       }
     }
   
@@ -139,7 +144,7 @@ public class TimedEvent {
    * it should no longer trigger any more events.
    */
   public void stop() {
-    TimedEvent.remove(this);
+    SimpleTimer.remove(this);
     }
   
   }

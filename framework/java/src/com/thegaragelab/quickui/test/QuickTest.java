@@ -15,7 +15,7 @@ import com.thegaragelab.quickui.controls.*;
 /** A simple test application for the framework
  *
  */
-public class QuickTest extends Application implements TimedEvent.Listener {
+public class QuickTest extends Application implements SimpleTimer.Listener {
   //--- Display preferences
   private static final int SCREEN_WIDTH  = 480; // Preferred width of the window
   private static final int SCREEN_HEIGHT = 272; // Preferred height of the window
@@ -54,7 +54,7 @@ public class QuickTest extends Application implements TimedEvent.Listener {
    * @param delay the delay (in milliseconds) between this event and when
    *              it should have happened.
    */
-  public void onTimer(TimedEvent timer, long delay) {
+  public void onTimer(SimpleTimer timer, long delay) {
     // Pick a random window
     IWindow w = m_winTL;
     switch(m_random.nextInt(3)) {
@@ -149,7 +149,7 @@ public class QuickTest extends Application implements TimedEvent.Listener {
            }
          );
      // Set up our timer
-     TimedEvent.repeat(250L, this);
+     SimpleTimer.repeat(250L, this);
      }
    
    /**
