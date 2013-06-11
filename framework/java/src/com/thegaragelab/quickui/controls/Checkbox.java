@@ -48,7 +48,9 @@ public class Checkbox extends SimpleControl {
    * @param the preferred width in pixels
    */
   public int getPreferredWidth() {
-    return 0;
+    Dimension size = getFont().getStringSize(getText());
+    Padding padding = getPadding();
+    return padding.getPaddingLeft() + ControlHelper.ICON_WIDTH + ControlHelper.ICON_PADDING + size.getWidth() + padding.getPaddingRight();
     }
   
   /** Get the preferred height of this control
@@ -59,7 +61,9 @@ public class Checkbox extends SimpleControl {
    * @param the preferred height in pixels
    */
   public int getPreferredHeight() {
-    return 0;
+    Dimension size = getFont().getStringSize(getText());
+    Padding padding = getPadding();
+    return padding.getPaddingTop() + Math.max(ControlHelper.ICON_HEIGHT, size.getHeight()) + padding.getPaddingRight();
     }
   
   //-------------------------------------------------------------------------

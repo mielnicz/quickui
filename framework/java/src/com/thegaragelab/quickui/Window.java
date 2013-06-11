@@ -436,12 +436,16 @@ public class Window implements IWindow {
     return m_rectangle.x;
     }
   
-  /** Set the X co-ordinate for this point.
+  /** Set the X co-ordinate for the window
+   * 
+   * For a window this sets the parent to dirty so all child windows are
+   * redrawn.
    * 
    * @param nx the new X co-ordinate for this point.
    */
   public void setX(int nx) {
     m_rectangle.x = nx;
+    getParent().setDirty(true);
     }
   
   /** Get the Y co-ordinate for this point.
@@ -454,10 +458,14 @@ public class Window implements IWindow {
   
   /** Set the Y co-ordinate for this point.
    * 
+   * For a window this sets the parent to dirty so all child windows are
+   * redrawn.
+   * 
    * @param ny the new Y co-ordinate for this point.
    */
   public void setY(int ny) {
     m_rectangle.y = ny;
+    getParent().setDirty(true);
     }
   
   /** Translate the point so the given point is the origin
@@ -480,10 +488,14 @@ public class Window implements IWindow {
   
   /** Set the width of the rectangle.
    * 
+   * For a window this sets the parent to dirty so all child windows are
+   * redrawn.
+   * 
    * @param w the new width of the rectangle.
    */
   public void setWidth(int w) {
     m_rectangle.width = w;
+    getParent().setDirty(true);
     }
   
   /** Get the height of the rectangle.
@@ -496,10 +508,14 @@ public class Window implements IWindow {
   
   /** Set the height of the rectangle.
    * 
+   * For a window this sets the parent to dirty so all child windows are
+   * redrawn.
+   * 
    * @param h the new height of the rectangle.
    */
   public void setHeight(int h) {
     m_rectangle.height = h;
+    getParent().setDirty(true);
     }
   
   /** Determine if this rectangle contains the given point

@@ -126,7 +126,8 @@ public class Application extends Container {
    * 
    * @param nx the new X co-ordinate for this point.
    */
-  public void setX(int nx) {
+  @Override
+  public final void setX(int nx) {
     // This value is immutable for this instance
     }
   
@@ -134,7 +135,8 @@ public class Application extends Container {
    * 
    * @param ny the new Y co-ordinate for this point.
    */
-  public void setY(int ny) {
+  @Override
+  public final void setY(int ny) {
     // This value is immutable for this instance
     }
     
@@ -142,7 +144,8 @@ public class Application extends Container {
    * 
    * @param w the new width of the rectangle.
    */
-  public void setWidth(int w) {
+  @Override
+  public final void setWidth(int w) {
     // This value is immutable for this instance
     }
     
@@ -150,7 +153,8 @@ public class Application extends Container {
    * 
    * @param h the new height of the rectangle.
    */
-  public void setHeight(int h) {
+  @Override
+  public final void setHeight(int h) {
     // This value is immutable for this instance
     }
 
