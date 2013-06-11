@@ -128,7 +128,7 @@ class ControlHelper {
         p.x = padding.getPaddingLeft();
         break;
       case IControl.CENTER:
-        p.x = (container.getWidth() - padding.getPaddingLeft() - padding.getPaddingRight() - content.getWidth()) / 2;
+        p.x = padding.getPaddingLeft() + ((container.getWidth() - padding.getPaddingLeft() - padding.getPaddingRight() - content.getWidth()) / 2);
         break;
       case IControl.RIGHT:
         p.x = container.getWidth() - padding.getPaddingRight() - content.getWidth();
@@ -140,7 +140,7 @@ class ControlHelper {
         p.y = padding.getPaddingTop();
         break;
       case IControl.MIDDLE:
-        p.y = (container.getHeight() - padding.getPaddingTop() - padding.getPaddingBottom() - content.getHeight()) / 2;
+        p.y = padding.getPaddingTop() + ((container.getHeight() - padding.getPaddingTop() - padding.getPaddingBottom() - content.getHeight()) / 2);
         break;
       case IControl.BOTTOM:
         p.y = container.getHeight() - padding.getPaddingBottom() - content.getHeight();
