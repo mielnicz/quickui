@@ -79,7 +79,6 @@ public class Label extends SimpleControl {
    *  This method is called to redraw the window.
    */
   @Override
-  @SuppressWarnings("incomplete-switch")
   public void onPaint() {
     super.onPaint();
     // Get the size information
