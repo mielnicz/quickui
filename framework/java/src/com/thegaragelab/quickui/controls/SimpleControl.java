@@ -17,7 +17,7 @@ import com.thegaragelab.quickui.utils.*;
  * contained - they do not have any child windows and manage themselves.
  * This includes controls like a TextInput, RadioButton or CheckBox.
  */
-public class SimpleControl extends Window implements IControl {
+public abstract class SimpleControl extends Window implements IControl {
   //--- Instance variables
   private String m_text; //! Text for this control
   

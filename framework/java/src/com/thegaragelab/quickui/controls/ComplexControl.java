@@ -16,7 +16,7 @@ import com.thegaragelab.quickui.*;
  * control may utilise simple (or complex) controls as child windows to
  * achieve it's purpose.
  */
-public class ComplexControl extends Container implements IControl {
+public abstract class ComplexControl extends Container implements IControl {
   //--- Instance variables
   private String m_text; //! Text for this control
   

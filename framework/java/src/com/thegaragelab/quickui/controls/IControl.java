@@ -28,6 +28,24 @@ public interface IControl extends IWindow {
    */
   public void setText(String text);
   
+  /** Get the preferred width of this control
+   * 
+   * This method should calculate the preferred with of the control in pixels
+   * taking into account the current control state and context settings.
+   * 
+   * @param the preferred width in pixels
+   */
+  public int getPreferredWidth();
+  
+  /** Get the preferred height of this control
+   * 
+   * This method should calculate the preferred height of the control in pixels
+   * taking into account the current control state and context settings.
+   * 
+   * @param the preferred height in pixels
+   */
+  public int getPreferredHeight();
+  
   /** Fire an event
    * 
    * @param event the event ID to fire.

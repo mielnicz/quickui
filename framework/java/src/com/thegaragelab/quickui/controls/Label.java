@@ -42,6 +42,37 @@ public class Label extends SimpleControl {
     }
 
   //-------------------------------------------------------------------------
+  // Implementation of IControl
+  //-------------------------------------------------------------------------
+  
+  /** Get the preferred width of this control
+   * 
+   * This method should calculate the preferred with of the control in pixels
+   * taking into account the current control state and context settings.
+   * 
+   * @param the preferred width in pixels
+   */
+  public int getPreferredWidth() {
+    Dimension text = getFont().getStringSize(getText());
+    Padding padding = getPadding();
+    return padding.getPaddingLeft() + text.getWidth() + padding.getPaddingRight();
+    }
+  
+  /** Get the preferred height of this control
+   * 
+   * This method should calculate the preferred height of the control in pixels
+   * taking into account the current control state and context settings.
+   * 
+   * @param the preferred height in pixels
+   */
+  public int getPreferredHeight() {
+    Dimension text = getFont().getStringSize(getText());
+    Padding padding = getPadding();
+    return padding.getPaddingTop() + text.getHeight() + padding.getPaddingBottom();
+    }
+  
+
+  //-------------------------------------------------------------------------
   // Implementation of IWindow
   //-------------------------------------------------------------------------
 
@@ -53,9 +84,7 @@ public class Label extends SimpleControl {
   public void onPaint() {
     super.onPaint();
     // Get the font to use
-    Font font = Application.getInstance().getFont();
-    if(font==null)
-      return;
+    Font font = getFont();
     // Calculate the text location
     Point where = new Point(
       0,
@@ -65,10 +94,9 @@ public class Label extends SimpleControl {
     this.drawString(
       font,
       where,
-      Color.RED,
+      getForeground(),
       getText()
       );
     }
-
 
   }
