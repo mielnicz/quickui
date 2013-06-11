@@ -100,7 +100,7 @@ public class Application extends Container {
     setFont(Asset.loadFont(SYSTEM_RESOURCE));
     setHorizontalAlignment(IContext.LEFT);
     setVerticalAlignment(IContext.MIDDLE);
-    setPadding(new Padding(Padding.DEFAULT_PADDING, Padding.DEFAULT_PADDING));
+    setPadding(Padding.NONE);
     // TODO: Colors should come from Palette indices
     setForeground(Color.WHITE);
     setBackground(Color.BLACK);

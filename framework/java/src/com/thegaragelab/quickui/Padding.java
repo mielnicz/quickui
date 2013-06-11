@@ -9,10 +9,16 @@ package com.thegaragelab.quickui;
 
 /** Represents padding around a rectangular area.
  *
+ * A padding instance describes the amount of space to keep clear around
+ * the edges of a rectangle.
  */
 public class Padding {
+  //--- Special instances
+  public static final Padding NONE    = new Padding(0); //! No padding
+  public static final Padding DEFAULT = new Padding();  //! Default padding
+  
   //--- Constants
-  public static int DEFAULT_PADDING = 2; //! Default padding (for all edges)
+  private static int DEFAULT_PADDING = 2; //! Default padding (for all edges)
   
   //--- Instance variables
   private int m_left;    //! Padding to the left
@@ -26,6 +32,7 @@ public class Padding {
   
   /** Default constructor
    * 
+   * Set's the default padding.
    */
   public Padding() {
     m_left = DEFAULT_PADDING;
@@ -34,8 +41,21 @@ public class Padding {
     m_bottom = DEFAULT_PADDING;
     }
   
+  /** Constructor with constant padding
+   * 
+   * @param padding the default padding for all sizes.
+   */
+  public Padding(int padding) {
+    m_left = padding;
+    m_right = padding;
+    m_top = padding;
+    m_bottom = padding;
+    }
+  
   /** Constructor with horizontal and vertical padding
    * 
+   * @param horizontal padding in the horizontal direction.
+   * @param vertical padding in the vertical direction.
    */
   public Padding(int horizontal, int vertical) {
     m_left = horizontal;
@@ -46,22 +66,16 @@ public class Padding {
   
   /** Constructor with all elements
    * 
+   * @param left padding to the left of the element.
+   * @param right padding to the right of the element.
+   * @param top padding to the top of the element.
+   * @param bottom padding to the bottom of the element.
    */
   public Padding(int left, int right, int top, int bottom) {
     m_left = left;
     m_right = right;
     m_top = top;
     m_bottom = bottom;
-    }
-  
-  /** Constructor from another padding element
-   * 
-   */
-  public Padding(Padding padding) {
-    m_left = padding.m_left;
-    m_right = padding.m_right;
-    m_top = padding.m_top;
-    m_bottom = padding.m_bottom;
     }
   
   //-------------------------------------------------------------------------
@@ -76,28 +90,12 @@ public class Padding {
     return m_left;
     }
   
-  /** Set the padding for the left of the window
-   * 
-   * @param padding the padding to assign to the left of the window
-   */
-  public void setPaddingLeft(int padding) {
-    m_left = padding;
-    }
-  
   /** Get the padding for the right of the window.
    * 
    * @return the padding assigned to the right of the window.
    */
   public int getPaddingRight() {
     return m_right;
-    }
-  
-  /** Set the padding for the right of the window
-   * 
-   * @param padding the padding to assign to the right of the window
-   */
-  public void setPaddingRight(int padding) {
-    m_right = padding;
     }
   
   /** Get the padding for the top of the window.
@@ -108,40 +106,12 @@ public class Padding {
     return m_top;
     }
   
-  /** Set the padding for the top of the window
-   * 
-   * @param padding the padding to assign to the top of the window
-   */
-  public void setPaddingTop(int padding) {
-    m_top = padding;
-    }
-  
   /** Get the padding for the bottom of the window.
    * 
    * @return the padding assigned to the bottom of the window.
    */
   public int getPaddingBottom() {
     return m_bottom;
-    }
-  
-  /** Set the padding for the bottom of the window
-   * 
-   * @param padding the padding to assign to the bottom of the window
-   */
-  public void setPaddingBottom(int padding) {
-    m_bottom = padding;
-    }
-  
-  //-------------------------------------------------------------------------
-  // Static helpers
-  //-------------------------------------------------------------------------
-  
-  /** Clone a copy of this padding description
-   * 
-   * @return a copy of this padding instance.
-   */
-  public final Padding clone() {
-    return new Padding(this);
     }
   
   }
