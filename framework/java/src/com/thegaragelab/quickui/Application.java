@@ -7,6 +7,9 @@
 *---------------------------------------------------------------------------*/
 package com.thegaragelab.quickui;
 
+import com.thegaragelab.quickui.IContext.HorizontalAlignment;
+import com.thegaragelab.quickui.IContext.VerticalAlignment;
+
 /** A single application.
  * 
  *  The Application is a special type of container window that is the top of
@@ -45,7 +48,6 @@ public class Application extends Container {
   private Point      m_offset;     //! The offset for painting operations
   private Palette    m_palette;    //! The system palette
   private Icon       m_icons;      //! The system icons
-  private Font       m_font;       //! The system font
   private IWindow    m_target;     //! The window currently accepting touch events.
   
   //-------------------------------------------------------------------------
@@ -97,7 +99,14 @@ public class Application extends Container {
     // Load our assets
     m_palette = Asset.loadPalette(SYSTEM_RESOURCE);
     m_icons = Asset.loadIcon(SYSTEM_RESOURCE);
-    m_font = Asset.loadFont(SYSTEM_RESOURCE);
+    // Set the base context
+    setFont(Asset.loadFont(SYSTEM_RESOURCE));
+    setHorizontalAlignment(HorizontalAlignment.LEFT);
+    setVerticalAlignment(VerticalAlignment.MIDDLE);
+    setPadding(new Padding(Padding.DEFAULT_PADDING, Padding.DEFAULT_PADDING));
+    // TODO: Colors should come from Palette indices
+    setForeground(Color.WHITE);
+    setBackground(Color.BLACK);
     }
   
   //-------------------------------------------------------------------------
@@ -185,6 +194,70 @@ public class Application extends Container {
   public final IWindow getAcceptTouch() {
     // We will always handle touch events on behalf of any window
     return this;
+    }
+  
+  //-------------------------------------------------------------------------
+  // Implementation of IContext
+  //-------------------------------------------------------------------------
+
+  /** Set the font for this context
+   * 
+   * @param font the font to use for this context.
+   */
+  @Override
+  public void setFont(Font font) {
+    if(font!=null)
+      super.setFont(font);
+    }
+  
+  /** Set the foreground color for this context
+   * 
+   * @param color the color to use as the foreground.
+   */
+  @Override
+  public void setForeground(Color color) {
+    if(color!=null)
+      super.setForeground(color);
+    }
+  
+  /** Set the background color for this context
+   * 
+   * @param color the color to use as the background.
+   */
+  @Override
+  public void setBackground(Color color) {
+    if(color!=null)
+      super.setBackground(color);
+    }
+  
+  /** Set the padding for drawing.
+   * 
+   * @param padding the padding to use when drawing.
+   */
+  @Override
+  public void setPadding(Padding padding) {
+    if(padding!=null)
+      super.setPadding(padding);
+    }
+  
+  /** Set the vertical alignment for elements
+   * 
+   * @param align the vertical alignment to use.
+   */
+  @Override
+  public void setVerticalAlignment(VerticalAlignment align) {
+    if(align!=VerticalAlignment.PARENT)
+      super.setVerticalAlignment(align);
+    }
+  
+  /** Set the horizontal alignment for elements
+   * 
+   * @param align the horizontal alignment to use.
+   */
+  @Override
+  public void setHorizontalAlignment(HorizontalAlignment align) {
+    if(align!=HorizontalAlignment.PARENT)
+      super.setHorizontalAlignment(align);
     }
   
   //-------------------------------------------------------------------------
@@ -393,27 +466,6 @@ public class Application extends Container {
       return;
     // Show the icon
     drawIcon(position, m_icons, color, new Rectangle(icon * SYSTEM_ICON_SIZE, 0, SYSTEM_ICON_SIZE, SYSTEM_ICON_SIZE));
-    }
-  
-  /** Get the system font
-   * 
-   * @return the Font asset for the system font.
-   */
-  public Font getFont() {
-    return m_font;
-    }
-  
-  /** Set the system font
-   * 
-   * @param font the new font to use as the system font.
-   */
-  public void setFont(Font font) {
-    // If there is no change, ignore it
-    if(font==m_font)
-      return;
-    // Save the new font and trigger a global repaint
-    m_font = font;
-    setDirty(true);
     }
   
   /** Get the current system palette

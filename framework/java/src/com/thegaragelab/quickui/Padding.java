@@ -68,6 +68,69 @@ public class Padding {
   // Getters and setters
   //-------------------------------------------------------------------------
   
+  /** Get the padding for the left of the window.
+   * 
+   * @return the padding assigned to the left of the window.
+   */
+  public int getPaddingLeft() {
+    return m_left;
+    }
+  
+  /** Set the padding for the left of the window
+   * 
+   * @param padding the padding to assign to the left of the window
+   */
+  public void setPaddingLeft(int padding) {
+    m_left = padding;
+    }
+  
+  /** Get the padding for the right of the window.
+   * 
+   * @return the padding assigned to the right of the window.
+   */
+  public int getPaddingRight() {
+    return m_right;
+    }
+  
+  /** Set the padding for the right of the window
+   * 
+   * @param padding the padding to assign to the right of the window
+   */
+  public void setPaddingRight(int padding) {
+    m_right = padding;
+    }
+  
+  /** Get the padding for the top of the window.
+   * 
+   * @return the padding assigned to the top of the window.
+   */
+  public int getPaddingTop() {
+    return m_top;
+    }
+  
+  /** Set the padding for the top of the window
+   * 
+   * @param padding the padding to assign to the top of the window
+   */
+  public void setPaddingTop(int padding) {
+    m_top = padding;
+    }
+  
+  /** Get the padding for the bottom of the window.
+   * 
+   * @return the padding assigned to the bottom of the window.
+   */
+  public int getPaddingBottom() {
+    return m_bottom;
+    }
+  
+  /** Set the padding for the bottom of the window
+   * 
+   * @param padding the padding to assign to the bottom of the window
+   */
+  public void setPaddingBottom(int padding) {
+    m_bottom = padding;
+    }
   
   //-------------------------------------------------------------------------
   // Static helpers
