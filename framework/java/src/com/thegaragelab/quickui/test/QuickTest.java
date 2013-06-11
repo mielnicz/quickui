@@ -116,13 +116,14 @@ public class QuickTest extends Application implements TimedEvent.Listener {
        ));
      m_winBR.setBackground(Color.WHITE);
      // Create a control
-     Label lblTest = new Label(this, new Rectangle(
+     Checkbox cbTest = new Checkbox(this, new Rectangle(
        screen.width / 2,
        screen.height / 2,
        128,
        32),
        "A Control"
        );
+     cbTest.setEraseBackground(true);
      // Set up our timer
      TimedEvent.repeat(250L, this);
      }
