@@ -12,9 +12,8 @@ import com.thegaragelab.quickui.*;
 
 /** This control represents a simple label.
  *
- * A label simply displays a string of text and does not respond to any touch
- * events. The label is aligned left horizontally and centered vertically by
- * default.
+ * A label simply displays a string of text and consumes but does not respond
+ * to any touch events.
  */
 public class Label extends SimpleControl {
   //-------------------------------------------------------------------------
@@ -71,7 +70,6 @@ public class Label extends SimpleControl {
     return padding.getPaddingTop() + text.getHeight() + padding.getPaddingBottom();
     }
   
-
   //-------------------------------------------------------------------------
   // Implementation of IWindow
   //-------------------------------------------------------------------------
@@ -81,19 +79,43 @@ public class Label extends SimpleControl {
    *  This method is called to redraw the window.
    */
   @Override
+  @SuppressWarnings("incomplete-switch")
   public void onPaint() {
     super.onPaint();
-    // Get the font to use
+    // Get the size information
     Font font = getFont();
-    // Calculate the text location
-    Point where = new Point(
-      0,
-      (getHeight() - font.getHeight()) / 2
-      );
+    Padding padding = getPadding();
+    Dimension size = font.getStringSize(getText());
+    // Calculate the X position of the text
+    int x = 0;
+    switch(getHorizontalAlignment()) {
+      case LEFT:
+        x = padding.getPaddingLeft();
+        break;
+      case CENTER:
+        x = (getWidth() - padding.getPaddingLeft() - padding.getPaddingRight() - size.getWidth()) / 2;
+        break;
+      case RIGHT:
+        x = getWidth() - padding.getPaddingRight() - size.getWidth();
+        break;
+      }
+    // Calculate the Y position of the text
+    int y = 0;
+    switch(getVerticalAlignment()) {
+      case TOP:
+        y = padding.getPaddingTop();
+        break;
+      case MIDDLE:
+        y = (getHeight() - padding.getPaddingTop() - padding.getPaddingBottom() - size.getHeight()) / 2;
+        break;
+      case BOTTOM:
+        y = getHeight() - padding.getPaddingBottom() - size.getHeight();
+        break;
+      }
     // Draw the text
     this.drawString(
       font,
-      where,
+      new Point(x, y),
       getForeground(),
       getText()
       );

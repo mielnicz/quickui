@@ -9,10 +9,6 @@ package com.thegaragelab.quickui;
 
 //--- Imports
 import java.util.*;
-
-import com.thegaragelab.quickui.IContext.HorizontalAlignment;
-import com.thegaragelab.quickui.IContext.VerticalAlignment;
-//--- Imports
 import com.thegaragelab.quickui.utils.*;
 
 /** Represents a simple window.

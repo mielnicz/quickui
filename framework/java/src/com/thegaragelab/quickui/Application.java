@@ -7,9 +7,6 @@
 *---------------------------------------------------------------------------*/
 package com.thegaragelab.quickui;
 
-import com.thegaragelab.quickui.IContext.HorizontalAlignment;
-import com.thegaragelab.quickui.IContext.VerticalAlignment;
-
 /** A single application.
  * 
  *  The Application is a special type of container window that is the top of

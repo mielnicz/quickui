@@ -9,7 +9,6 @@ package com.thegaragelab.quickui.controls;
 
 //--- Imports
 import com.thegaragelab.quickui.*;
-import com.thegaragelab.quickui.utils.*;
 
 /** A simple control provides IControl functionality to a Window
  * 
