@@ -83,41 +83,10 @@ public class Label extends SimpleControl {
     super.onPaint();
     // Get the size information
     Font font = getFont();
-    Padding padding = getPadding();
     Dimension size = font.getStringSize(getText());
-    // Calculate the X position of the text
-    int x = 0;
-    switch(getHorizontalAlignment()) {
-      case LEFT:
-        x = padding.getPaddingLeft();
-        break;
-      case CENTER:
-        x = (getWidth() - padding.getPaddingLeft() - padding.getPaddingRight() - size.getWidth()) / 2;
-        break;
-      case RIGHT:
-        x = getWidth() - padding.getPaddingRight() - size.getWidth();
-        break;
-      }
-    // Calculate the Y position of the text
-    int y = 0;
-    switch(getVerticalAlignment()) {
-      case TOP:
-        y = padding.getPaddingTop();
-        break;
-      case MIDDLE:
-        y = (getHeight() - padding.getPaddingTop() - padding.getPaddingBottom() - size.getHeight()) / 2;
-        break;
-      case BOTTOM:
-        y = getHeight() - padding.getPaddingBottom() - size.getHeight();
-        break;
-      }
+    Point where = ControlHelper.getPosition(this, size, getPadding(), getHorizontalAlignment(), getVerticalAlignment());
     // Draw the text
-    this.drawString(
-      font,
-      new Point(x, y),
-      getForeground(),
-      getText()
-      );
+    this.drawString(font, where, getForeground(), getText());
     }
 
   }
