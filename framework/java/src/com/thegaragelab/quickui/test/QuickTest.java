@@ -90,28 +90,31 @@ public class QuickTest extends Application implements TimedEvent.Listener {
        WINDOW_WIDTH,
        WINDOW_HEIGHT
        ));
-//     m_winTL.setBackground(Color.RED);
+     m_winTL.setEraseBackground(true);
+     m_winTL.setBackground(Color.RED);
      m_winTR = new Window(this, new Rectangle(
        screen.width - WINDOW_OFFSET - WINDOW_WIDTH,
        WINDOW_OFFSET,
        WINDOW_WIDTH,
        WINDOW_HEIGHT
        ));
-//     m_winTR.setBackground(Color.GREEN);
+     m_winTR.setEraseBackground(true);
+     m_winTR.setBackground(Color.GREEN);
      m_winBL = new Window(this, new Rectangle(
        WINDOW_OFFSET,
        screen.height - WINDOW_OFFSET - WINDOW_HEIGHT,
        WINDOW_WIDTH,
        WINDOW_HEIGHT
        ));
-//     m_winBL.setBackground(Color.BLUE);
+     m_winBL.setEraseBackground(true);
+     m_winBL.setBackground(Color.BLUE);
      m_winBR = new ToggleWindow(this, new Rectangle(
        screen.width - WINDOW_OFFSET - WINDOW_WIDTH,
        screen.height - WINDOW_OFFSET - WINDOW_HEIGHT,
        WINDOW_WIDTH,
        WINDOW_HEIGHT
        ));
-//     m_winBR.setBackground(Color.WHITE);
+     m_winBR.setBackground(Color.WHITE);
      // Create a control
      Label lblTest = new Label(this, new Rectangle(
        screen.width / 2,
@@ -120,7 +123,6 @@ public class QuickTest extends Application implements TimedEvent.Listener {
        32),
        "A Control"
        );
-//     lblTest.setBackground(Color.WHITE);
      // Set up our timer
      TimedEvent.repeat(250L, this);
      }
@@ -170,6 +172,7 @@ public class QuickTest extends Application implements TimedEvent.Listener {
   public static void main(String[] args) {
     // Simple create and run our application
     Application app = new QuickTest();
+    app.setEraseBackground(true);
 //    app.setBackground(Color.BLACK);
     app.run();
     }

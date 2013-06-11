@@ -27,6 +27,7 @@ public class ToggleWindow extends Window {
     super(parent, rect);
     m_random = new Random();
     setAcceptTouch(true);
+    setEraseBackground(true);
     }
 
   /** Called when an input event is targeted to this window
@@ -45,8 +46,8 @@ public class ToggleWindow extends Window {
       return;
     // Change color when touched
     Palette palette = Application.getInstance().getPalette();
-//    if(palette!=null)
-//      setBackground(palette.getColor(m_random.nextInt(Palette.PALETTE_SIZE)));
+    if(palette!=null)
+      setBackground(palette.getColor(m_random.nextInt(Palette.PALETTE_SIZE)));
     setDirty(true);
     }
 

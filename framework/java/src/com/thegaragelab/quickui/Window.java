@@ -24,15 +24,15 @@ public class Window implements IWindow {
   protected static final int WIN_FLAG_ERASE_BACKGROUND = WIN_ACCEPT_TOUCH << 1;
   
   //--- Instance variables
-  private Container           m_parent;     //! The parent Window
-  private Rectangle           m_rectangle;  //! Position and size of the window
-  private Flags               m_flags;      //! Current flags
-  private Font                m_font;       //! The current font to use
-  private Color               m_foreground; //! The foreground color
-  private Color               m_background; //! The background color
-  private Padding             m_padding;    //! Window padding
-  private VerticalAlignment   m_vertical;   //! Vertical alignment
-  private HorizontalAlignment m_horizontal; //! Horizontal alignment
+  private Container m_parent;     //! The parent Window
+  private Rectangle m_rectangle;  //! Position and size of the window
+  private Flags     m_flags;      //! Current flags
+  private Font      m_font;       //! The current font to use
+  private Color     m_foreground; //! The foreground color
+  private Color     m_background; //! The background color
+  private Padding   m_padding;    //! Window padding
+  private int       m_vertical;   //! Vertical alignment
+  private int       m_horizontal; //! Horizontal alignment
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -276,8 +276,8 @@ public class Window implements IWindow {
    * 
    * @return the vertical alignment to use for this window.
    */
-  public VerticalAlignment getVerticalAlignment() {
-    if(m_vertical!=VerticalAlignment.PARENT)
+  public int getVerticalAlignment() {
+    if(m_vertical!=IContext.PARENT)
       return m_vertical;
     return getParent().getVerticalAlignment();
     }
@@ -286,7 +286,7 @@ public class Window implements IWindow {
    * 
    * @param align the vertical alignment to use.
    */
-  public void setVerticalAlignment(VerticalAlignment align) {
+  public void setVerticalAlignment(int align) {
     m_vertical = align;
     }
   
@@ -294,8 +294,8 @@ public class Window implements IWindow {
    * 
    * @return the horizontal alignment to use for this window.
    */
-  public HorizontalAlignment getHorizontalAlignment() {
-    if(m_horizontal!=HorizontalAlignment.PARENT)
+  public int getHorizontalAlignment() {
+    if(m_horizontal!=IContext.PARENT)
       return m_horizontal;
     return getParent().getHorizontalAlignment();
     }
@@ -304,7 +304,7 @@ public class Window implements IWindow {
    * 
    * @param align the horizontal alignment to use.
    */
-  public void setHorizontalAlignment(HorizontalAlignment align) {
+  public void setHorizontalAlignment(int align) {
     m_horizontal = align;
     }
   
@@ -397,7 +397,10 @@ public class Window implements IWindow {
   /** Called to erase the background of the window.
    */
   public void onEraseBackground() {
-    // Do nothing in this instance
+    fillRect(
+      new Rectangle(Point.ORIGIN, this),
+      getBackground()
+      );
     }
   
   /**

@@ -26,7 +26,7 @@ public class Label extends SimpleControl {
    * @param rect the Rectangle describing the location and size of the window.
    */
   public Label(Container parent, Rectangle rect) {
-    super(parent, rect, 0, Window.WIN_ACCEPT_TOUCH);
+    super(parent, rect);
     }
 
   /** Constructor with a parent, position and size as well as text.
@@ -36,7 +36,7 @@ public class Label extends SimpleControl {
    * @param text the initial text to display
    */
   public Label(Container parent, Rectangle rect, String text) {
-    super(parent, rect, 0, Window.WIN_ACCEPT_TOUCH);
+    super(parent, rect);
     setText(text);
     }
 

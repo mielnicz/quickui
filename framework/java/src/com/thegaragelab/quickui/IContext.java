@@ -14,23 +14,14 @@ package com.thegaragelab.quickui;
  * a single shared instance but still have a custom instance if needed.
  */
 public interface IContext {
-  /** Vertical alignment
-   */
-  public enum VerticalAlignment {
-    PARENT, //! Use parent window alignment
-    TOP,    //! Align elements to the top of the window
-    MIDDLE, //! Align elements to the middle of the window
-    BOTTOM  //! Align elements to the bottom of the window
-    };
-  
-  /** Vertical alignment
-   */
-  public enum HorizontalAlignment {
-    PARENT, //! Use parent window alignment
-    LEFT,   //! Align elements to the left of the window
-    CENTER, //! Align elements to center of the window
-    RIGHT   //! Align elements to the right of the window
-    };
+  //--- Alignment constants
+  public static final int PARENT = 0; //! Use the parent alignment
+  public static final int TOP    = 1; //! Align to the top of the window
+  public static final int MIDDLE = 2; //! Align to the middle of the window
+  public static final int BOTTOM = 3; //! Align to the bottom of the window
+  public static final int LEFT   = 4; //! Align to the left of the window
+  public static final int CENTER = 5; //! Align to the center of the window
+  public static final int RIGHT  = 6; //! Align to the right of the window
     
   //-------------------------------------------------------------------------
   // Getters and setters
@@ -88,24 +79,24 @@ public interface IContext {
    * 
    * @return the vertical alignment to use for this window.
    */
-  public VerticalAlignment getVerticalAlignment();
+  public int getVerticalAlignment();
   
   /** Set the vertical alignment for elements
    * 
    * @param align the vertical alignment to use.
    */
-  public void setVerticalAlignment(VerticalAlignment align);
+  public void setVerticalAlignment(int align);
   
   /** Get the horizontal alignment for elements
    * 
    * @return the horizontal alignment to use for this window.
    */
-  public HorizontalAlignment getHorizontalAlignment();
+  public int getHorizontalAlignment();
   
   /** Set the horizontal alignment for elements
    * 
    * @param align the horizontal alignment to use.
    */
-  public void setHorizontalAlignment(HorizontalAlignment align);
+  public void setHorizontalAlignment(int align);
   
   }

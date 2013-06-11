@@ -98,8 +98,8 @@ public class Application extends Container {
     m_icons = Asset.loadIcon(SYSTEM_RESOURCE);
     // Set the base context
     setFont(Asset.loadFont(SYSTEM_RESOURCE));
-    setHorizontalAlignment(HorizontalAlignment.LEFT);
-    setVerticalAlignment(VerticalAlignment.MIDDLE);
+    setHorizontalAlignment(IContext.LEFT);
+    setVerticalAlignment(IContext.MIDDLE);
     setPadding(new Padding(Padding.DEFAULT_PADDING, Padding.DEFAULT_PADDING));
     // TODO: Colors should come from Palette indices
     setForeground(Color.WHITE);
@@ -242,8 +242,8 @@ public class Application extends Container {
    * @param align the vertical alignment to use.
    */
   @Override
-  public void setVerticalAlignment(VerticalAlignment align) {
-    if(align!=VerticalAlignment.PARENT)
+  public void setVerticalAlignment(int align) {
+    if(align!=IContext.PARENT)
       super.setVerticalAlignment(align);
     }
   
@@ -252,8 +252,8 @@ public class Application extends Container {
    * @param align the horizontal alignment to use.
    */
   @Override
-  public void setHorizontalAlignment(HorizontalAlignment align) {
-    if(align!=HorizontalAlignment.PARENT)
+  public void setHorizontalAlignment(int align) {
+    if(align!=IContext.PARENT)
       super.setHorizontalAlignment(align);
     }
   
