@@ -124,6 +124,30 @@ public class QuickTest extends Application implements TimedEvent.Listener {
        "A Control"
        );
      cbTest.setEraseBackground(true);
+     cbTest.setEventHandler(
+       Checkbox.EVENT_CHECKED,
+       new IControlEventHandler() {
+         public void onEvent(IWindow source, int event, Object params) {
+           System.out.println("Got EVENT_CHECKED");
+           }
+         }
+       );
+     cbTest.setEventHandler(
+         Checkbox.EVENT_UNCHECKED,
+         new IControlEventHandler() {
+           public void onEvent(IWindow source, int event, Object params) {
+             System.out.println("Got EVENT_UNCHECKED");
+             }
+           }
+         );
+     cbTest.setEventHandler(
+         Checkbox.EVENT_CHANGED,
+         new IControlEventHandler() {
+           public void onEvent(IWindow source, int event, Object params) {
+             System.out.println("Got EVENT_CHANGED with " + params.toString());
+             }
+           }
+         );
      // Set up our timer
      TimedEvent.repeat(250L, this);
      }
