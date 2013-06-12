@@ -115,42 +115,35 @@ public class QuickTest extends Application implements SimpleTimer.Listener {
        WINDOW_HEIGHT
        ));
      m_winBR.setBackground(Color.WHITE);
-     // Create a control
+     // Create some controls
      Checkbox cbTest = new Checkbox(this, new Rectangle(
+       screen.width / 4,
+       screen.height / 4,
+       128,
+       32),
+       "A Control"
+       );
+     cbTest.setEraseBackground(true);
+     cbTest.setWidth(cbTest.getPreferredWidth());
+     cbTest.setHeight(cbTest.getPreferredHeight());
+     Button test = new Button(this, new Rectangle(
        screen.width / 2,
        screen.height / 2,
        128,
        32),
        "A Control"
        );
-     cbTest.setBackground(Color.GREEN);
-     cbTest.setEraseBackground(true);
-     cbTest.setWidth(cbTest.getPreferredWidth());
-     cbTest.setHeight(cbTest.getPreferredHeight());
-     cbTest.setEventHandler(
-       Checkbox.EVENT_CHECKED,
+     test.setBackground(Color.GREEN);
+     test.setWidth(test.getPreferredWidth());
+     test.setHeight(test.getPreferredHeight());
+     test.setEventHandler(
+       Button.EVENT_TOUCHED,
        new IControlEventHandler() {
          public void onEvent(IWindow source, int event, Object params) {
-           System.out.println("Got EVENT_CHECKED");
+           System.out.println("Touch!");
            }
          }
        );
-     cbTest.setEventHandler(
-         Checkbox.EVENT_UNCHECKED,
-         new IControlEventHandler() {
-           public void onEvent(IWindow source, int event, Object params) {
-             System.out.println("Got EVENT_UNCHECKED");
-             }
-           }
-         );
-     cbTest.setEventHandler(
-         Checkbox.EVENT_CHANGED,
-         new IControlEventHandler() {
-           public void onEvent(IWindow source, int event, Object params) {
-             System.out.println("Got EVENT_CHANGED with " + params.toString());
-             }
-           }
-         );
      // Set up our timer
      SimpleTimer.repeat(250L, this);
      }
