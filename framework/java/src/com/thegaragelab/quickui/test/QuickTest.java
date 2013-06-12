@@ -134,7 +134,7 @@ public class QuickTest extends Application implements SimpleTimer.Listener {
        "A Control"
        );
      test.setBackground(Color.GREEN);
-     test.setWidth(test.getPreferredWidth());
+     test.setWidth(test.getPreferredWidth() / 2);
      test.setHeight(test.getPreferredHeight());
      test.setEventHandler(
        Button.EVENT_TOUCHED,
