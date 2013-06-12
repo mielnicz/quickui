@@ -31,7 +31,7 @@ public abstract class ComplexControl extends Container implements IControl {
    * @param require additional flags to set
    * @param exclude flags to mask out
    */
-  public ComplexControl(Container parent, Rectangle rect, int require, int exclude) {
+  public ComplexControl(Container parent, IRectangle rect, int require, int exclude) {
     super(parent, rect, Window.WIN_ACCEPT_TOUCH | require, exclude);    
     }
 

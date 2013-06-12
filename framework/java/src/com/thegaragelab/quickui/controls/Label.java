@@ -26,7 +26,7 @@ public class Label extends SimpleControl {
    * @param rect the Rectangle describing the location and size of the window.
    * @param text the initial text to display
    */
-  public Label(Container parent, Rectangle rect, String text) {
+  public Label(Container parent, IRectangle rect, String text) {
     super(parent, rect, text);
     }
 

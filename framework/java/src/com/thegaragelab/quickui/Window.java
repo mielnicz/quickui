@@ -57,7 +57,7 @@ public class Window implements IWindow {
    * @param require additional flags to set
    * @param exclude flags to mask out
    */
-  public Window(Container parent, Rectangle rect, int require, int exclude) {
+  public Window(Container parent, IRectangle rect, int require, int exclude) {
     m_parent = parent;
     m_flags = new Flags();
     m_rectangle = new Rectangle(rect);
@@ -74,7 +74,7 @@ public class Window implements IWindow {
    * @param parent the parent window for this instance.
    * @param rect the Rectangle describing the location and size of the window.
    */
-  public Window(Container parent, Rectangle rect) {
+  public Window(Container parent, IRectangle rect) {
     this(parent, rect, 0, 0);
     }
 

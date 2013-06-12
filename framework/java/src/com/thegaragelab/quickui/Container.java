@@ -36,7 +36,7 @@ public class Container extends Window {
    * @param require additional flags to set
    * @param exclude flags to mask out
    */
-  public Container(Container parent, Rectangle rect, int require, int exclude) {
+  public Container(Container parent, IRectangle rect, int require, int exclude) {
     super(parent, rect, require, exclude);
     }
   
@@ -45,7 +45,7 @@ public class Container extends Window {
    * @param parent the parent window for this instance.
    * @param rect the Rectangle describing the location and size of the window.
    */
-  public Container(Container parent, Rectangle rect) {
+  public Container(Container parent, IRectangle rect) {
     super(parent, rect);
     }
 
@@ -113,6 +113,7 @@ public class Container extends Window {
   /** Find all dirty children of this container
    * 
    */
+  @Override
   void findDirtyChildren(List<Window> children) {
     // If we are dirty simply add ourselves
     if(isDirty())

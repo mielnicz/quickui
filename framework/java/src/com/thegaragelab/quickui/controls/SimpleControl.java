@@ -30,7 +30,7 @@ public abstract class SimpleControl extends Window implements IControl {
    * @param rect the Rectangle describing the location and size of the window.
    * @param text the text for this control.
    */
-  public SimpleControl(Container parent, Rectangle rect, String text) {
+  public SimpleControl(Container parent, IRectangle rect, String text) {
     super(parent, rect, Window.WIN_ACCEPT_TOUCH, 0);
     setText(text);
     }
