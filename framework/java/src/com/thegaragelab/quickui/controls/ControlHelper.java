@@ -120,7 +120,7 @@ class ControlHelper {
    * 
    * @return a point indicating where to position the object.
    */
-  public static final Point getPosition(IRectangle container, IDimension content, Padding padding, int halign, int valign) {
+  public static final Point getPosition(IDimension container, IDimension content, Padding padding, int halign, int valign) {
     Point p = new Point(0, 0);
     // Calculate the horizontal position
     switch(halign) {
@@ -147,7 +147,6 @@ class ControlHelper {
         break;
       }
     // Adjust for any container offset and return
-    p.translate(container);
     return p;
     }
   
