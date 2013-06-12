@@ -174,6 +174,7 @@ GFX_RESULT gfx_Init(uint16_t width, uint16_t height) {
   g_GfxDriver.m_pfBeginPaint = gfx_vnc_BeginPaint;
   g_GfxDriver.m_pfEndPaint = gfx_vnc_EndPaint;
   g_GfxDriver.m_pfPutPixel = gfx_vnc_PutPixel;
+  g_GfxDriver.m_pfSetClip = gfx_common_SetClip;
   g_GfxDriver.m_pfFillRegion = gfx_common_FillRegion;
   g_GfxDriver.m_pfDrawIcon = gfx_common_DrawIcon;
   g_GfxDriver.m_pfDrawIconPortion = gfx_common_DrawIconPortion;
@@ -183,6 +184,8 @@ GFX_RESULT gfx_Init(uint16_t width, uint16_t height) {
   g_GfxDriver.m_pfDrawBox = gfx_common_DrawBox;
   g_GfxDriver.m_pfCheckEvents = gfx_vnc_CheckEvents;
   g_GfxDriver.m_pfAddEvent = gfx_common_AddEvent;
+  // Set the initial clipping to full screen
+  gfx_SetClip(0, 0, g_GfxDriver.m_width - 1, g_GfxDriver.m_height - 1);
   // All done
   return GFX_RESULT_OK;
   }

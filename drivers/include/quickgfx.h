@@ -162,6 +162,9 @@ typedef GFX_RESULT (*_gfx_BeginPaint)();
 /** Finish a multipart paint operation */
 typedef GFX_RESULT (*_gfx_EndPaint)();
 
+/** Set the clipping rectangle */
+typedef GFX_RESULT (*_gfx_SetClip)(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
+
 /** Set the color of a single pixel */
 typedef GFX_RESULT (*_gfx_PutPixel)(uint16_t x, uint16_t y, GFX_COLOR color);
 
@@ -199,8 +202,13 @@ typedef GFX_RESULT (*_gfx_AddEvent)(GFX_TOUCH_EVENT evType, uint16_t x, uint16_t
 typedef struct _GFX_DRIVER {
   uint16_t              m_width;              //! Width of the display in pixels
   uint16_t              m_height;             //! Height of the display in pixels
+  uint16_t              m_clipX1;             //! Top left X co-ordinate of clipping
+  uint16_t              m_clipY1;             //! Top left Y co-ordinate of clipping
+  uint16_t              m_clipX2;             //! Bottom right X co-ordinate of clipping
+  uint16_t              m_clipY2;             //! Bottom right Y co-ordinate of clipping
   _gfx_BeginPaint       m_pfBeginPaint;       //! Begin a paint operation
   _gfx_EndPaint         m_pfEndPaint;         //! End a paint operation
+  _gfx_SetClip          m_pfSetClip;          //! Set a clipping rectangle
   _gfx_PutPixel         m_pfPutPixel;         //! Place a single pixel
   _gfx_FillRegion       m_pfFillRegion;       //! Fill a region with a single color
   _gfx_DrawIcon         m_pfDrawIcon;         //! Draw an entire icon
@@ -254,6 +262,17 @@ const void *gfx_Framebuffer();
  */
 #define gfx_EndPaint() (*g_GfxDriver.m_pfEndPaint)()
 
+/** Set the clipping rectangle
+ *
+ * @param x1 the top left X co-ordinate of the clipping rectangle
+ * @param y1 the top left Y co-ordinate of the clipping rectangle
+ * @param x2 the bottom right X co-ordinate of the clipping rectangle
+ * @param y2 the bottom right Y co-ordinate of the clipping rectangle
+ *
+ * @return GFX_RESULT_OK if everything was ok.
+ */
+#define gfx_SetClip(x1, y1, x2, y2) (*g_GfxDriver.m_pfSetClip)(x1, y1, x2, y2)
+
 /** Set the color of a single pixel
  *
  * @param pDriver the SPI driver to use
@@ -301,25 +320,25 @@ const void *gfx_Framebuffer();
  * @return true if the co-ordinates can be displayed, false if not
  */
 #define GFX_CLIP(x, y) \
-  (((x)>=0)&&((x)<g_GfxDriver.m_width)&&((y)>=0)&&((y)<g_GfxDriver.m_height))
+  (((x)>=g_GfxDriver.m_clipX1)&&((x)<=g_GfxDriver.m_clipX2)&&((y)>=g_GfxDriver.m_clipY1)&&((y)<=g_GfxDriver.m_clipY2))
 
 /** Clamp the X co-ordinate
  *
  * @param x the X co-ordinate to clamp
  *
- * @return the clamped value that will fit on the screen
+ * @return the clamped value that will fit in the clipping region
  */
 #define GFX_CLAMP_X(x) \
-  (((x)<0)?0:(((x)>=g_GfxDriver.m_width)?(g_GfxDriver.m_width - 1):(x)))
+  (((x)<g_gfxDriver.m_clipX1)?g_gfxDriver.m_clipX1:(((x)>g_GfxDriver.m_clipX2)?g_GfxDriver.m_clipX2:(x)))
 
 /** Clamp the Y co-ordinate
  *
  * @param y the Y co-ordinate to clamp
  *
- * @return the clamped value that will fit on the screen
+ * @return the clamped value that will fit in the clipping region
  */
 #define GFX_CLAMP_Y(y) \
-  (((y)<0)?0:(((y)>=g_GfxDriver.m_height)?(g_GfxDriver.m_height - 1):(y)))
+  (((y)<g_gfxDriver.m_clipY1)?g_gfxDriver.m_clipY1:(((y)>g_GfxDriver.m_clipY2)?g_GfxDriver.m_clipY2:(y)))
 
 /* Guard for C++ */
 #ifdef __cplusplus

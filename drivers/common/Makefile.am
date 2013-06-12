@@ -9,5 +9,5 @@ libgfxcommon_la_SOURCES = \
     gfxDrawImagePortion.c \
     gfxDrawLine.c \
     gfxFillRegion.c \
-    gfxEvents.c
-
+    gfxEvents.c \
+    gfxSetClip.c

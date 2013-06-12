@@ -18,6 +18,10 @@
 extern "C" {
 #endif
 
+/** Set the clipping region
+ */
+GFX_RESULT gfx_common_SetClip(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
+
 /** Fill a region with the specified color
  */
 GFX_RESULT gfx_common_FillRegion(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, GFX_COLOR color);

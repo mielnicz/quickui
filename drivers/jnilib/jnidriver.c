@@ -145,7 +145,7 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxEndPaint(JNIEnv *
  * Signature: (IIII)I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxSetClip(JNIEnv *pEnv, jobject obj, jint x1, jint y1, jint x2, jint y2) {
-  return (jint)GFX_RESULT_OK;
+  return (jint)gfx_SetClip(x1, y1, x2, y2);
   }
 
 /*
