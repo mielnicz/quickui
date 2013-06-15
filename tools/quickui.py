@@ -46,6 +46,44 @@ def readImageHeader(input):
   width, height = unpack("BB", input[:2])
   return input[2:], width + 1, height + 1
 
+""" Write image data
+"""
+def writeImageData(output, width, height, bits):
+  # Make sure we have enough bits
+  size = width * height
+  if len(bits) <> size:
+    print "ERROR: Insufficient data provided for image (Wanted %i, got %i)" % (size, len(bits))
+    exit(1)
+  nwidth = int(width / 2)
+  if (width % 2) > 0:
+    nwidth = nwidth + 1
+  index = 0
+  nybbles = 0
+  val = 0
+  for y in range(height):
+    for x in range(nwidth):
+      val = (val & 0x0F) << 4
+      if x < width:
+        val = val | (bits[index] & 0x0F)
+        index = index + 1
+      nybbles = nyblles + 1
+      if (nybbles % 2) == 0:
+        output.write(pack("B", val & 0xFF))
+
+""" Read image data
+"""
+def readImageData(input, width, height):
+  # Calculate the number of bytes we should have
+  size = int(width / 2)
+  if (width % 2) > 0:
+    size = size + 1
+  size = size * height
+  # Verify the size of the data we have been given
+  if len(input) < size:
+    print "ERROR: Not enough data for a %i x %i image." % (width, height)
+    print "       Wanted %i bytes, got %i." % (size, len(input))
+    exit(1)
+
 """ Write icon data
 """
 def writeIconData(output, width, height, bits):
@@ -133,6 +171,34 @@ def writePalette(filename, palette):
       value = createColor(*palette[index])
     # Write it to the output
     output.write(pack("<H", value))
+  # All done
+  output.close()
+
+""" Read an icon image from a file
+"""
+def readImage(filename):
+  input = ""
+  # Read the input
+  with open(filename, "rb") as content:
+    data = content.read()
+    while data <> '':
+      input = input + data
+      data = content.read()
+  # Read the image header
+  input, width, height = readImageHeader(input)
+  # Now read the data for the Image
+  input, bits = readImageData(input, width, height)
+  return width, height, bits
+
+""" Write an image resource to a file
+"""
+def writeImage(filename, width, height, bits):
+  # Open the file
+  output = open(filename, "wb")
+  # Write the header
+  writeImageHeader(output, width, height)
+  # Write the data
+  writeImageData(output, width, height, bits)
   # All done
   output.close()
 
