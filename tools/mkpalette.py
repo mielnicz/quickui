@@ -75,9 +75,7 @@ Options:
         This specifies that the input files are images. A wide range of image
         formats are supported (jpg, png, bmp, etc). In this case the colors
         in the image will be reduced to a maximum of 15 colors (based on usage
-        counts) and those values will be used in the palette. The first color
-        in this situation will always be black (color index 0 for an image is
-        used to specify the background or transparent color).
+        counts) and those values will be used in the palette.
 
     --output output-file
 
