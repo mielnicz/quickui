@@ -24,8 +24,8 @@ def selectFont(fontname, height, charset):
     mw = max(size[0], mw)
     mh = max(size[1], mh)
   # Find the scale to apply and reload the font
-  size = int(32.0 * height / mh) + 1
-  font = ImageFont.truetype(fontname, size)
+  scale = int(32.0 * height / mh) + 1
+  font = ImageFont.truetype(fontname, scale)
   while mh > height:
     # Recalculate width and height
     mh = 0
@@ -35,8 +35,8 @@ def selectFont(fontname, height, charset):
       mw = max(size[0], mw)
       mh = max(size[1], mh)
     if mh > height:
-      size = size - 1
-      font = ImageFont.truetype(fontname, size)
+      scale = scale - 1
+      font = ImageFont.truetype(fontname, scale)
   # All done
   return mw, font
 
@@ -146,7 +146,7 @@ if __name__ == "__main__":
     elif argv[index] == "--monospace":
       monospace = True
       index = index + 1
-    elif argv[index] == "--charset":
+    elif argv[index] == "--chars":
       charset = argv[index + 1]
       index = index + 2
     else:
