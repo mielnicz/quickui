@@ -15,7 +15,7 @@ from quickui import *
 
 """ Process an RGB file
 """
-def processRGB(image):
+def processRGB(image, oncolor):
   print "  Processing RGB graphics file."
 
 """ Process an RGBA file
@@ -80,19 +80,7 @@ def processImage(filename, oncolor):
     exit(1)
   # Start processing the file
   print "Processing '%s' ..." % filename
-  # Check the size
-  if (image.size[0] > 256) or (image.size[1] > 256):
-    print "  WARNING: Source image is greater than 256 is at least one dimension."
-  # Check the mode and process appropriately
-  if image.mode == "RGB":
-    return processRGB(image)
-  if image.mode == "RGBA":
-    return processRGBA(image)
-  if image.mode == "1":
-    return processMono(image, oncolor)
-  # If we get here, we failed
-  print "  ERROR: Unsupported graphics mode '%s'." % image.mode
-  exit(1)
+  return imageToBits(image, oncolor)
 
 #----------------------------------------------------------------------------
 # Main program

@@ -24,6 +24,78 @@ MAX_IMAGE_WIDTH  = 256
 MAX_IMAGE_HEIGHT = 256
 
 #----------------------------------------------------------------------------
+# Image processing
+#----------------------------------------------------------------------------
+
+""" Process an RGB file
+"""
+def imageToBits_RGB(image, oncolor):
+  print "  Processing RGB graphics file."
+
+""" Process an RGBA file
+"""
+def imageToBits_RGBA(image):
+  width, height = image.size
+  width = min(width, MAX_IMAGE_WIDTH)
+  height = min(height, MAX_IMAGE_HEIGHT)
+  print "  Processing %i x %i image with alpha channel." % (width, height)
+  bits = ""
+  for y in range(height):
+    line = ""
+    for x in range(width):
+      color = image.getpixel((x, y))
+      if color[3] == 0:
+        line = line + "0"
+      else:
+        line = line + "1"
+    # Pad the line to a full number of bytes
+    while (len(line) % 8) <> 0:
+      line = line + "0"
+    bits = bits + line
+  # All done
+  return width, height, bits
+
+""" Process a monochrome image file
+"""
+def imageToBits_Mono(image, oncolor):
+  width, height = image.size
+  width = min(width, MAX_IMAGE_WIDTH)
+  height = min(height, MAX_IMAGE_HEIGHT)
+  print "  Processing %i x %i monochrome image." % (width, height)
+  bits = ""
+  for y in range(height):
+    line = ""
+    for x in range(width):
+      color = image.getpixel((x, y))
+      if color == oncolor:
+        bits = bits + "1"
+      else:
+        bits = bits + "0"
+    # Pad the line to a full number of bytes
+    while (len(line) % 8) <> 0:
+      line = line + "0"
+    bits = bits + line
+  # All done
+  return width, height, bits
+
+""" Process a single image file
+"""
+def imageToBits(image, oncolor = 255):
+  # Check the size
+  if (image.size[0] > 256) or (image.size[1] > 256):
+    print "  WARNING: Source image is greater than 256 is at least one dimension."
+  # Check the mode and process appropriately
+  if image.mode == "RGB":
+    return imageToBits_RGB(image, oncolor)
+  if image.mode == "RGBA":
+    return imageToBits_RGBA(image)
+  if image.mode == "1":
+    return imageToBits_Mono(image, oncolor)
+  # If we get here, we failed
+  print "  ERROR: Unsupported graphics mode '%s'." % image.mode
+  exit(1)
+
+#----------------------------------------------------------------------------
 # Helper functions
 #----------------------------------------------------------------------------
 
