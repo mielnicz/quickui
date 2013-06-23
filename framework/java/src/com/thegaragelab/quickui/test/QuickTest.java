@@ -52,7 +52,7 @@ public class QuickTest extends Application {
        screen.height / 4,
        128,
        32),
-       "A Control"
+       "Checkbox"
        );
      cbTest.setPreferredSize();
      Button btnTest = new Button(this, new Rectangle(
@@ -60,7 +60,7 @@ public class QuickTest extends Application {
        screen.height / 2,
        128,
        32),
-       "A Control"
+       "Button"
        );
      btnTest.setPreferredSize();
      btnTest.setEventHandler(
@@ -76,7 +76,7 @@ public class QuickTest extends Application {
        screen.height / 2,
        128,
        32),
-       "A Label"
+       "Label"
        );
      lblTest.setPreferredSize();
      }

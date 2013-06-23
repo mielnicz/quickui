@@ -32,6 +32,7 @@ public class Button extends SimpleControl {
   */
   public Button(Container parent, Rectangle rect, String text) {
     super(parent, rect, text);
+    setPadding(Padding.BUTTON);
     }
 
   //-------------------------------------------------------------------------
@@ -70,6 +71,19 @@ public class Button extends SimpleControl {
   // Implementation of IWindow
   //-------------------------------------------------------------------------
   
+  /**
+   * @see com.thegaragelab.quickui.controls.SimpleControl#onEraseBackground()
+   */
+  @Override
+  public void onEraseBackground() {
+    super.onEraseBackground();
+    // Draw the border
+    drawBox(
+      new Rectangle(Point.ORIGIN, this),
+      Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_HIGHLIGHT)
+      );
+    }
+
   /** Called when the window needs to be painted
    * 
    *  This method is called to redraw the window.

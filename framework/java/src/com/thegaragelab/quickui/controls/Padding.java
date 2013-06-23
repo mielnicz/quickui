@@ -15,10 +15,12 @@ package com.thegaragelab.quickui.controls;
 public class Padding {
   //--- Constants
   private static int DEFAULT_PADDING = 2; //! Default padding (for all edges)
+  private static int BUTTON_PADDING  = 4; //! Padding for buttons
   
   //--- Special instances
   public static final Padding NONE    = new Padding(0);               //! No padding
   public static final Padding DEFAULT = new Padding(DEFAULT_PADDING); //! Default padding
+  public static final Padding BUTTON  = new Padding(BUTTON_PADDING);  //! Button padding
   
   //--- Instance variables
   private int m_left;    //! Padding to the left

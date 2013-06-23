@@ -86,10 +86,9 @@ public class Checkbox extends SimpleControl {
     size.height = Math.max(size.height, ControlHelper.ICON_HEIGHT);
     Point where = ControlHelper.getPosition(this, size, getPadding(), getHorizontalAlignment(), getVerticalAlignment());
     // Draw the icon
+    ControlHelper.drawControlIcon(this, where, ControlHelper.ICON_CHECK_EMPTY, Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_FOREGROUND));
     if(isChecked())
-      ControlHelper.drawControlIcon(this, where, ControlHelper.ICON_CHECK_SELECTED, Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_FOREGROUND));
-    else
-      ControlHelper.drawControlIcon(this, where, ControlHelper.ICON_CHECK_EMPTY, Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_FOREGROUND));
+      ControlHelper.drawControlIcon(this, where, ControlHelper.ICON_CHECK_SELECTED, Application.getInstance().getSystemColor(Application.SYS_COLOR_ICON_SUCCESS));
     // Adjust to handle where the text should go
     where.x = where.x + ControlHelper.ICON_WIDTH + ControlHelper.ICON_PADDING;
     where.y = where.y + (ControlHelper.ICON_HEIGHT - font.getHeight()) / 2;

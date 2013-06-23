@@ -28,9 +28,9 @@ class ControlHelper {
   private static final String COMMON_CONTROLS = "controls";
   
   //--- Constants (public)
-  public static final int ICON_WIDTH   = 14; //! Width of the icons (in pixels)
-  public static final int ICON_HEIGHT  = 14; //! Height of the icons (in pixels)
-  public static final int ICON_PADDING = 2;  //! Padding between the icons and text
+  public static final int ICON_WIDTH   = 16; //! Width of the icons (in pixels)
+  public static final int ICON_HEIGHT  = 16; //! Height of the icons (in pixels)
+  public static final int ICON_PADDING = 4;  //! Padding between the icons and text
   
   //--- Supported icons for controls
   public static final int ICON_CHECK_EMPTY    = 0;
