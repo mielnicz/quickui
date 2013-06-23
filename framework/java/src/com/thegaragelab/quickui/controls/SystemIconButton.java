@@ -1,66 +1,69 @@
 /*---------------------------------------------------------------------------*
 * $Id$
 *----------------------------------------------------------------------------*
-* 12/06/2013 - shane
+* 23/06/2013 - shane
 * 
 * Initial version
 *---------------------------------------------------------------------------*/
+
 package com.thegaragelab.quickui.controls;
 
-//--- Imports
 import com.thegaragelab.quickui.*;
 
-/** Implements a simple push button.
+/** SystemIconButton
  *
  */
-public class Button extends SimpleControl implements IButton {
+public class SystemIconButton extends AbstractIconButton {
+  //--- Instance variables
+  private int m_sysicon; //! The system icon for the button
+  
   //-------------------------------------------------------------------------
   // Construction and initialisation
   //-------------------------------------------------------------------------
   
   /** Constructor
-  *
-  * @param parent the parent Window for this control
-  * @param rect   the rectangle describing the position of this control
-  * @param text   the text for the the control.
-  */
-  public Button(Container parent, Rectangle rect, String text) {
-    super(parent, rect, text);
-    setPadding(Padding.BUTTON);
+   *
+   * @param parent the parent Window for this control
+   * @param rect   the rectangle describing the position of this control
+   * @param icon   the system icon for this control
+   */
+  public SystemIconButton(Container parent, Rectangle rect, int icon) {
+    super(parent, rect);
+    m_sysicon = icon;
     }
 
   //-------------------------------------------------------------------------
-  // Implementation of IControl
+  // Implementation of AbstractIconButton
   //-------------------------------------------------------------------------
   
-  /** Get the preferred width of this control
+  /** Get the width of the Icon
    * 
-   * This method should calculate the preferred with of the control in pixels
-   * taking into account the current control state and context settings.
-   * 
-   * @param the preferred width in pixels
+   * @return the width of the Icon in pxiels
    */
   @Override
-  public int getPreferredWidth() {
-    Dimension size = Application.getInstance().getFont().getStringSize(getText());
-    Padding padding = getPadding();
-    return padding.getPaddingLeft() + size.getWidth() + padding.getPaddingRight();
+  protected int getIconWidth() {
+    return Application.SYSTEM_ICON_SIZE;
     }
-  
-  /** Get the preferred height of this control
+
+  /** Get the height of the Icon
    * 
-   * This method should calculate the preferred height of the control in pixels
-   * taking into account the current control state and context settings.
-   * 
-   * @param the preferred height in pixels
+   * @return the height of the Icon in pxiels
    */
   @Override
-  public int getPreferredHeight() {
-    Dimension size = Application.getInstance().getFont().getStringSize(getText());
-    Padding padding = getPadding();
-    return padding.getPaddingTop() + size.getHeight() + padding.getPaddingBottom();
+  protected int getIconHeight() {
+    return Application.SYSTEM_ICON_SIZE;
     }
-  
+
+  /** Draw the icon at the specific location.
+   * 
+   * @param where the Point at which the icon should be drawn.
+   * @param color the color to draw the Icon in.
+   */
+  @Override
+  protected void drawIcon(IPoint where, Color color) {
+    Application.getInstance().drawSystemIcon(where, m_sysicon, color);
+    }
+
   //-------------------------------------------------------------------------
   // Implementation of IWindow
   //-------------------------------------------------------------------------
@@ -111,5 +114,5 @@ public class Button extends SimpleControl implements IButton {
     if(evType==TouchEvent.GFX_EVENT_RELEASE)
       this.fireEvent(EVENT_TOUCHED, null);
     }
-
+  
   }
