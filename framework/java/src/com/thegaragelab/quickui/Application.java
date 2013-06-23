@@ -18,23 +18,17 @@ public class Application extends Container {
   private static final String SYSTEM_RESOURCE = "system";
   
   //--- System icons
-  public static final  int SYSTEM_ICON_SIZE = 16; //! Size of system icons
-  public static final  int ICON_HOME        = 0;  //! The home icon
-  public static final  int ICON_UP          = 1;  //! Icon pointing up
-  public static final  int ICON_UP_RIGHT    = 2;  //! Icon pointing up and right
-  public static final  int ICON_RIGHT       = 3;  //! Icon pointing right
-  public static final  int ICON_DOWN_RIGHT  = 4;  //! Icon pointing down and right
-  public static final  int ICON_DOWN        = 5;  //! Icon pointing down
-  public static final  int ICON_DOWN_LEFT   = 6;  //! Icon pointing down and left
-  public static final  int ICON_LEFT        = 7;  //! Icon pointing left
-  public static final  int ICON_UP_LEFT     = 8;  //! Icon pointing up and left
-  public static final  int ICON_ALERT       = 9;  //! Alert icon
-  public static final  int ICON_ERROR       = 10; //! Error icon
-  public static final  int ICON_INFO        = 11; //! Information icon
-  public static final  int ICON_OK          = 12; //! Showing OK
-  public static final  int ICON_CANCEL      = 13; //! Showing Cancel or Bad
-  public static final  int ICON_TAG         = 14; //! Tag (partial save)
-  public static final  int ICON_SAVE        = 15; //! Save (save everything)
+  public static final  int SYSTEM_ICON_SIZE = 16;       //! Size of system icons
+  public static final  int ICON_HOME        = 0;        //! The home icon
+  public static final  int ICON_SETTINGS    = 1;        //! Show settings
+  public static final  int ICON_BACK        = 2;        //! Move back
+  public static final  int ICON_FORWARD     = 3;        //! Move forward
+  public static final  int ICON_ALERT       = 4;        //! Alert icon
+  public static final  int ICON_ERROR       = 5;        //! Error icon
+  public static final  int ICON_INFO        = 6;        //! Information icon
+  public static final  int ICON_OK          = 7;        //! Showing OK
+  public static final  int ICON_CANCEL      = 8;        //! Showing Cancel or Bad
+  public static final  int ICON_SAVE        = 9;        //! Save (save everything)
   private static final int SYSTEM_ICON_MAX = ICON_SAVE; //! Maximum ID for system icons
   
   //--- System colors
