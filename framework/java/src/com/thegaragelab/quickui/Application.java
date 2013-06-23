@@ -37,6 +37,23 @@ public class Application extends Container {
   public static final  int ICON_SAVE        = 15; //! Save (save everything)
   private static final int SYSTEM_ICON_MAX = ICON_SAVE; //! Maximum ID for system icons
   
+  //--- System colors
+  //
+  // These constants define offsets into the system palette that are used for
+  // various elements of the UI. They are not enforced but the framework will
+  // use them by default. By changing or overriding the system palette you can
+  // change the look of the whole UI very simply.
+  public static final int SYS_COLOR_BACKGROUND      = 0; //! Default background
+  public static final int SYS_COLOR_FOREGROUND      = 1; //! Default foreground
+  public static final int SYS_COLOR_WIN_BACKGROUND  = 2; //! Window background
+  public static final int SYS_COLOR_WIN_FOREGROUND  = 3; //! Window foreground
+  public static final int SYS_COLOR_CTRL_BACKGROUND = 4; //! Control background
+  public static final int SYS_COLOR_CTRL_FOREGROUND = 5; //! Control foreground
+  public static final int SYS_COLOR_CTRL_HIGHLIGHT  = 6; //! Control highlights
+  public static final int SYS_COLOR_CTRL_BORDER     = 7; //! Control borders
+  public static final int SYS_COLOR_DLG_BACKGROUND  = 8; //! Dialog background
+  public static final int SYS_COLOR_DLG_FOREGROUND  = 9; //! Dialog foreground
+  
   //--- Class variables
   private static Application m_instance;
   
@@ -475,6 +492,16 @@ public class Application extends Container {
    */
   public Palette getPalette() {
     return m_palette;
+    }
+  
+  /** Get a system color
+   *
+   * @param index the index of the color to fetch.
+   * 
+   * @return the color from the system palette that matches the given index.
+   */
+  public Color getSystemColor(int index) {
+    return m_palette.getColor(index % Palette.PALETTE_SIZE);
     }
   
   /** Called to initialise the application
