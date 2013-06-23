@@ -113,8 +113,8 @@ public class Font extends Asset {
     Rectangle cell = new Rectangle(
       m_xpos[(int)ch],
       m_ypos[(int)ch],
-      m_widths[(int)ch],
-      m_height
+      m_widths[(int)ch] - 1,
+      m_height - 1
       );
     // Now draw the character
     surface.drawIcon(point, m_icon, color, cell);
@@ -130,14 +130,14 @@ public class Font extends Asset {
   void drawString(ISurface surface, IPoint point, Color color, String string) {
     byte[] chars = toASCII(string);
     Rectangle cell = new Rectangle(Point.ORIGIN, Dimension.EMPTY);
-    cell.setHeight(m_height);
+    cell.setHeight(m_height - 1);
     // Now draw all the characters
     Point where = new Point(point);
     for(byte ch: chars) {
       int index = ch & 0xFF;
       cell.setX(m_xpos[index]);
       cell.setY(m_ypos[index]);
-      cell.setWidth(m_widths[index]);
+      cell.setWidth(m_widths[index] - 1);
       surface.drawIcon(where, m_icon, color, cell);
       where.setX(where.getX() + m_widths[index]);
       }
