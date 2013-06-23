@@ -262,7 +262,7 @@ public class Window implements IWindow {
    * @param force if true force a repaint regardless of the 'dirty' state.
    */
   void doRepaint(boolean force) {
-    // If we are not visible, don'tfalse do anything
+    // If we are not visible, don't do anything
     if(!isVisible())
       return;
     // If we are not dirty, don't do anything
