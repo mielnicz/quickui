@@ -1,23 +1,55 @@
 #----------------------------------------------------------------------------
-# This defines the system palette which is based on the VGA 16 color palette.
-# It's not used for any images, it simply provides a handy standard that can
-# be used throughout applications.
+# This defines the system palette which is based on the Android ICS color
+# scheme. The various entries are used by the framework to render specific
+# UI elements. Change the system palette (or provide your own alternative
+# in the application resource branch) to change the color scheme.
 #----------------------------------------------------------------------------
 
+# SYS_COLOR_BACKGROUND      Default background
+0x22,0x22,0x22
+
+# SYS_COLOR_FOREGROUND      Default foreground
+0xFF,0xFF,0xFF
+
+# SYS_COLOR_WIN_BACKGROUND  Window background
+0xEE,0xEE,0xEE
+
+# SYS_COLOR_WIN_FOREGROUND  Window foreground
 0x00,0x00,0x00
-0x00,0x00,0x7f
-0x00,0x7f,0x00
-0x00,0x7f,0x7f
-0x7f,0x00,0x00
-0x7f,0x00,0x7f
-0x7f,0x7f,0x00
-0x7f,0x7f,0x7f
-0x7f,0x7f,0x7f
-0x7f,0x7f,0xff
-0x7f,0xff,0x7f
-0x7f,0xff,0xff
-0xff,0x7f,0x7f
-0xff,0x7f,0xff
-0xff,0xff,0x7f
-0xff,0xff,0xff
+
+# SYS_COLOR_CTRL_BACKGROUND Control background
+0x55,0x55,0x55
+
+# SYS_COLOR_CTRL_FOREGROUND Control foreground
+0xFF,0xFF,0xFF
+
+# SYS_COLOR_CTRL_HIGHLIGHT  Control highlights
+0x33,0xB5,0xE5
+
+# SYS_COLOR_CTRL_BORDER     Control borders
+0x17, 0x7B,0xBD
+
+# SYS_COLOR_DLG_BACKGROUND  Dialog background
+0x55,0x55,0x55
+
+# SYS_COLOR_DLG_FOREGROUND  Dialog foreground
+0xFF,0xFF,0xFF
+
+# SYS_COLOR_ICON_SUCCESS     Success indicator
+0x66,0x99,0x00
+
+# SYS_COLOR_ICON_SUCCESS_ALT Alternate success indicator
+0x99,0xCC,0x00
+
+# SYS_COLOR_ICON_WARNING     Warning indicator
+0xFF,0x88,0x00
+
+# SYS_COLOR_ICON_WARNING_ALT Alternate warning indicator
+0xFF,0xBB,0x33
+
+# SYS_COLOR_ICON_ERROR       Error indicator
+0xCC,0x00,0x00
+
+# SYS_COLOR_ICON_ERROR_ALT   Alternate error indicator
+0xFF,0x44,0x44
 
