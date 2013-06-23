@@ -41,6 +41,7 @@ public class Label extends SimpleControl {
    * 
    * @param the preferred width in pixels
    */
+  @Override
   public int getPreferredWidth() {
     Dimension text = Application.getInstance().getFont().getStringSize(getText());
     Padding padding = getPadding();
@@ -54,6 +55,7 @@ public class Label extends SimpleControl {
    * 
    * @param the preferred height in pixels
    */
+  @Override
   public int getPreferredHeight() {
     Dimension text = Application.getInstance().getFont().getStringSize(getText());
     Padding padding = getPadding();

@@ -54,19 +54,16 @@ public class QuickTest extends Application {
        32),
        "A Control"
        );
-     cbTest.setEraseBackground(true);
-     cbTest.setWidth(cbTest.getPreferredWidth());
-     cbTest.setHeight(cbTest.getPreferredHeight());
-     Button test = new Button(this, new Rectangle(
+     cbTest.setPreferredSize();
+     Button btnTest = new Button(this, new Rectangle(
        screen.width / 2,
        screen.height / 2,
        128,
        32),
        "A Control"
        );
-     test.setWidth(test.getPreferredWidth());
-     test.setHeight(test.getPreferredHeight());
-     test.setEventHandler(
+     btnTest.setPreferredSize();
+     btnTest.setEventHandler(
        Button.EVENT_TOUCHED,
        new IControlEventHandler() {
          public void onEvent(IWindow source, int event, Object params) {
@@ -74,6 +71,14 @@ public class QuickTest extends Application {
            }
          }
        );
+     Label lblTest = new Label(this, new Rectangle(
+       screen.width / 4,
+       screen.height / 2,
+       128,
+       32),
+       "A Label"
+       );
+     lblTest.setPreferredSize();
      }
    
    /**

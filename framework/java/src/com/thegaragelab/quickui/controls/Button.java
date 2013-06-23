@@ -45,6 +45,7 @@ public class Button extends SimpleControl {
    * 
    * @param the preferred width in pixels
    */
+  @Override
   public int getPreferredWidth() {
     Dimension size = Application.getInstance().getFont().getStringSize(getText());
     Padding padding = getPadding();
@@ -58,6 +59,7 @@ public class Button extends SimpleControl {
    * 
    * @param the preferred height in pixels
    */
+  @Override
   public int getPreferredHeight() {
     Dimension size = Application.getInstance().getFont().getStringSize(getText());
     Padding padding = getPadding();
@@ -77,17 +79,10 @@ public class Button extends SimpleControl {
     super.onPaint();
     Font font = Application.getInstance().getFont();
     Dimension size = font.getStringSize(getText());
-    // Now draw in the appropriate state
-    Point where = ControlHelper.getPosition(this, size, getPadding(), getHorizontalAlignment(), getVerticalAlignment());
-    Rectangle background = new Rectangle(Point.ORIGIN, this);
-    if(isDepressed())
-      fillRect(background, Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_HIGHLIGHT));
-    else
-      fillRect(background, Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_BACKGROUND));
     // Draw the text on top
     drawString(
       font,
-      where,
+      ControlHelper.getPosition(this, size, getPadding(), getHorizontalAlignment(), getVerticalAlignment()),
       Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_FOREGROUND),
       getText()
       );
@@ -123,7 +118,7 @@ public class Button extends SimpleControl {
    * 
    * @return true if the button is in a depressed state.
    */
-  public boolean isDepressed() {
+  public boolean isTouched() {
     return m_depressed;
     }
   

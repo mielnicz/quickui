@@ -22,6 +22,7 @@ public abstract class ComplexControl extends Container implements IControl {
   private Padding m_padding; //! Padding for this control
   private int     m_valign;  //! Vertical alignment for the control
   private int     m_halign;  //! Horizontal alignment for the control
+  private boolean m_touched; //! Are we currently touched?
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -35,7 +36,7 @@ public abstract class ComplexControl extends Container implements IControl {
    * @param exclude flags to mask out
    */
   public ComplexControl(Container parent, IRectangle rect, int require, int exclude) {
-    super(parent, rect, Window.WIN_ACCEPT_TOUCH | require, exclude);    
+    super(parent, rect, Window.WIN_FLAG_ACCEPT_TOUCH | require, exclude);    
     }
 
   /** Constructor with a parent Window and a Rectangle for position and size.
@@ -44,7 +45,7 @@ public abstract class ComplexControl extends Container implements IControl {
    * @param rect the Rectangle describing the location and size of the window.
    */
   public ComplexControl(Container parent, Rectangle rect) {
-    super(parent, rect, Window.WIN_ACCEPT_TOUCH, 0);
+    super(parent, rect, Window.WIN_FLAG_ACCEPT_TOUCH, 0);
     }
 
   //-------------------------------------------------------------------------
@@ -144,6 +145,13 @@ public abstract class ComplexControl extends Container implements IControl {
     ControlHelper.setEventHandler(this, event, handler);
     }
   
+  /**
+   * @see com.thegaragelab.quickui.controls.IControl#isTouched()
+   */
+  public boolean isTouched() {
+    return m_touched;
+    }
+
   //-------------------------------------------------------------------------
   // Public event methods
   //-------------------------------------------------------------------------
@@ -151,10 +159,25 @@ public abstract class ComplexControl extends Container implements IControl {
   /** Called to erase the background of the control.
    */
   public void onEraseBackground() {
-    fillRect(
-      new Rectangle(Point.ORIGIN, this),
-      Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_BACKGROUND)
-      );
+    // Pick the right color for the background
+    Color color;
+    if(isTouched())
+      color = Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_BACKGROUND);
+    else
+      color = Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_BACKGROUND);
+    // Now erase the background
+    fillRect(new Rectangle(Point.ORIGIN, this), color);
+    }
+  
+  /**
+   * @see com.thegaragelab.quickui.Window#onTouchEvent(int, com.thegaragelab.quickui.IPoint)
+   */
+  @Override
+  public void onTouchEvent(int evType, IPoint where) {
+    if((evType==TouchEvent.GFX_EVENT_TOUCH)||(evType==TouchEvent.GFX_EVENT_DRAG))
+      m_touched = true;
+    else
+      m_touched = false;
     }
   
   }

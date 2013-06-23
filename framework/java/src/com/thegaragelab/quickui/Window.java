@@ -20,8 +20,8 @@ public class Window implements IWindow {
   //--- Constants
   protected static final int WIN_FLAG_DIRTY            = 0x0001;
   protected static final int WIN_FLAG_VISIBLE          = WIN_FLAG_DIRTY << 1;
-  protected static final int WIN_ACCEPT_TOUCH          = WIN_FLAG_VISIBLE << 1;
-  protected static final int WIN_FLAG_ERASE_BACKGROUND = WIN_ACCEPT_TOUCH << 1;
+  protected static final int WIN_FLAG_ACCEPT_TOUCH     = WIN_FLAG_VISIBLE << 1;
+  protected static final int WIN_FLAG_ERASE_BACKGROUND = WIN_FLAG_ACCEPT_TOUCH << 1;
   
   //--- Instance variables
   private Container m_parent;     //! The parent Window
@@ -95,6 +95,44 @@ public class Window implements IWindow {
   // Window specific operations
   //-------------------------------------------------------------------------
 
+  /** Get the preferred width of this window
+   * 
+   * This method is used to determine the preferred width of the window,
+   * the width required to fit it's contents in.
+   * 
+   * @return the preferred width of the window.
+   */
+  public int getPreferredWidth() {
+    // We have no preferred width so just use the current width
+    return getWidth();
+    }
+  
+  /** Get the preferred height of this window
+   * 
+   * This method is used to determine the preferred height of the window,
+   * the height required to fit it's contents in.
+   * 
+   * @return the preferred height of the window.
+   */
+  public int getPreferredHeight() {
+    // We have no preferred height so just use the current height
+    return getHeight();
+    }
+  
+  /** Set the preferred size of the window
+   * 
+   * This method will change the current size of the window to match the
+   * preferred width and height.
+   */
+  public void setPreferredSize() {
+    int value = getPreferredWidth();
+    if(value>0)
+      setWidth(value);
+    value = getPreferredHeight();
+    if(value>0)
+      setHeight(value);
+    }
+  
   /**
    * @see com.thegaragelab.quickui.IWindow#getParent()
    */
@@ -169,14 +207,14 @@ public class Window implements IWindow {
    * @see com.thegaragelab.quickui.IWindow#setAcceptTouch(boolean)
    */
   public void setAcceptTouch(boolean accept) {
-    m_flags.setFlags(WIN_ACCEPT_TOUCH);
+    m_flags.setFlags(WIN_FLAG_ACCEPT_TOUCH);
     }
   
   /**
    * @see com.thegaragelab.quickui.IWindow#getAcceptTouch()
    */
   public IWindow getAcceptTouch() {
-    if(m_flags.areFlagsSet(WIN_ACCEPT_TOUCH))
+    if(m_flags.areFlagsSet(WIN_FLAG_ACCEPT_TOUCH))
       return this;
     return getParent().getAcceptTouch();
     }

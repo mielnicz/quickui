@@ -104,4 +104,10 @@ public interface IControl extends IWindow {
    */
   public void setEventHandler(int event, IControlEventHandler handler);
   
+  /** Determine if the button is currently touched.
+   * 
+   * @return true if the button is in a depressed state.
+   */
+  public boolean isTouched();
+  
   }

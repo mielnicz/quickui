@@ -10,6 +10,31 @@ package com.thegaragelab.quickui;
 /** This interface describes the basic interface to a window.
  */
 public interface IWindow extends IRectangle, ISurface {
+  /** Get the preferred width of this window
+   * 
+   * This method is used to determine the preferred width of the window,
+   * the width required to fit it's contents in.
+   * 
+   * @return the preferred width of the window.
+   */
+  public int getPreferredWidth();
+  
+  /** Get the preferred height of this window
+   * 
+   * This method is used to determine the preferred height of the window,
+   * the height required to fit it's contents in.
+   * 
+   * @return the preferred height of the window.
+   */
+  public int getPreferredHeight();
+  
+  /** Set the preferred size of the window
+   * 
+   * This method will change the current size of the window to match the
+   * preferred width and height.
+   */
+  public void setPreferredSize();
+  
   /** Get the parent of this Window
    * 
    * @return the Window instance that represents the parent of this window.

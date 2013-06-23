@@ -47,6 +47,7 @@ public class Checkbox extends SimpleControl {
    * 
    * @param the preferred width in pixels
    */
+  @Override
   public int getPreferredWidth() {
     Dimension size = Application.getInstance().getFont().getStringSize(getText());
     Padding padding = getPadding();
@@ -60,6 +61,7 @@ public class Checkbox extends SimpleControl {
    * 
    * @param the preferred height in pixels
    */
+  @Override
   public int getPreferredHeight() {
     Dimension size = Application.getInstance().getFont().getStringSize(getText());
     Padding padding = getPadding();
@@ -105,6 +107,7 @@ public class Checkbox extends SimpleControl {
    */
   @Override
   public void onTouchEvent(int evType, IPoint where) {
+    super.onTouchEvent(evType, where);
     if(evType==TouchEvent.GFX_EVENT_RELEASE)
       setChecked(!isChecked());
     }
