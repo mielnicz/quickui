@@ -5,7 +5,7 @@
 * 
 * Initial version
 *---------------------------------------------------------------------------*/
-package com.thegaragelab.quickui;
+package com.thegaragelab.quickui.controls;
 
 /** Represents padding around a rectangular area.
  *
