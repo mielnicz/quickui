@@ -48,7 +48,7 @@ public class Checkbox extends SimpleControl {
    * @param the preferred width in pixels
    */
   public int getPreferredWidth() {
-    Dimension size = getFont().getStringSize(getText());
+    Dimension size = Application.getInstance().getFont().getStringSize(getText());
     Padding padding = getPadding();
     return padding.getPaddingLeft() + ControlHelper.ICON_WIDTH + ControlHelper.ICON_PADDING + size.getWidth() + padding.getPaddingRight();
     }
@@ -61,7 +61,7 @@ public class Checkbox extends SimpleControl {
    * @param the preferred height in pixels
    */
   public int getPreferredHeight() {
-    Dimension size = getFont().getStringSize(getText());
+    Dimension size = Application.getInstance().getFont().getStringSize(getText());
     Padding padding = getPadding();
     return padding.getPaddingTop() + Math.max(ControlHelper.ICON_HEIGHT, size.getHeight()) + padding.getPaddingRight();
     }
@@ -77,7 +77,7 @@ public class Checkbox extends SimpleControl {
   @Override
   public void onPaint() {
     super.onPaint();
-    Font font = getFont();
+    Font font = Application.getInstance().getFont();
     // Get the size of what we want to draw and where to draw it
     Dimension size = font.getStringSize(getText());
     size.width = size.width + ControlHelper.ICON_WIDTH + ControlHelper.ICON_PADDING;
@@ -85,13 +85,13 @@ public class Checkbox extends SimpleControl {
     Point where = ControlHelper.getPosition(this, size, getPadding(), getHorizontalAlignment(), getVerticalAlignment());
     // Draw the icon
     if(isChecked())
-      ControlHelper.drawControlIcon(this, where, ControlHelper.ICON_CHECK_SELECTED, getForeground());
+      ControlHelper.drawControlIcon(this, where, ControlHelper.ICON_CHECK_SELECTED, Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_FOREGROUND));
     else
-      ControlHelper.drawControlIcon(this, where, ControlHelper.ICON_CHECK_EMPTY, getForeground());
+      ControlHelper.drawControlIcon(this, where, ControlHelper.ICON_CHECK_EMPTY, Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_FOREGROUND));
     // Adjust to handle where the text should go
     where.x = where.x + ControlHelper.ICON_WIDTH + ControlHelper.ICON_PADDING;
     where.y = where.y + (ControlHelper.ICON_HEIGHT - font.getHeight()) / 2;
-    drawString(font, where, getForeground(), getText());
+    drawString(font, where, Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_FOREGROUND), getText());
     }
 
   /** Called when an input event is targeted to this window

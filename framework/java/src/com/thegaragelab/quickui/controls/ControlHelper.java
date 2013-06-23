@@ -124,25 +124,25 @@ class ControlHelper {
     Point p = new Point(0, 0);
     // Calculate the horizontal position
     switch(halign) {
-      case IControl.LEFT:
+      case IControl.ALIGN_LEFT:
         p.x = padding.getPaddingLeft();
         break;
-      case IControl.CENTER:
+      case IControl.ALIGN_CENTER:
         p.x = padding.getPaddingLeft() + ((container.getWidth() - padding.getPaddingLeft() - padding.getPaddingRight() - content.getWidth()) / 2);
         break;
-      case IControl.RIGHT:
+      case IControl.ALIGN_RIGHT:
         p.x = container.getWidth() - padding.getPaddingRight() - content.getWidth();
         break;
       }
     // Calculate the vertical position
     switch(valign) {
-      case IControl.TOP:
+      case IControl.ALIGN_TOP:
         p.y = padding.getPaddingTop();
         break;
-      case IControl.MIDDLE:
+      case IControl.ALIGN_MIDDLE:
         p.y = padding.getPaddingTop() + ((container.getHeight() - padding.getPaddingTop() - padding.getPaddingBottom() - content.getHeight()) / 2);
         break;
-      case IControl.BOTTOM:
+      case IControl.ALIGN_BOTTOM:
         p.y = container.getHeight() - padding.getPaddingBottom() - content.getHeight();
         break;
       }

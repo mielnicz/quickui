@@ -27,12 +27,6 @@ public class Window implements IWindow {
   private Container m_parent;     //! The parent Window
   private Rectangle m_rectangle;  //! Position and size of the window
   private Flags     m_flags;      //! Current flags
-  private Font      m_font;       //! The current font to use
-  private Color     m_foreground; //! The foreground color
-  private Color     m_background; //! The background color
-  private Padding   m_padding;    //! Window padding
-  private int       m_vertical;   //! Vertical alignment
-  private int       m_horizontal; //! Horizontal alignment
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -197,118 +191,6 @@ public class Window implements IWindow {
     }
   
   //-------------------------------------------------------------------------
-  // Implementation of IContext
-  //-------------------------------------------------------------------------
-
-  /** Get the font for this context
-   * 
-   * @return the font to use for this context.
-   */
-  public Font getFont() {
-    if(m_font!=null)
-      return m_font;
-    return getParent().getFont();
-    }
-  
-  /** Set the font for this context
-   * 
-   * @param font the font to use for this context.
-   */
-  public void setFont(Font font) {
-    m_font = font;
-    }
-  
-  /** Get the color for this context
-   * 
-   * @return a Color instance to use for the foreground (icons and text)
-   */
-  public Color getForeground() {
-    if(m_foreground!=null)
-      return m_foreground;
-    return getParent().getForeground();
-    }
-  
-  /** Set the foreground color for this context
-   * 
-   * @param color the color to use as the foreground.
-   */
-  public void setForeground(Color color) {
-    m_foreground = color;
-    }
-  
-  /** Get the background color for this context
-   * 
-   * @return a Color instance to use for the background.
-   */
-  public Color getBackground() {
-    if(m_background!=null)
-      return m_background;
-    return getParent().getBackground();
-    }
-  
-  /** Set the background color for this context
-   * 
-   * @param color the color to use as the background.
-   */
-  public void setBackground(Color color) {
-    m_background = color;
-    }
-  
-  /** Get the padding to use when drawing.
-   *
-   * @return the current padding to use.
-   */
-  public Padding getPadding() {
-    if(m_padding!=null)
-      return m_padding;
-    return getParent().getPadding();
-    }
-  
-  /** Set the padding for drawing.
-   * 
-   * @param padding the padding to use when drawing.
-   */
-  public void setPadding(Padding padding) {
-    m_padding = padding;
-    }
-  
-  /** Get the vertical alignment for elements
-   * 
-   * @return the vertical alignment to use for this window.
-   */
-  public int getVerticalAlignment() {
-    if(m_vertical!=IContext.PARENT)
-      return m_vertical;
-    return getParent().getVerticalAlignment();
-    }
-  
-  /** Set the vertical alignment for elements
-   * 
-   * @param align the vertical alignment to use.
-   */
-  public void setVerticalAlignment(int align) {
-    m_vertical = align;
-    }
-  
-  /** Get the horizontal alignment for elements
-   * 
-   * @return the horizontal alignment to use for this window.
-   */
-  public int getHorizontalAlignment() {
-    if(m_horizontal!=IContext.PARENT)
-      return m_horizontal;
-    return getParent().getHorizontalAlignment();
-    }
-  
-  /** Set the horizontal alignment for elements
-   * 
-   * @param align the horizontal alignment to use.
-   */
-  public void setHorizontalAlignment(int align) {
-    m_horizontal = align;
-    }
-  
-  //-------------------------------------------------------------------------
   // Internal event and painting helpers
   //-------------------------------------------------------------------------
 
@@ -399,7 +281,7 @@ public class Window implements IWindow {
   public void onEraseBackground() {
     fillRect(
       new Rectangle(Point.ORIGIN, this),
-      getBackground()
+      Application.getInstance().getSystemColor(Application.SYS_COLOR_WIN_BACKGROUND)
       );
     }
   

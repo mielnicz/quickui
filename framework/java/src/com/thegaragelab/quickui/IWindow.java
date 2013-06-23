@@ -9,7 +9,7 @@ package com.thegaragelab.quickui;
 
 /** This interface describes the basic interface to a window.
  */
-public interface IWindow extends IRectangle, ISurface, IContext {
+public interface IWindow extends IRectangle, ISurface {
   /** Get the parent of this Window
    * 
    * @return the Window instance that represents the parent of this window.

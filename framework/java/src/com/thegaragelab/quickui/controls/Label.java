@@ -42,7 +42,7 @@ public class Label extends SimpleControl {
    * @param the preferred width in pixels
    */
   public int getPreferredWidth() {
-    Dimension text = getFont().getStringSize(getText());
+    Dimension text = Application.getInstance().getFont().getStringSize(getText());
     Padding padding = getPadding();
     return padding.getPaddingLeft() + text.getWidth() + padding.getPaddingRight();
     }
@@ -55,7 +55,7 @@ public class Label extends SimpleControl {
    * @param the preferred height in pixels
    */
   public int getPreferredHeight() {
-    Dimension text = getFont().getStringSize(getText());
+    Dimension text = Application.getInstance().getFont().getStringSize(getText());
     Padding padding = getPadding();
     return padding.getPaddingTop() + text.getHeight() + padding.getPaddingBottom();
     }
@@ -72,11 +72,16 @@ public class Label extends SimpleControl {
   public void onPaint() {
     super.onPaint();
     // Get the size information
-    Font font = getFont();
+    Font font = Application.getInstance().getFont();
     Dimension size = font.getStringSize(getText());
     Point where = ControlHelper.getPosition(this, size, getPadding(), getHorizontalAlignment(), getVerticalAlignment());
     // Draw the text
-    this.drawString(font, where, getForeground(), getText());
+    this.drawString(
+      font,
+      where,
+      Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_FOREGROUND),
+      getText()
+      );
     }
 
   }

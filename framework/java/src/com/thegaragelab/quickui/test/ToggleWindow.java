@@ -45,10 +45,12 @@ public class ToggleWindow extends Window {
     if(evType!=TouchEvent.GFX_EVENT_TOUCH)
       return;
     // Change color when touched
+/*    
     Palette palette = Application.getInstance().getPalette();
     if(palette!=null)
       setBackground(palette.getColor(m_random.nextInt(Palette.PALETTE_SIZE)));
     setDirty(true);
+*/    
     }
 
   }

@@ -43,16 +43,22 @@ public class Application extends Container {
   // various elements of the UI. They are not enforced but the framework will
   // use them by default. By changing or overriding the system palette you can
   // change the look of the whole UI very simply.
-  public static final int SYS_COLOR_BACKGROUND      = 0; //! Default background
-  public static final int SYS_COLOR_FOREGROUND      = 1; //! Default foreground
-  public static final int SYS_COLOR_WIN_BACKGROUND  = 2; //! Window background
-  public static final int SYS_COLOR_WIN_FOREGROUND  = 3; //! Window foreground
-  public static final int SYS_COLOR_CTRL_BACKGROUND = 4; //! Control background
-  public static final int SYS_COLOR_CTRL_FOREGROUND = 5; //! Control foreground
-  public static final int SYS_COLOR_CTRL_HIGHLIGHT  = 6; //! Control highlights
-  public static final int SYS_COLOR_CTRL_BORDER     = 7; //! Control borders
-  public static final int SYS_COLOR_DLG_BACKGROUND  = 8; //! Dialog background
-  public static final int SYS_COLOR_DLG_FOREGROUND  = 9; //! Dialog foreground
+  public static final int SYS_COLOR_BACKGROUND       = 0;  //! Default background
+  public static final int SYS_COLOR_FOREGROUND       = 1;  //! Default foreground
+  public static final int SYS_COLOR_WIN_BACKGROUND   = 2;  //! Window background
+  public static final int SYS_COLOR_WIN_FOREGROUND   = 3;  //! Window foreground
+  public static final int SYS_COLOR_CTRL_BACKGROUND  = 4;  //! Control background
+  public static final int SYS_COLOR_CTRL_FOREGROUND  = 5;  //! Control foreground
+  public static final int SYS_COLOR_CTRL_HIGHLIGHT   = 6;  //! Control highlights
+  public static final int SYS_COLOR_CTRL_BORDER      = 7;  //! Control borders
+  public static final int SYS_COLOR_DLG_BACKGROUND   = 8;  //! Dialog background
+  public static final int SYS_COLOR_DLG_FOREGROUND   = 9;  //! Dialog foreground
+  public static final int SYS_COLOR_ICON_SUCCESS     = 10; //! Success indicator
+  public static final int SYS_COLOR_ICON_SUCCESS_ALT = 11; //! Alternate success indicator
+  public static final int SYS_COLOR_ICON_WARNING     = 12; //! Warning indicator
+  public static final int SYS_COLOR_ICON_WARNING_ALT = 13; //! Alternate warning indicator
+  public static final int SYS_COLOR_ICON_ERROR       = 14; //! Error indicator
+  public static final int SYS_COLOR_ICON_ERROR_ALT   = 15; //! Alternate error indicator
   
   //--- Class variables
   private static Application m_instance;
@@ -61,6 +67,7 @@ public class Application extends Container {
   private Driver     m_driver;     //! The graphics driver instance
   private Point      m_offset;     //! The offset for painting operations
   private Palette    m_palette;    //! The system palette
+  private Font       m_font;       //! The system font
   private Icon       m_icons;      //! The system icons
   private IWindow    m_target;     //! The window currently accepting touch events.
   
@@ -113,14 +120,7 @@ public class Application extends Container {
     // Load our assets
     m_palette = Asset.loadPalette(SYSTEM_RESOURCE);
     m_icons = Asset.loadIcon(SYSTEM_RESOURCE);
-    // Set the base context
-    setFont(Asset.loadFont(SYSTEM_RESOURCE));
-    setHorizontalAlignment(IContext.LEFT);
-    setVerticalAlignment(IContext.MIDDLE);
-    setPadding(Padding.NONE);
-    // TODO: Colors should come from Palette indices
-    setForeground(Color.WHITE);
-    setBackground(Color.BLACK);
+    m_font = Asset.loadFont(SYSTEM_RESOURCE);
     }
   
   //-------------------------------------------------------------------------
@@ -175,6 +175,15 @@ public class Application extends Container {
     // This value is immutable for this instance
     }
 
+  /** Called to erase the background of the window.
+   */
+  public void onEraseBackground() {
+    fillRect(
+      new Rectangle(Point.ORIGIN, this),
+      Application.getInstance().getSystemColor(Application.SYS_COLOR_BACKGROUND)
+      );
+    }
+  
   /** Called when an input event is targeted to this window
    * 
    * An input event represents a key press or activity on the touch screen.
@@ -212,70 +221,6 @@ public class Application extends Container {
   public final IWindow getAcceptTouch() {
     // We will always handle touch events on behalf of any window
     return this;
-    }
-  
-  //-------------------------------------------------------------------------
-  // Implementation of IContext
-  //-------------------------------------------------------------------------
-
-  /** Set the font for this context
-   * 
-   * @param font the font to use for this context.
-   */
-  @Override
-  public void setFont(Font font) {
-    if(font!=null)
-      super.setFont(font);
-    }
-  
-  /** Set the foreground color for this context
-   * 
-   * @param color the color to use as the foreground.
-   */
-  @Override
-  public void setForeground(Color color) {
-    if(color!=null)
-      super.setForeground(color);
-    }
-  
-  /** Set the background color for this context
-   * 
-   * @param color the color to use as the background.
-   */
-  @Override
-  public void setBackground(Color color) {
-    if(color!=null)
-      super.setBackground(color);
-    }
-  
-  /** Set the padding for drawing.
-   * 
-   * @param padding the padding to use when drawing.
-   */
-  @Override
-  public void setPadding(Padding padding) {
-    if(padding!=null)
-      super.setPadding(padding);
-    }
-  
-  /** Set the vertical alignment for elements
-   * 
-   * @param align the vertical alignment to use.
-   */
-  @Override
-  public void setVerticalAlignment(int align) {
-    if(align!=IContext.PARENT)
-      super.setVerticalAlignment(align);
-    }
-  
-  /** Set the horizontal alignment for elements
-   * 
-   * @param align the horizontal alignment to use.
-   */
-  @Override
-  public void setHorizontalAlignment(int align) {
-    if(align!=IContext.PARENT)
-      super.setHorizontalAlignment(align);
     }
   
   //-------------------------------------------------------------------------
@@ -484,6 +429,14 @@ public class Application extends Container {
       return;
     // Show the icon
     drawIcon(position, m_icons, color, new Rectangle(icon * SYSTEM_ICON_SIZE, 0, SYSTEM_ICON_SIZE, SYSTEM_ICON_SIZE));
+    }
+  
+  /** Get the system font
+   * 
+   * @return the default system font.
+   */
+  public Font getFont() {
+    return m_font;
     }
   
   /** Get the current system palette

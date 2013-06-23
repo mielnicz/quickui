@@ -18,7 +18,10 @@ import com.thegaragelab.quickui.*;
  */
 public abstract class SimpleControl extends Window implements IControl {
   //--- Instance variables
-  private String m_text; //! Text for this control
+  private String  m_text;    //! Text for this control
+  private Padding m_padding; //! Padding for this control
+  private int     m_valign;  //! Vertical alignment for the control
+  private int     m_halign;  //! Horizontal alignment for the control
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -33,6 +36,9 @@ public abstract class SimpleControl extends Window implements IControl {
   public SimpleControl(Container parent, IRectangle rect, String text) {
     super(parent, rect, Window.WIN_ACCEPT_TOUCH, 0);
     setText(text);
+    m_padding = Padding.DEFAULT;
+    m_halign = ALIGN_LEFT;
+    m_valign = ALIGN_MIDDLE;
     }
 
   //-------------------------------------------------------------------------
@@ -52,6 +58,54 @@ public abstract class SimpleControl extends Window implements IControl {
   // Control specific operations
   //-------------------------------------------------------------------------
 
+  /** Get the padding for this control
+   * 
+   * @return the padding settings used to display this control
+   */
+  public Padding getPadding() {
+    return m_padding;
+    }
+  
+  /** Set the padding for this control
+   * 
+   * @param padding the new padding for this control.
+   */
+  public void setPadding(Padding padding) {
+    m_padding = padding;
+    }
+  
+  /** Get the vertical alignment for this control
+   * 
+   * @return the vertical alignment for this control
+   */
+  public int getVerticalAlignment() {
+    return m_valign;
+    }
+  
+  /** Set the vertical alignment for this control
+   *   
+   * @param alignment the vertical alignment to use for this control
+   */
+  public void setVerticalAlignment(int alignment) {
+    m_valign = alignment;
+    }
+  
+  /** Get the horizontal alignment for this control
+   * 
+   * @return the horizontal alignment for this control
+   */
+  public int getHorizontalAlignment() {
+    return m_halign;
+    }
+  
+  /** Set the horizontal alignment for this control
+   *   
+   * @param alignment the horizontal alignment to use for this control
+   */
+  public void setHorizontalAlignment(int alignment) {
+    m_halign = alignment;
+    }
+  
   /** Get the text for this control
    * 
    * @return the current text string associated with the control
@@ -84,6 +138,19 @@ public abstract class SimpleControl extends Window implements IControl {
    */
   public final void setEventHandler(int event, IControlEventHandler handler) {
     ControlHelper.setEventHandler(this, event, handler);
+    }
+  
+  //-------------------------------------------------------------------------
+  // Public event methods
+  //-------------------------------------------------------------------------
+
+  /** Called to erase the background of the control.
+   */
+  public void onEraseBackground() {
+    fillRect(
+      new Rectangle(Point.ORIGIN, this),
+      Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_BACKGROUND)
+      );
     }
   
   }

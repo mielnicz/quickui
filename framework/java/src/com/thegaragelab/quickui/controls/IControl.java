@@ -16,6 +16,54 @@ import com.thegaragelab.quickui.*;
  * etc).
  */
 public interface IControl extends IWindow {
+  //--- Alignment constants
+  public static final int ALIGN_LEFT   = 0; //! Align contents to the left
+  public static final int ALIGN_TOP    = 0; //! Align contents to the top
+  public static final int ALIGN_RIGHT  = 1; //! Align contents to the right
+  public static final int ALIGN_BOTTOM = 1; //! Align contents to the bottom
+  public static final int ALIGN_CENTER = 2; //! Align contents to the center
+  public static final int ALIGN_MIDDLE = 2; //! Align contents to the middle
+  
+  //-------------------------------------------------------------------------
+  // Control specific methods
+  //-------------------------------------------------------------------------
+  
+  /** Get the padding for this control
+   * 
+   * @return the padding settings used to display this control
+   */
+  public Padding getPadding();
+  
+  /** Set the padding for this control
+   * 
+   * @param padding the new padding for this control.
+   */
+  public void setPadding(Padding padding);
+  
+  /** Get the vertical alignment for this control
+   * 
+   * @return the vertical alignment for this control
+   */
+  public int getVerticalAlignment();
+  
+  /** Set the vertical alignment for this control
+   *   
+   * @param alignment the vertical alignment to use for this control
+   */
+  public void setVerticalAlignment(int alignment);
+  
+  /** Get the horizontal alignment for this control
+   * 
+   * @return the horizontal alignment for this control
+   */
+  public int getHorizontalAlignment();
+  
+  /** Set the horizontal alignment for this control
+   *   
+   * @param alignment the horizontal alignment to use for this control
+   */
+  public void setHorizontalAlignment(int alignment);
+  
   /** Get the text for this control
    * 
    * @return the current text string associated with the control

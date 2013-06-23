@@ -8,29 +8,18 @@
 package com.thegaragelab.quickui.test;
 
 //--- Imports
-import java.util.*;
 import com.thegaragelab.quickui.*;
 import com.thegaragelab.quickui.controls.*;
 
 /** A simple test application for the framework
  *
  */
-public class QuickTest extends Application implements SimpleTimer.Listener {
+public class QuickTest extends Application {
   //--- Display preferences
   private static final int SCREEN_WIDTH  = 480; // Preferred width of the window
   private static final int SCREEN_HEIGHT = 272; // Preferred height of the window
   
-  //--- Constants for child windows
-  private static final int WINDOW_WIDTH  = 25; // Width of the child window
-  private static final int WINDOW_HEIGHT = 25; // Height of the child window
-  private static final int WINDOW_OFFSET = 10; // Offset for window placement
-  
   //--- Instance variables
-  private Random  m_random = new Random();
-  private IWindow m_winTL; // Window in the top left corner
-  private IWindow m_winTR; // Window in the top right corner
-  private IWindow m_winBL; // Window in the bottom left corner
-  private IWindow m_winBR; // Window in the bottom right corner
   private Point   m_where; // Where to draw text
   
   //-------------------------------------------------------------------------
@@ -48,32 +37,6 @@ public class QuickTest extends Application implements SimpleTimer.Listener {
   // Application implementation
   //-------------------------------------------------------------------------
   
-  /** Called when a timer event is triggered.
-   * 
-   * @param timer the timer that caused the event.
-   * @param delay the delay (in milliseconds) between this event and when
-   *              it should have happened.
-   */
-  public void onTimer(SimpleTimer timer, long delay) {
-    // Pick a random window
-    IWindow w = m_winTL;
-    switch(m_random.nextInt(3)) {
-      case 0:
-        w = m_winTL;
-        break;
-      case 1:
-        w = m_winTR;
-        break;
-      case 2:
-        w = m_winBL;
-        break;
-      }
-    // Set a random color
-//    Palette palette = Application.getInstance().getPalette();
-//    if(palette!=null)
-//      w.setBackground(palette.getColor(m_random.nextInt(Palette.PALETTE_SIZE)));
-    }
-
   /** Called to initialise the application
    *
    * This method is called after the window management functions have been
@@ -82,40 +45,8 @@ public class QuickTest extends Application implements SimpleTimer.Listener {
    * etc.
    */
    public void onInitialise() {
-     // Create our child windows
-     Rectangle screen = new Rectangle(this);
-     m_winTL = new Window(this, new Rectangle(
-       WINDOW_OFFSET,
-       WINDOW_OFFSET,
-       WINDOW_WIDTH,
-       WINDOW_HEIGHT
-       ));
-     m_winTL.setEraseBackground(true);
-     m_winTL.setBackground(Color.RED);
-     m_winTR = new Window(this, new Rectangle(
-       screen.width - WINDOW_OFFSET - WINDOW_WIDTH,
-       WINDOW_OFFSET,
-       WINDOW_WIDTH,
-       WINDOW_HEIGHT
-       ));
-     m_winTR.setEraseBackground(true);
-     m_winTR.setBackground(Color.GREEN);
-     m_winBL = new Window(this, new Rectangle(
-       WINDOW_OFFSET,
-       screen.height - WINDOW_OFFSET - WINDOW_HEIGHT,
-       WINDOW_WIDTH,
-       WINDOW_HEIGHT
-       ));
-     m_winBL.setEraseBackground(true);
-     m_winBL.setBackground(Color.BLUE);
-     m_winBR = new ToggleWindow(this, new Rectangle(
-       screen.width - WINDOW_OFFSET - WINDOW_WIDTH,
-       screen.height - WINDOW_OFFSET - WINDOW_HEIGHT,
-       WINDOW_WIDTH,
-       WINDOW_HEIGHT
-       ));
-     m_winBR.setBackground(Color.WHITE);
      // Create some controls
+     Rectangle screen = new Rectangle(this);
      Checkbox cbTest = new Checkbox(this, new Rectangle(
        screen.width / 4,
        screen.height / 4,
@@ -133,8 +64,7 @@ public class QuickTest extends Application implements SimpleTimer.Listener {
        32),
        "A Control"
        );
-     test.setBackground(Color.GREEN);
-     test.setWidth(test.getPreferredWidth() / 2);
+     test.setWidth(test.getPreferredWidth());
      test.setHeight(test.getPreferredHeight());
      test.setEventHandler(
        Button.EVENT_TOUCHED,
@@ -144,8 +74,6 @@ public class QuickTest extends Application implements SimpleTimer.Listener {
            }
          }
        );
-     // Set up our timer
-     SimpleTimer.repeat(250L, this);
      }
    
    /**

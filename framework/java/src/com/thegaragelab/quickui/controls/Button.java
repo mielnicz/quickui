@@ -18,7 +18,6 @@ public class Button extends SimpleControl {
   public static final int EVENT_TOUCHED = 0; //! Fired when the button was touched and released
   
   //--- Instance variables
-  private Padding m_innerPadding; //! Padding between text and button
   private boolean m_depressed;    //! True if the button is touched
   
   //-------------------------------------------------------------------------
@@ -33,7 +32,6 @@ public class Button extends SimpleControl {
   */
   public Button(Container parent, Rectangle rect, String text) {
     super(parent, rect, text);
-    m_innerPadding = Padding.DEFAULT;
     }
 
   //-------------------------------------------------------------------------
@@ -48,9 +46,9 @@ public class Button extends SimpleControl {
    * @param the preferred width in pixels
    */
   public int getPreferredWidth() {
-    Dimension size = getFont().getStringSize(getText());
+    Dimension size = Application.getInstance().getFont().getStringSize(getText());
     Padding padding = getPadding();
-    return padding.getPaddingLeft() + m_innerPadding.getPaddingLeft() + size.getWidth() + m_innerPadding.getPaddingRight() + padding.getPaddingRight();
+    return padding.getPaddingLeft() + size.getWidth() + padding.getPaddingRight();
     }
   
   /** Get the preferred height of this control
@@ -61,9 +59,9 @@ public class Button extends SimpleControl {
    * @param the preferred height in pixels
    */
   public int getPreferredHeight() {
-    Dimension size = getFont().getStringSize(getText());
+    Dimension size = Application.getInstance().getFont().getStringSize(getText());
     Padding padding = getPadding();
-    return padding.getPaddingTop() + m_innerPadding.getPaddingTop() + size.getHeight() + m_innerPadding.getPaddingBottom() + padding.getPaddingBottom();
+    return padding.getPaddingTop() + size.getHeight() + padding.getPaddingBottom();
     }
   
   //-------------------------------------------------------------------------
@@ -77,28 +75,22 @@ public class Button extends SimpleControl {
   @Override
   public void onPaint() {
     super.onPaint();
-    Font font = getFont();
-    // Determine the size of the rectangle we are drawing in
-    Rectangle container = new Rectangle(Point.ORIGIN, this);
-    Padding padding = getPadding();
-    container.x = container.x + padding.getPaddingLeft();
-    container.width = container.width - padding.getPaddingLeft() - padding.getPaddingRight();
-    container.y = container.y + padding.getPaddingTop();
-    container.height = container.height - padding.getPaddingTop() - padding.getPaddingBottom();
-    // Get the size of the text and where to draw it
-    Dimension text = font.getStringSize(getText());
-    Point where = ControlHelper.getPosition(container, text, m_innerPadding, getHorizontalAlignment(), getVerticalAlignment());
-    where.translate(container);
+    Font font = Application.getInstance().getFont();
+    Dimension size = font.getStringSize(getText());
     // Now draw in the appropriate state
-    if(isDepressed()) {
-      // Invert the colors
-      fillRect(container, getForeground());
-      drawString(getFont(), where, getBackground(), getText());
-      }
-    else {
-      fillRect(container, getBackground());
-      drawString(getFont(), where, getForeground(), getText());
-      }
+    Point where = ControlHelper.getPosition(this, size, getPadding(), getHorizontalAlignment(), getVerticalAlignment());
+    Rectangle background = new Rectangle(Point.ORIGIN, this);
+    if(isDepressed())
+      fillRect(background, Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_HIGHLIGHT));
+    else
+      fillRect(background, Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_BACKGROUND));
+    // Draw the text on top
+    drawString(
+      font,
+      where,
+      Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_FOREGROUND),
+      getText()
+      );
     }
 
   /** Called when an input event is targeted to this window
