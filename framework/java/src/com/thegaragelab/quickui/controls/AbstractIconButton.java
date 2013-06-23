@@ -77,7 +77,7 @@ public abstract class AbstractIconButton extends SimpleControl implements IButto
   protected abstract void drawIcon(IPoint where, Color color);
   
   //-------------------------------------------------------------------------
-  // Implementation of IControl
+  // Implementation of IWindow
   //-------------------------------------------------------------------------
   
   /** Get the preferred width of this control
@@ -104,6 +104,36 @@ public abstract class AbstractIconButton extends SimpleControl implements IButto
   public int getPreferredHeight() {
     Padding padding = getPadding();
     return padding.getPaddingTop() + getIconHeight() + padding.getPaddingBottom();
+    }
+  
+  /** Called when the window needs to be painted
+   * 
+   *  This method is called to redraw the window.
+   */
+  @Override
+  public void onPaint() {
+    super.onPaint();
+    Padding padding = getPadding();
+    drawIcon(
+      new Point(padding.getPaddingLeft(), padding.getPaddingLeft()),
+      getColor()
+      );
+    }
+
+  /** Called when an input event is targeted to this window
+   * 
+   * An input event represents a key press or activity on the touch screen.
+   * In general, unless you are implementing a control, you don't need to
+   * do anything with these events.
+   * 
+   * @param evType the type of the event
+   * @param where the location of the event (in window co-ordinates)
+   */
+  @Override
+  public void onTouchEvent(int evType, IPoint where) {
+    super.onTouchEvent(evType, where);
+    if(evType==TouchEvent.GFX_EVENT_RELEASE)
+      this.fireEvent(EVENT_TOUCHED, null);
     }
   
   }

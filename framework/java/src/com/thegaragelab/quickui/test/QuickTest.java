@@ -79,6 +79,14 @@ public class QuickTest extends Application {
        "Label"
        );
      lblTest.setPreferredSize();
+     SystemIconButton btnSystem = new SystemIconButton(this, new Rectangle(
+       screen.width / 8,
+       screen.height / 4,
+       32,
+       32),
+       Application.ICON_HOME
+       );
+     btnSystem.setPreferredSize();  
      }
    
    /**
