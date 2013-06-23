@@ -68,9 +68,9 @@ def imageToBits_Mono(image, oncolor):
     for x in range(width):
       color = image.getpixel((x, y))
       if color == oncolor:
-        bits = bits + "1"
+        line = line + "1"
       else:
-        bits = bits + "0"
+        line = line + "0"
     # Pad the line to a full number of bytes
     while (len(line) % 8) <> 0:
       line = line + "0"
@@ -159,10 +159,14 @@ def readImageData(input, width, height):
 """ Write icon data
 """
 def writeIconData(output, width, height, bits):
-  # Make sure we have enough bits
-  size = width * height
-  if len(bits) <> size:
-    print "ERROR: Insufficient data provided for icon (Wanted %i, got %i)" % (size, len(bits))
+  # Calculate the number of bytes we should have
+  size = int(width / 8)
+  if (width % 8) > 0:
+    size = size + 1
+  size = size * height
+  # Make sure we have the right amount
+  if len(bits) <> (size * 8):
+    print "ERROR: Incorrect data provided for icon (Wanted %i, got %i)" % (size, len(bits))
     exit(1)
   # Write out the data
   byte = 0
@@ -191,7 +195,7 @@ def readIconData(input, width, height):
   size = size * height
   # Verify the size of the data we have been given
   if len(input) < size:
-    print "ERROR: Not enough data for a %i x %i icon." % (width, height)
+    print "ERROR: Insufficient data for a %i x %i icon." % (width, height)
     print "       Wanted %i bytes, got %i." % (size, len(input))
     exit(1)
   # Now read the data

@@ -13,57 +13,6 @@ from quickui import *
 # Image processing
 #----------------------------------------------------------------------------
 
-""" Process an RGB file
-"""
-def processRGB(image, oncolor):
-  print "  Processing RGB graphics file."
-
-""" Process an RGBA file
-"""
-def processRGBA(image):
-  width, height = image.size
-  width = min(width, MAX_IMAGE_WIDTH)
-  height = min(height, MAX_IMAGE_HEIGHT)
-  print "  Processing %i x %i image with alpha channel." % (width, height)
-  bits = ""
-  for y in range(height):
-    line = ""
-    for x in range(width):
-      color = image.getpixel((x, y))
-      if color[3] == 0:
-        line = line + "0"
-      else:
-        line = line + "1"
-    # Pad the line to a full number of bytes
-    while (len(line) % 8) <> 0:
-      line = line + "0"
-    bits = bits + line
-  # All done
-  return width, height, bits
-
-""" Process a monochrome image file
-"""
-def processMono(image, oncolor):
-  width, height = image.size
-  width = min(width, MAX_IMAGE_WIDTH)
-  height = min(height, MAX_IMAGE_HEIGHT)
-  print "  Processing %i x %i monochrome image." % (width, height)
-  bits = ""
-  for y in range(height):
-    line = ""
-    for x in range(width):
-      color = image.getpixel((x, y))
-      if color == oncolor:
-        bits = bits + "1"
-      else:
-        bits = bits + "0"
-    # Pad the line to a full number of bytes
-    while (len(line) % 8) <> 0:
-      line = line + "0"
-    bits = bits + line
-  # All done
-  return width, height, bits
-
 """ Process a single image file
 """
 def processImage(filename, oncolor):
