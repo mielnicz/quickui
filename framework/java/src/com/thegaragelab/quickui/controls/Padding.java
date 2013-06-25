@@ -14,8 +14,8 @@ package com.thegaragelab.quickui.controls;
  */
 public class Padding {
   //--- Constants
-  private static int DEFAULT_PADDING = 2; //! Default padding (for all edges)
-  private static int BUTTON_PADDING  = 4; //! Padding for buttons
+  public static int DEFAULT_PADDING = 2; //! Default padding (for all edges)
+  public static int BUTTON_PADDING  = 4; //! Padding for buttons
   
   //--- Special instances
   public static final Padding NONE    = new Padding(0);               //! No padding
