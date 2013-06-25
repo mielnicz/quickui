@@ -67,8 +67,10 @@ static void vnc_PointerEvent(int buttonMask, int x, int y, rfbClientPtr cl) {
 /** Set the color of a single pixel
  */
 static GFX_RESULT gfx_vnc_PutPixel(uint16_t x, uint16_t y, GFX_COLOR color) {
-  if(GFX_CLIP(x, y))
-    g_pFrameBuffer[(y * g_GfxDriver.m_width) + x] = color;
+  if(!GFX_CLIP(x, y))
+    return;
+  // Plot the point
+  g_pFrameBuffer[(y * g_GfxDriver.m_width) + x] = color;
   // Change the current update region
   g_minX = (x<g_minX)?x:g_minX;
   g_minY = (y<g_minY)?y:g_minY;
@@ -93,14 +95,14 @@ static GFX_RESULT gfx_vnc_EndPaint() {
   g_paintLevel--;
   // Do we need to send an update ?
   if(g_paintLevel>0)
-	return GFX_RESULT_OK;
+    return GFX_RESULT_OK;
   // Yes, we do - send an update (if one is available)
   if((g_maxX>0)&&(g_maxY>0))
     rfbMarkRectAsModified(g_pScreenInfo, g_minX, g_minY, g_maxX + 1, g_maxY + 1);
   // Clear the region
-  g_minX = g_GfxDriver.m_width;
+  g_minX = g_GfxDriver.m_width - 1;
   g_maxX = 0;
-  g_minY = g_GfxDriver.m_height;
+  g_minY = g_GfxDriver.m_height - 1;
   g_maxY = 0;
   // And done
   return GFX_RESULT_OK;
@@ -155,7 +157,7 @@ GFX_RESULT gfx_Init(uint16_t width, uint16_t height) {
   rfbLogEnable(0);
   g_pScreenInfo = rfbGetScreen(NULL, NULL, width, height, 5, 3, 2);
   if(g_pScreenInfo==NULL)
-	return GFX_RESULT_INTERNAL;
+        return GFX_RESULT_INTERNAL;
   // Set the pixel format
   g_pScreenInfo->serverFormat.redShift = 11;
   g_pScreenInfo->serverFormat.greenShift = 6;
