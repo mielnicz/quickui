@@ -150,8 +150,7 @@ public class Container extends Window {
     // Even if we are not dirty we may have to repaint some child windows
     if(isDirty()||force) {
       beginPaint();
-      // Erase the background and repaint
-      onEraseBackground();
+      // Repaint ourselves
       super.doRepaint(true);
       // Repaint everything
       for(Window child: m_children) {
@@ -167,7 +166,7 @@ public class Container extends Window {
       for(Window child: children) {
         beginPaint();
         // TODO: Should repaint our background before painting the child
-        setOffset(this);
+        setOffset(child.getParent());
         child.doRepaint(false);
         endPaint();
         }
