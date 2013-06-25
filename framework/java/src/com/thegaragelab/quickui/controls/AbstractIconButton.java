@@ -14,9 +14,6 @@ import com.thegaragelab.quickui.*;
  *
  */
 public abstract class AbstractIconButton extends SimpleControl implements IButton {
-  //--- Instance variables
-  private Color m_color; //! The current color
-  
   //-------------------------------------------------------------------------
   // Construction and initialisation
   //-------------------------------------------------------------------------
@@ -30,29 +27,6 @@ public abstract class AbstractIconButton extends SimpleControl implements IButto
     super(parent, rect, "");
     }
 
-  //-------------------------------------------------------------------------
-  // Helpers for an Icon based button
-  //-------------------------------------------------------------------------
-  
-  /** Set the color for the Icon
-   * 
-   * @param color the Color to use for the icon or null to use default.
-   */
-  public void setColor(Color color) {
-    m_color = color;
-    }
-  
-  /** Get the color for the Icon
-   * 
-   * @return the Color to use for the icon.
-   */
-  public Color getColor() {
-    if(m_color!=null)
-      return m_color;
-    // Use the default (Control foreground)
-    return Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_FOREGROUND);
-    }
-  
   //-------------------------------------------------------------------------
   // Helpers for an Icon based button (implemented by subclass)
   //-------------------------------------------------------------------------

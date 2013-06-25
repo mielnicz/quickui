@@ -78,7 +78,7 @@ public class Button extends SimpleControl implements IButton {
     drawString(
       font,
       ControlHelper.getPosition(this, size, getPadding(), getHorizontalAlignment(), getVerticalAlignment()),
-      Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_FOREGROUND),
+      getColor(),
       getText()
       );
     }

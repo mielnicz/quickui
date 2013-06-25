@@ -110,4 +110,30 @@ public interface IControl extends IWindow {
    */
   public boolean isTouched();
   
+  /** Set the background color to use
+   * 
+   * @param color the background color to use or null to use the default
+   */
+  public void setBackground(Color color);
+  
+  /** Get the current background color
+   * 
+   * @return the color chosen by the call to setBackground() or the default
+   *         color if none is selected.
+   */
+  public Color getBackground();
+  
+  /** Set the foreground color to use
+   * 
+   * @param color the foreground color to use or null to use the default
+   */
+  public void setColor(Color color);
+  
+  /** Get the current foreground color
+   * 
+   * @return the color chosen by the call to setForeground() or the default
+   *         color if none is selected.
+   */
+  public Color getColor();
+  
   }

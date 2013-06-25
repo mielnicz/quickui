@@ -81,7 +81,7 @@ public class Label extends SimpleControl {
     this.drawString(
       font,
       where,
-      Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_FOREGROUND),
+      getColor(),
       getText()
       );
     }

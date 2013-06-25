@@ -18,11 +18,13 @@ import com.thegaragelab.quickui.*;
  */
 public abstract class SimpleControl extends Window implements IControl {
   //--- Instance variables
-  private String  m_text;    //! Text for this control
-  private Padding m_padding; //! Padding for this control
-  private int     m_valign;  //! Vertical alignment for the control
-  private int     m_halign;  //! Horizontal alignment for the control
-  private boolean m_touched; //! Are we currently touched?
+  private String  m_text;       //! Text for this control
+  private Padding m_padding;    //! Padding for this control
+  private int     m_valign;     //! Vertical alignment for the control
+  private int     m_halign;     //! Horizontal alignment for the control
+  private boolean m_touched;    //! Are we currently touched?
+  private Color   m_background; //! The background color to use
+  private Color   m_foreground; //! The foreground color to use
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -148,6 +150,44 @@ public abstract class SimpleControl extends Window implements IControl {
     return m_touched;
     }
 
+  /** Set the background color to use
+   * 
+   * @param color the background color to use or null to use the default
+   */
+  public void setBackground(Color color) {
+    m_background = color;
+    }
+  
+  /** Get the current background color
+   * 
+   * @return the color chosen by the call to setBackground() or the default
+   *         color if none is selected.
+   */
+  public Color getBackground() {
+    if(m_background!=null)
+      return m_background;
+    return Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_BACKGROUND);
+    }
+  
+  /** Set the foreground color to use
+   * 
+   * @param color the foreground color to use or null to use the default
+   */
+  public void setColor(Color color) {
+    m_foreground = color;
+    }
+  
+  /** Get the current foreground color
+   * 
+   * @return the color chosen by the call to setForeground() or the default
+   *         color if none is selected.
+   */
+  public Color getColor() {
+    if(m_foreground!=null)
+      return m_foreground;
+    return Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_FOREGROUND);
+    }
+  
   //-------------------------------------------------------------------------
   // Implementation of IWindow
   //-------------------------------------------------------------------------
@@ -161,7 +201,7 @@ public abstract class SimpleControl extends Window implements IControl {
     if(isTouched())
       color = Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_HIGHLIGHT);
     else
-      color = Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_BACKGROUND);
+      color = getBackground();
     // Now erase the background
     fillRect(new Rectangle(Point.ORIGIN, this), color);
     }
