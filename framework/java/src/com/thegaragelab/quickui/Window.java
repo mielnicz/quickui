@@ -169,6 +169,9 @@ public class Window implements IWindow {
       m_flags.setFlags(WIN_FLAG_VISIBLE | WIN_FLAG_DIRTY);
     else
       m_flags.clearFlags(WIN_FLAG_VISIBLE);
+    // Mark the parent as dirty
+    if(m_parent!=null)
+      m_parent.setDirty(true);
     // Let the window know the state has changed
     onVisible(visible);
     }
@@ -262,12 +265,11 @@ public class Window implements IWindow {
    * @param force if true force a repaint regardless of the 'dirty' state.
    */
   void doRepaint(boolean force) {
-    // If we are not visible, don't do anything
-    if(!isVisible())
+    // If we are not visible or not dirty and not forced don't do anything
+    if((!isVisible())||(!(isDirty()||force))) {
+      setDirty(false);
       return;
-    // If we are not dirty, don't do anything
-    if(!(isDirty()||force))
-      return;
+      }
     // Start the paint operation
     Rectangle region = new Rectangle(this);
     Application.getInstance().setClip(region);
