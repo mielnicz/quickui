@@ -38,7 +38,7 @@ public class SystemIconButton extends AbstractIconButton {
   
   /** Get the width of the Icon
    * 
-   * @return the width of the Icon in pxiels
+   * @return the width of the Icon in pixels
    */
   @Override
   protected int getIconWidth() {

@@ -82,7 +82,7 @@ public abstract class AbstractIconButton extends SimpleControl implements IButto
   
   /** Get the preferred width of this control
    * 
-   * This method should calculate the preferred with of the control in pixels
+   * This method should calculate the preferred width of the control in pixels
    * taking into account the current control state and context settings.
    * 
    * @param the preferred width in pixels

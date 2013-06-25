@@ -35,7 +35,7 @@ public class Button extends SimpleControl implements IButton {
   
   /** Get the preferred width of this control
    * 
-   * This method should calculate the preferred with of the control in pixels
+   * This method should calculate the preferred width of the control in pixels
    * taking into account the current control state and context settings.
    * 
    * @param the preferred width in pixels
@@ -65,19 +65,6 @@ public class Button extends SimpleControl implements IButton {
   // Implementation of IWindow
   //-------------------------------------------------------------------------
   
-  /**
-   * @see com.thegaragelab.quickui.controls.SimpleControl#onEraseBackground()
-   */
-  @Override
-  public void onEraseBackground() {
-    super.onEraseBackground();
-    // Draw the border
-    drawBox(
-      new Rectangle(Point.ORIGIN, this),
-      Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_HIGHLIGHT)
-      );
-    }
-
   /** Called when the window needs to be painted
    * 
    *  This method is called to redraw the window.

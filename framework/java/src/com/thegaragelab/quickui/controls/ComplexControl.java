@@ -159,14 +159,10 @@ public abstract class ComplexControl extends Container implements IControl {
   /** Called to erase the background of the control.
    */
   public void onEraseBackground() {
-    // Pick the right color for the background
-    Color color;
-    if(isTouched())
-      color = Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_BACKGROUND);
-    else
-      color = Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_BACKGROUND);
-    // Now erase the background
-    fillRect(new Rectangle(Point.ORIGIN, this), color);
+    fillRect(
+      new Rectangle(Point.ORIGIN, this), 
+      Application.getInstance().getSystemColor(Application.SYS_COLOR_CTRL_BACKGROUND)
+      );
     }
   
   /**
