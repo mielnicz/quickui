@@ -115,6 +115,9 @@ public class Container extends Window {
    */
   @Override
   void findDirtyChildren(List<Window> children) {
+    // If we are not visible we don't care about dirty state
+    if(!isVisible())
+      return;
     // If we are dirty simply add ourselves
     if(isDirty())
       children.add(this);
@@ -140,12 +143,15 @@ public class Container extends Window {
   @Override
   void doRepaint(boolean force) {
     // Don't do anything if we are not visible
-    if(!isVisible())
+    if(!isVisible()) {
+      setDirty(false);
       return;
+      }
     // Even if we are not dirty we may have to repaint some child windows
     if(isDirty()||force) {
       beginPaint();
-      // Do our painting
+      // Erase the background and repaint
+      onEraseBackground();
       super.doRepaint(true);
       // Repaint everything
       for(Window child: m_children) {
@@ -166,6 +172,7 @@ public class Container extends Window {
         endPaint();
         }
       }
+    setDirty(false);
     }
   
   /** Called to do an update of the window.
