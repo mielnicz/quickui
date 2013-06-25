@@ -10,6 +10,10 @@ package com.thegaragelab.quickui;
 /** Extends Point to add width and height dimensions.
  */
 public class Rectangle extends Point implements IRectangle {
+  //--- Constants
+  public static final Rectangle EMPTY = new Rectangle(Point.ORIGIN, Dimension.EMPTY);
+  
+  //--- Instance variables
   public int width;  //! Width of the rectangle
   public int height; //! Height of the rectangle
 
