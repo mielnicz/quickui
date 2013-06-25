@@ -66,6 +66,13 @@ public class Label extends SimpleControl {
   // Implementation of IWindow
   //-------------------------------------------------------------------------
 
+  /** Called to erase the background of the control.
+   */
+  @Override
+  public void onEraseBackground() {
+    fillRect(new Rectangle(Point.ORIGIN, this), getBackground());
+    }
+
   /** Called when the window needs to be painted
    * 
    *  This method is called to redraw the window.
