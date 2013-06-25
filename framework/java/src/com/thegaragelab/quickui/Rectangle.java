@@ -32,11 +32,11 @@ public class Rectangle extends Point implements IRectangle {
 
   /** Constructor with a Point and dimension information
    * 
-   * @param point the Point representing the top left left corner.
+   * @param point the IPoint representing the top left left corner.
    * @param w the width of the rectangle.
    * @param h the height of the rectangle.
    */
-  public Rectangle(Point point, int w, int h) {
+  public Rectangle(IPoint point, int w, int h) {
     super(point);
     width = w;
     height = h;
@@ -47,7 +47,7 @@ public class Rectangle extends Point implements IRectangle {
    * @param point the Point representing the top left left corner.
    * @param dimension the Dimension of the rectangle.
    */
-  public Rectangle(Point point, IDimension dimension) {
+  public Rectangle(IPoint point, IDimension dimension) {
     super(point);
     width = dimension.getWidth();
     height = dimension.getHeight();
