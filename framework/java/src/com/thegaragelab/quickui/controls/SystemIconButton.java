@@ -64,4 +64,16 @@ public class SystemIconButton extends AbstractIconButton {
     Application.getInstance().drawSystemIcon(where, m_sysicon, color);
     }
 
+  //-------------------------------------------------------------------------
+  // SystemIconButton operations
+  //-------------------------------------------------------------------------
+  
+  /** Set the icon to display
+   * 
+   */
+  public void setIcon(int icon) {
+    m_sysicon = icon;
+    setDirty(true);
+    }
+  
   }

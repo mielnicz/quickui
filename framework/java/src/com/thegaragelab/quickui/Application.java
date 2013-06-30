@@ -18,18 +18,22 @@ public class Application extends Container {
   private static final String SYSTEM_RESOURCE = "system";
   
   //--- System icons
-  public static final  int SYSTEM_ICON_SIZE = 16;       //! Size of system icons
-  public static final  int ICON_HOME        = 0;        //! The home icon
-  public static final  int ICON_SETTINGS    = 1;        //! Show settings
-  public static final  int ICON_BACK        = 2;        //! Move back
-  public static final  int ICON_FORWARD     = 3;        //! Move forward
-  public static final  int ICON_ALERT       = 4;        //! Alert icon
-  public static final  int ICON_ERROR       = 5;        //! Error icon
-  public static final  int ICON_INFO        = 6;        //! Information icon
-  public static final  int ICON_OK          = 7;        //! Showing OK
-  public static final  int ICON_CANCEL      = 8;        //! Showing Cancel or Bad
-  public static final  int ICON_SAVE        = 9;        //! Save (save everything)
-  private static final int SYSTEM_ICON_MAX = ICON_SAVE; //! Maximum ID for system icons
+  public static final  int SYSTEM_ICON_SIZE = 16;         //! Size of system icons
+  public static final  int ICON_HOME        = 0;          //! The home icon
+  public static final  int ICON_SETTINGS    = 1;          //! Show settings
+  public static final  int ICON_BACK        = 2;          //! Move back
+  public static final  int ICON_FORWARD     = 3;          //! Move forward
+  public static final  int ICON_ALERT       = 4;          //! Alert icon
+  public static final  int ICON_ERROR       = 5;          //! Error icon
+  public static final  int ICON_INFO        = 6;          //! Information icon
+  public static final  int ICON_OK          = 7;          //! Showing OK
+  public static final  int ICON_CANCEL      = 8;          //! Showing Cancel or Bad
+  public static final  int ICON_SAVE        = 9;          //! Save (save everything)
+  public static final  int ICON_PLAY        = 10;         //! Play
+  public static final  int ICON_PAUSE       = 11;         //! Pause
+  public static final  int ICON_STOP        = 12;         //! Stop
+  public static final  int ICON_RECORD      = 13;         //! Record
+  private static final int SYSTEM_ICON_MAX = ICON_RECORD; //! Maximum ID for system icons
   
   //--- System colors
   //
