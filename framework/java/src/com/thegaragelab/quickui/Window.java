@@ -25,7 +25,8 @@ public class Window implements IWindow {
   
   //--- Instance variables
   private Container m_parent;     //! The parent Window
-  private Rectangle m_rectangle;  //! Position and size of the window
+  private Rectangle m_rectangle;  //! Position and size of the window (relative)
+  private Rectangle m_absolute;   //! The absolute position and size of the window
   private Flags     m_flags;      //! Current flags
   
   //-------------------------------------------------------------------------
@@ -83,12 +84,9 @@ public class Window implements IWindow {
     setDirty(true);
     setVisible(true);
     // Add ourselves to the parent (if we have one)
-    if(m_parent!=null) {
-      // Translate our co-ordinates from relative to absolute
-      m_rectangle = (Rectangle)m_rectangle.translate(m_parent);
+    if(m_parent!=null)
       // Add ourselves to the parent
       m_parent.add(this);
-      }
     }
   
   //-------------------------------------------------------------------------
@@ -131,6 +129,22 @@ public class Window implements IWindow {
     value = getPreferredHeight();
     if(value>0)
       setHeight(value);
+    }
+  
+  /** Get our absolute position
+   * 
+   * @return an IRectangle representing our absolute screen position
+   */
+  public IRectangle getAbsolute() {
+    // If we already have it, return it
+    if(m_absolute!=null)
+      return m_absolute;
+    // Recalculate the value
+    if(m_parent==null)
+      m_absolute = new Rectangle(m_rectangle);
+    else
+      m_absolute = (Rectangle)m_rectangle.translate(m_parent.getAbsolute());
+    return m_absolute;
     }
   
   /**
@@ -226,7 +240,7 @@ public class Window implements IWindow {
    * @see com.thegaragelab.quickui.IWindow#getWindowByPoint(com.thegaragelab.quickui.IPoint)
    */
   public IWindow getWindowByPoint(IPoint point) {
-    if(!contains(point))
+    if(!getAbsolute().contains(point))
       return null;
     return this;
     }
@@ -271,7 +285,7 @@ public class Window implements IWindow {
       return;
       }
     // Start the paint operation
-    Rectangle region = new Rectangle(this);
+    Rectangle region = new Rectangle(this.getAbsolute());
     Application.getInstance().setClip(region);
     beginPaint();
     setOffset(region);
@@ -367,6 +381,7 @@ public class Window implements IWindow {
    */
   public void setX(int nx) {
     m_rectangle.x = nx;
+    m_absolute = null;
     getParent().setDirty(true);
     }
   
@@ -387,6 +402,7 @@ public class Window implements IWindow {
    */
   public void setY(int ny) {
     m_rectangle.y = ny;
+    m_absolute = null;
     getParent().setDirty(true);
     }
   
@@ -397,6 +413,7 @@ public class Window implements IWindow {
    * @return IPoint the translated instance.
    */
   public IPoint translate(IPoint origin) {
+    m_absolute = null;
     return m_rectangle.translate(origin);
     }
   
@@ -417,6 +434,7 @@ public class Window implements IWindow {
    */
   public void setWidth(int w) {
     m_rectangle.width = w;
+    m_absolute = null;
     getParent().setDirty(true);
     }
   
@@ -437,6 +455,7 @@ public class Window implements IWindow {
    */
   public void setHeight(int h) {
     m_rectangle.height = h;
+    m_absolute = null;
     getParent().setDirty(true);
     }
   
@@ -447,7 +466,7 @@ public class Window implements IWindow {
    * @return true if the rectangle contains the given point, false otherwise.
    */
   public boolean contains(IPoint point) {
-    return m_rectangle.contains(point);
+    return m_rectangle.contains(point)&&isVisible();
     }
   
   //-------------------------------------------------------------------------

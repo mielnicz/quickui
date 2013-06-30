@@ -69,19 +69,18 @@ public class Container extends Window {
    * 
    * @param point the Point we are searching for.
    * 
-   * @return the smallest window that contains this point.
+   * @return the smallest window that contains this point and is visible.
    */
   @Override
   public IWindow getWindowByPoint(IPoint point) {
-    if(!contains(point))
+    if(!(getAbsolute().contains(point)&&isVisible()))
       return null;
     // Do we have children ?
     if((m_children==null)||(m_children.size()==0))
       return this;
     // Check each child
-    Point test = Point.offset(this, point);
     for(IWindow child: m_children) {
-      IWindow result = child.getWindowByPoint(test);
+      IWindow result = child.getWindowByPoint(point);
       if(result!=null)
         return result;
       }
@@ -154,7 +153,7 @@ public class Container extends Window {
       super.doRepaint(true);
       // Repaint everything
       for(Window child: m_children) {
-        setOffset(this);
+        setOffset(this.getAbsolute());
         child.doRepaint(true);
         }
       endPaint();
