@@ -40,6 +40,7 @@ public class Window implements IWindow {
   Window(Rectangle rect) {
     m_rectangle = new Rectangle(rect);
     m_flags = new Flags();
+    m_flags.setFlags(Window.WIN_FLAG_DIRTY | Window.WIN_FLAG_VISIBLE);
     initialiseState();
     // Call the creation method
     onCreate();
@@ -56,10 +57,10 @@ public class Window implements IWindow {
     m_parent = parent;
     m_flags = new Flags();
     m_rectangle = new Rectangle(rect);
-    initialiseState();
     // Adjust flags
-    m_flags.setFlags(require);
+    m_flags.setFlags(Window.WIN_FLAG_DIRTY | Window.WIN_FLAG_VISIBLE | require);
     m_flags.clearFlags(exclude);
+    initialiseState();
     // Call the creation method
     onCreate();
     }
@@ -70,7 +71,7 @@ public class Window implements IWindow {
    * @param rect the Rectangle describing the location and size of the window.
    */
   public Window(Container parent, IRectangle rect) {
-    this(parent, rect, 0, 0);
+    this(parent, rect, Window.WIN_FLAG_DIRTY | Window.WIN_FLAG_VISIBLE, 0);
     }
 
   /** Initialise the state
@@ -80,9 +81,11 @@ public class Window implements IWindow {
    *  initial state but must call the parent implementation.
    */
   void initialiseState() {
-    // Always start as visible and dirty
+    // Always start as dirty
     setDirty(true);
-    setVisible(true);
+    // Trigger invisibility
+    if(isVisible())
+      onVisible(true);
     // Add ourselves to the parent (if we have one)
     if(m_parent!=null)
       // Add ourselves to the parent
