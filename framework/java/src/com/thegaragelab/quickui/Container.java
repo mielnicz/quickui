@@ -146,7 +146,7 @@ public class Container extends Window {
       setDirty(false);
       return;
       }
-    // Even if we are not dirty we may have to repaint some child windows
+    // If we are dirty repaint our children as well
     if(isDirty()||force) {
       beginPaint();
       // Repaint ourselves

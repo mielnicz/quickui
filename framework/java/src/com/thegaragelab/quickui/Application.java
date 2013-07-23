@@ -68,6 +68,7 @@ public class Application extends Container {
   private Font       m_font;       //! The system font
   private Icon       m_icons;      //! The system icons
   private IWindow    m_target;     //! The window currently accepting touch events.
+  private Dialog     m_dialog;     //! The current dialog (if any)
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -238,6 +239,15 @@ public class Application extends Container {
   void doRepaint(boolean force) {
     // Set the offset to origin
     setOffset(Point.ORIGIN);
+    // If we have an active dialog, show it only
+    if(m_dialog!=null) {
+      if(m_dialog.isVisible()) {
+        m_dialog.doRepaint(force);
+        return;
+        }
+      m_dialog = null;
+      force = true;
+      }
     // And start the repaint sequence
     super.doRepaint(force);
     }
@@ -263,9 +273,19 @@ public class Application extends Container {
    * @param event the TouchEvent to handle
    */
   void doTouchEvent(TouchEvent event) {
+    // Limit touch targets to the dialog if present.
+    IWindow search = this;
+    if(m_dialog!=null) {
+      if(m_dialog.isVisible()) {
+        search = m_dialog;
+        m_target = null;
+        }
+      else
+        m_dialog = null;
+      }
     // A touch event can change the focus, handle that situation.
     if(event.getEventType()==TouchEvent.GFX_EVENT_TOUCH) {
-      IWindow window = getWindowByPoint(event);
+      IWindow window = search.getWindowByPoint(event);
       if(window!=null)
         m_target = window.getAcceptTouch();
       }
@@ -407,6 +427,23 @@ public class Application extends Container {
   //-------------------------------------------------------------------------
   // Application specific operations
   //-------------------------------------------------------------------------
+  
+  /** Show a dialog
+   * 
+   * @param dialog the modal dialog to display.
+   */
+  public boolean showDialog(Dialog dialog) {
+    // Dialogs cannot be stacked
+    if(m_dialog!=null)
+      return false;
+    // Set the parameter as the current dialog
+    m_dialog = dialog;
+    if(m_dialog!=null) {
+      m_dialog.setVisible(true);
+      setDirty(true);
+      }
+    return true;
+    }
   
   /** Get the system icons
    *

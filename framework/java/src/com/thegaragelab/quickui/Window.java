@@ -236,7 +236,9 @@ public class Window implements IWindow {
   public IWindow getAcceptTouch() {
     if(m_flags.areFlagsSet(WIN_FLAG_ACCEPT_TOUCH))
       return this;
-    return getParent().getAcceptTouch();
+    if(getParent()!=null)
+      return getParent().getAcceptTouch();
+    return null;
     }
   
   /**
@@ -385,7 +387,8 @@ public class Window implements IWindow {
   public void setX(int nx) {
     m_rectangle.x = nx;
     m_absolute = null;
-    getParent().setDirty(true);
+    if(getParent()!=null)
+      getParent().setDirty(true);
     }
   
   /** Get the Y co-ordinate for this point.
@@ -406,7 +409,8 @@ public class Window implements IWindow {
   public void setY(int ny) {
     m_rectangle.y = ny;
     m_absolute = null;
-    getParent().setDirty(true);
+    if(getParent()!=null)
+      getParent().setDirty(true);
     }
   
   /** Translate the point so the given point is the origin
@@ -438,7 +442,8 @@ public class Window implements IWindow {
   public void setWidth(int w) {
     m_rectangle.width = w;
     m_absolute = null;
-    getParent().setDirty(true);
+    if(getParent()!=null)
+      getParent().setDirty(true);
     }
   
   /** Get the height of the rectangle.
@@ -459,7 +464,8 @@ public class Window implements IWindow {
   public void setHeight(int h) {
     m_rectangle.height = h;
     m_absolute = null;
-    getParent().setDirty(true);
+    if(getParent()!=null)
+      getParent().setDirty(true);
     }
   
   /** Determine if this rectangle contains the given point
