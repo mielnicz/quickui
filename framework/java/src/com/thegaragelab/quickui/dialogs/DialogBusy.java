@@ -25,7 +25,6 @@ public class DialogBusy extends Dialog implements SimpleTimer.Listener {
   
   //--- Instance variables
   private SimpleTimer m_timer;    //! The timer used to control testing
-  private Label       m_label;    //! The text to display
   private Icon        m_icon;     //! The icon to animate
   private int         m_frame;    //! The current frame of the icon
   private Rectangle   m_iconRect; //! Where to place the icon
@@ -41,9 +40,9 @@ public class DialogBusy extends Dialog implements SimpleTimer.Listener {
     super();
     // Now add the text
     if(m_icon!=null)
-      m_label = new Label(this, new Rectangle(m_icon.getHeight() + 4, 2, getWidth() - m_icon.getHeight() - 4, getHeight() - 4), text);
+      new Label(this, new Rectangle(m_icon.getHeight() + 4, 2, getWidth() - m_icon.getHeight() - 4, getHeight() - 4), text);
     else
-      m_label = new Label(this, new Rectangle(2, 2, getWidth() - 4, getHeight() - 4), text);
+      new Label(this, new Rectangle(2, 2, getWidth() - 4, getHeight() - 4), text);
     }
 
   /** Constructor
