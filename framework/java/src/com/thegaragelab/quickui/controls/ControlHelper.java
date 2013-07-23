@@ -40,7 +40,7 @@ class ControlHelper {
   
   //--- Static instance variables
   private static Icon m_icons; //! Icons for common controls
-  private static WeakHashMap<ControlEventSource, IControlEventHandler> m_dispatcher;
+  private static HashMap<ControlEventSource, IControlEventHandler> m_dispatcher;
   
   //-------------------------------------------------------------------------
   // Helper methods
@@ -74,9 +74,13 @@ class ControlHelper {
   public static synchronized void setEventHandler(IControl control, int event, IControlEventHandler handler) {
     // Make sure we have something to hold the mapping
     if(m_dispatcher==null)
-      m_dispatcher = new WeakHashMap<ControlEventSource, IControlEventHandler>();
-    // Add it
-    m_dispatcher.put(new ControlEventSource(control, event), handler);
+      m_dispatcher = new HashMap<ControlEventSource, IControlEventHandler>();
+    // Add or remove it as needed
+    ControlEventSource source = new ControlEventSource(control, event);
+    if(handler==null)
+      m_dispatcher.remove(source);
+    else
+      m_dispatcher.put(source, handler);
     }
   
   /** Draw a control icon at the requested co-ordinates
