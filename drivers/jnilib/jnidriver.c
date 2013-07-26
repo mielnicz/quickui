@@ -266,3 +266,34 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxGetWidth(JNIEnv *
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxGetHeight(JNIEnv *pEnv, jobject obj) {
   return (jint)g_GfxDriver.m_height;
   }
+
+  /*
+ * Class:     com_thegaragelab_quickui_Driver
+ * Method:    gfxGetBufferSize
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxGetBufferSize(JNIEnv *pEnv, jobject obj) {
+  return (jint)(g_GfxDriver.m_width * g_GfxDriver.m_height * 2);
+  }
+
+/*
+ * Class:     com_thegaragelab_quickui_Driver
+ * Method:    gfxGetBuffer
+ * Signature: ([B)I
+ */
+JNIEXPORT void JNICALL Java_com_thegaragelab_quickui_Driver_gfxGetBuffer(JNIEnv *pEnv, jobject obj, jbyteArray data) {
+  // See if we can get a buffer at all
+  uint8_t *pBuffer = gfx_Framebuffer();
+  if(pBuffer==NULL)
+    return;
+  // Copy it into the array provided.
+  jbyte *pData = (*pEnv)->GetByteArrayElements(pEnv, data, NULL);
+  if(pData==NULL)
+    return;
+  memcpy(pData, pBuffer, g_GfxDriver.m_width * g_GfxDriver.m_height * 2);
+  // Release the array
+  (*pEnv)->ReleaseByteArrayElements(pEnv, data, pData, 0);
+  }
+
+
+

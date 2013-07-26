@@ -155,6 +155,20 @@ class Driver implements ISurface {
    */
   private native int gfxGetHeight();
   
+  /** Get the size of the buffer in bytes
+   * 
+   * @return the number of bytes required to store the buffer or 0 if the
+   *         raw buffer is not available.
+   */
+  private native int gfxGetBufferSize();
+  
+  /** Create a copy of the current buffer
+   * 
+   * @param buffer the location to store the buffer. This must be at least
+   *               the number of bytes returned by gfxGetBufferSize().
+   */
+  private native void gfxGetBuffer(byte[] buffer);
+  
   //-------------------------------------------------------------------------
   // Implementation of IDimension
   //-------------------------------------------------------------------------

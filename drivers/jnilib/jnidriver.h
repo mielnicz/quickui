@@ -135,6 +135,22 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxGetWidth
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxGetHeight
   (JNIEnv *, jobject);
 
+/*
+ * Class:     com_thegaragelab_quickui_Driver
+ * Method:    gfxGetBufferSize
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxGetBufferSize
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_thegaragelab_quickui_Driver
+ * Method:    gfxGetBuffer
+ * Signature: ([B)V
+ */
+JNIEXPORT void JNICALL Java_com_thegaragelab_quickui_Driver_gfxGetBuffer
+  (JNIEnv *, jobject, jbyteArray);
+
 #ifdef __cplusplus
 }
 #endif
