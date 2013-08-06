@@ -1,8 +1,8 @@
 AM_CPPFLAGS = \
     -I$(top_srcdir)/drivers/include \
-    -I$(top_srcdir)/drivers/vncfb/vncserver \
-    -I$(top_srcdir)/drivers/vncfb/vncserver/rfb \
-    -I$(top_srcdir)/drivers/vncfb/vncserver/libvncserver \
+    -I$(top_srcdir)/drivers/vnc/vncserver \
+    -I$(top_srcdir)/drivers/vnc/vncserver/rfb \
+    -I$(top_srcdir)/drivers/vnc/vncserver/libvncserver \
     $(libz_CFLAGS) \
     $(libjpeg_CFLAGS)
 

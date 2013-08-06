@@ -40,8 +40,23 @@ done
 #       selected.
 #----------------------------------------------------------------------------
 
-AC_ARG_WITH([vncdriver],
-  AS_HELP_STRING([--with-vncdriver], [Use the VNC based driver]))
+AC_ARG_WITH([driver],
+  AS_HELP_STRING([--with-driver], [Specify the driver to build.]))
+
+# Make sure the driver is valid
+if test "x$with_driver" == "xvnc"; then
+  AC_MSG_NOTICE([Using VNC driver.])
+  GFX_DRIVER=vnc
+elif test "x$with_driver" == "xlinuxfb"; then
+  AC_MSG_NOTICE([Using Linux framebuffer driver.])
+  GFX_DRIVER=linuxfb
+else
+  AC_MSG_ERROR([
+** You must specify a valid graphics driver to use. Options are:
+**   vnc     - use VNC for graphics and input.
+**   linuxfb - Linux framebuffer])
+fi
+AC_SUBST(GFX_DRIVER)
 
 #----------------------------------------------------------------------------
 # Check for required libraries
@@ -89,7 +104,7 @@ AC_OUTPUT(
   Makefile
   drivers/Makefile
   drivers/common/Makefile
-  drivers/vncfb/Makefile
+  drivers/vnc/Makefile
   drivers/jnilib/Makefile
   testing/Makefile
   testing/simple/Makefile
