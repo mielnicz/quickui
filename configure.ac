@@ -47,11 +47,39 @@ AC_ARG_WITH([vncdriver],
 # Check for required libraries
 #----------------------------------------------------------------------------
 
-AS_IF([test "x$with_vncdriver" == "xyes"],
-      [PKG_CHECK_MODULES([libjpeg], [libjpeg])])
+# Check for libjpeg
+if test "x$with_vncdriver" == "xyes" && test -z "$LIBJPEG"; then
+  AC_CHECK_LIB(jpeg, jpeg_destroy_decompress,
+               jpeg_ok=yes,
+               jpeg_ok=no)
+  if test "$jpeg_ok" = yes; then
+    AC_MSG_CHECKING([for jpeglib.h])
+    AC_TRY_CPP(
+[#include <stdio.h>
+#undef PACKAGE
+#undef VERSION
+#undef HAVE_STDLIB_H
+#include <jpeglib.h>],
+        jpeg_ok=yes,
+        jpeg_ok=no)
+    AC_MSG_RESULT($jpeg_ok)
+    if test "$jpeg_ok" = yes; then
+      LIBJPEG='-ljpeg'
+    fi
+  fi
+
+  if test x$with_libjpeg != xno && test -z "$LIBJPEG"; then
+     AC_MSG_ERROR([Could not find JPEG library.])
+  else
+    AC_DEFINE(HAVE_LIBJPEG, [1], [Have JPEG library])
+  fi
+fi
+
+AM_CONDITIONAL(HAVE_LIBJPEG, test ! -z "$LIBJPEG")
+AC_SUBST(LIBJPEG)
 
 AS_IF([test "x$with_vncdriver" == "xyes"],
-      [PKG_CHECK_MODULES([libz], [libz])])
+      [PKG_CHECK_MODULES([zlib], [zlib])])
 
 #----------------------------------------------------------------------------
 # Generate output files
