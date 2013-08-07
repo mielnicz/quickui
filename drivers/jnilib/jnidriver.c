@@ -6,6 +6,7 @@
 * Provides an interface between Java and the QuickGFX low level driver.
 *---------------------------------------------------------------------------*/
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 #include <quickgfx.h>
 #include "jnidriver.h"
