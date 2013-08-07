@@ -63,7 +63,7 @@ AC_SUBST(GFX_DRIVER)
 #----------------------------------------------------------------------------
 
 # Check for libjpeg
-if test "x$with_vncdriver" == "xyes" && test -z "$LIBJPEG"; then
+if test "x$GFX_DRIVER" == "xvnc" && test -z "$LIBJPEG"; then
   AC_CHECK_LIB(jpeg, jpeg_destroy_decompress,
                jpeg_ok=yes,
                jpeg_ok=no)
@@ -93,7 +93,7 @@ fi
 AM_CONDITIONAL(HAVE_LIBJPEG, test ! -z "$LIBJPEG")
 AC_SUBST(LIBJPEG)
 
-AS_IF([test "x$with_vncdriver" == "xyes"],
+AS_IF([test "x$GFX_DRIVER" == "xvnc"],
       [PKG_CHECK_MODULES([zlib], [zlib])])
 
 #----------------------------------------------------------------------------

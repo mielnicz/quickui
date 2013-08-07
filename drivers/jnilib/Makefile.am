@@ -7,7 +7,7 @@ AM_LDFLAGS = \
 lib_LTLIBRARIES = libjniquickgfx.la
 
 libjniquickgfx_la_LIBADD = \
-    $(top_srcdir)/build/drivers/vncfb/libgfxvncfb.la \
+    $(top_srcdir)/build/drivers/vnc/libgfxvnc.la \
     $(top_srcdir)/build/drivers/common/libgfxcommon.la
 
 libjniquickgfx_la_SOURCES = \

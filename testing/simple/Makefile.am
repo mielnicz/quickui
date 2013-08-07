@@ -7,7 +7,7 @@ AM_LDFLAGS = \
 bin_PROGRAMS = quicktest
 
 quicktest_LDADD = \
-    $(top_srcdir)/build/drivers/vncfb/libgfxvncfb.la \
+    $(top_srcdir)/build/drivers/vnc/libgfxvnc.la \
     $(top_srcdir)/build/drivers/common/libgfxcommon.la
 
 quicktest_SOURCES = \

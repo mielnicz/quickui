@@ -6,14 +6,14 @@ AM_CPPFLAGS = \
     $(libz_CFLAGS) \
     $(libjpeg_CFLAGS)
 
-noinst_LTLIBRARIES = libgfxvncfb.la
+noinst_LTLIBRARIES = libgfxvnc.la
 
-libgfxvncfb_la_LIBADD = \
+libgfxvnc_la_LIBADD = \
     -ljpeg \
     -lpthread \
     -lz
 
-libgfxvncfb_la_SOURCES = \
+libgfxvnc_la_SOURCES = \
     vncfb.c \
     vncserver/libvncserver/main.c \
     vncserver/libvncserver/rfbserver.c \
