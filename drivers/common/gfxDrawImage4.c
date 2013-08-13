@@ -12,7 +12,6 @@
 
 /** Draw a portion of an image to the display
  */
-GFX_RESULT gfx_common_DrawImagePortion(uint16_t x, uint16_t y, GFX_IMAGE *pImage, uint8_t sx, uint8_t sy, uint8_t w, uint8_t h, GFX_PALETTE pPalette) {
+GFX_RESULT gfx_common_DrawImage4(uint16_t x, uint16_t y, GFX_IMAGE *pImage, uint8_t sx, uint8_t sy, uint8_t w, uint8_t h, GFX_IMAGE *pMask, GFX_PALETTE pPalette) {
   return GFX_RESULT_OK;
   }
-

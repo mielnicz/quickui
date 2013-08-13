@@ -43,6 +43,7 @@ typedef enum _GFX_RESULT {
   GFX_RESULT_MEMORY,   //! Out of memory
   GFX_RESULT_INTERNAL, //! Internal error (driver specific)
   GFX_RESULT_FAILED,   //! Generic failure (when no other data is available)
+  GFX_RESULT_BADARG,   //! Invalid argument
   } GFX_RESULT;
 
 // These structures are all byte aligned (space is at a premium)
@@ -82,38 +83,36 @@ typedef struct _GFX_TOUCH_EVENT_INFO {
   uint16_t        m_ypos;   //! The Y position of the event (in screen co-ordinates)
   } GFX_TOUCH_EVENT_INFO;
 
+/** Supported image types
+ *
+ */
+typedef enum _IMAGE_BPP {
+  IMAGE_BPP_1  = 0, //! 1 bpp (monochrome) image.
+  IMAGE_BPP_4  = 1, //! 4 bpp (palette) image.
+  IMAGE_BPP_16 = 2, //! 16 bpp (rrrrrggggggbbbbb) image.
+  } IMAGE_BPP;
+
 /** Image header information
  *
  * This structure provides common information about an image regardless of
  * it's format.
  */
 typedef struct _GFX_IMAGE_HEADER {
-  uint8_t m_width;  //! Width of the image in pixels
-  uint8_t m_height; //! Height of the image in pixels
+  uint8_t m_width;    //! Width of the image in pixels
+  uint8_t m_height;   //! Height of the image in pixels
+  uint8_t m_bpp;      //! Pixel size (see IMAGE_BPP enum for values)
+  uint8_t m_reserved; //! Reserved for future use
   } GFX_IMAGE_HEADER;
 
-/** A compressed image
+/** An image
  *
- * Images are stored with 4 bits per pixel providing an index into a dynamic
- * color lookup table. This means a single image can contain at most 16 distinct
- * colors but those colors can be chosen from the full range of colors provided
- * by the driver.
+ * This structure combines the image header with the raw data for the image.
+ * TODO: Restrictions and requirements for data size
  */
 typedef struct _GFX_IMAGE {
   GFX_IMAGE_HEADER m_header;  //! Image information
-  uint16_t         m_data[1]; //! The actual image data
-  } GFX_IMAGE;
-
-/** This structure represents an icon
- *
- * An icon is a monochrome image bit packed into byte values. When rendered
- * the 'on' bits (those set to one) are changed to the specified color. The
- * 'off' bits are ignored and allow the image behind to show though.
- */
-typedef struct _GFX_ICON {
-  GFX_IMAGE_HEADER m_header;  //! Image information
   uint8_t          m_data[1]; //! The actual image data
-  } GFX_ICON;
+  } GFX_IMAGE;
 
 // Revert to normal structure packing
 #pragma pack(pop)
@@ -135,15 +134,10 @@ typedef struct _GFX_ICON {
     & 0xFFFF \
     ))
 
-/** Calculate the length (in bytes) of a line in an icon image
- */
-#define GFX_LINE_LENGTH_ICON(icon) \
-  ((((icon).m_header.m_width - 1) / 8) + 1)
-
 /** Calculate the length (in bytes) of a line in an image
  */
-#define GFX_LINE_LENGTH_IMAGE(image) \
-  ((((image).m_header.m_width * 4 - 1) / 8) + 1)
+#define GFX_LINE_LENGTH(image, bpp) \
+  ((((image).m_header.m_width * (bpp) - 1) / 8) + 1)
 
 //---------------------------------------------------------------------------
 // Graphics driver SPI
@@ -171,17 +165,17 @@ typedef GFX_RESULT (*_gfx_PutPixel)(uint16_t x, uint16_t y, GFX_COLOR color);
 /** Fill a region with the specified color */
 typedef GFX_RESULT (*_gfx_FillRegion)(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, GFX_COLOR color);
 
-/** Draw an icon to the display */
-typedef GFX_RESULT (*_gfx_DrawIcon)(uint16_t x, uint16_t y, GFX_ICON *pIcon, GFX_COLOR color);
+/** Draw a monochrome image to the display */
+typedef GFX_RESULT (*_gfx_DrawIcon)(uint16_t x, uint16_t y, GFX_IMAGE *pIcon, uint8_t sx, uint8_t sy, uint8_t w, uint8_t h, GFX_IMAGE *pMask, GFX_COLOR color);
 
-/** Draw a portion of an icon to the display */
-typedef GFX_RESULT (*_gfx_DrawIconPortion)(uint16_t x, uint16_t y, GFX_ICON *pIcon, uint8_t sx, uint8_t sy, uint8_t w, uint8_t h, GFX_COLOR color);
+/** Draw a 4 bit image to the display */
+typedef GFX_RESULT (*_gfx_DrawImage4)(uint16_t x, uint16_t y, GFX_IMAGE *pImage, uint8_t sx, uint8_t sy, uint8_t w, uint8_t h, GFX_IMAGE *pMask, GFX_PALETTE pPalette);
+
+/** Draw a 16 bit image to the display */
+typedef GFX_RESULT (*_gfx_DrawImage16)(uint16_t x, uint16_t y, GFX_IMAGE *pImage, uint8_t sx, uint8_t sy, uint8_t w, uint8_t h, GFX_IMAGE *pMask);
 
 /** Draw an image to the display */
-typedef GFX_RESULT (*_gfx_DrawImage)(uint16_t x, uint16_t y, GFX_IMAGE *pImage, GFX_PALETTE pPalette);
-
-/** Draw a portion of an image to the display */
-typedef GFX_RESULT (*_gfx_DrawImagePortion)(uint16_t x, uint16_t y, GFX_IMAGE *pImage, uint8_t sx, uint8_t sy, uint8_t w, uint8_t h, GFX_PALETTE pPalette);
+typedef GFX_RESULT (*_gfx_DrawImage)(uint16_t x, uint16_t y, GFX_IMAGE *pImage, uint8_t sx, uint8_t sy, uint8_t w, uint8_t h, GFX_IMAGE *pMask, GFX_COLOR color, GFX_PALETTE pPalette);
 
 /** Draw a line from one point to another */
 typedef GFX_RESULT (*_gfx_DrawLine)(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, GFX_COLOR color);
@@ -211,10 +205,10 @@ typedef struct _GFX_DRIVER {
   _gfx_SetClip          m_pfSetClip;          //! Set a clipping rectangle
   _gfx_PutPixel         m_pfPutPixel;         //! Place a single pixel
   _gfx_FillRegion       m_pfFillRegion;       //! Fill a region with a single color
-  _gfx_DrawIcon         m_pfDrawIcon;         //! Draw an entire icon
-  _gfx_DrawIconPortion  m_pfDrawIconPortion;  //! Draw a portion of an icon
-  _gfx_DrawImage        m_pfDrawImage;        //! Draw an entire image
-  _gfx_DrawImagePortion m_pfDrawImagePortion; //! Draw a portion of an image
+  _gfx_DrawIcon         m_pfDrawIcon;         //! Draw a monochrome image
+  _gfx_DrawImage4       m_pfDrawImage4;       //! Draw a 4 bit image
+  _gfx_DrawImage16      m_pfDrawImage16;      //! Draw a 16 bit image
+  _gfx_DrawImage        m_pfDrawImage;        //! Draw an image
   _gfx_DrawLine         m_pfDrawLine;         //! Draw a line
   _gfx_DrawBox          m_pfDrawBox;          //! Draw a box
   _gfx_CheckEvents      m_pfCheckEvents;      //! Check for pending events
@@ -288,17 +282,17 @@ const void *gfx_Framebuffer();
  */
 #define gfx_FillRegion(x1, y1, x2, y2, color) (*g_GfxDriver.m_pfFillRegion)(x1, y1, x2, y2, color)
 
-/** Draw an icon to the display */
-#define gfx_DrawIcon(x, y, pIcon, color) (*g_GfxDriver.m_pfDrawIcon)(x, y, pIcon, color)
-
 /** Draw a portion of an icon to the display */
-#define gfx_DrawIconPortion(x, y, pIcon, sx, sy, w, h, color) (*g_GfxDriver.m_pfDrawIconPortion)(x, y, pIcon, sx, sy, w, h, color)
-
-/** Draw an image to the display */
-#define gfx_DrawImage(x, y, pImage, pPalette) (*g_GfxDriver.m_pfDrawImage)(x, y, pImage, pPalette)
+#define gfx_DrawIcon(x, y, pIcon, sx, sy, w, h, pMask, color) (*g_GfxDriver.m_pfDrawIcon)(x, y, pIcon, sx, sy, w, h, pMask, color)
 
 /** Draw a portion of an image to the display */
-#define gfx_DrawImagePortion(x, y, pImage, sx, sy, w, h, pPalette) (*g_GfxDriver.m_pfDrawImagePortion)(x, y, pImage, sx, sy, w, h, pPalette)
+#define gfx_DrawImage4(x, y, pImage, sx, sy, w, h, pMask, pPalette) (*g_GfxDriver.m_pfDrawImage4)(x, y, pImage, sx, sy, w, h, pMask, pPalette)
+
+/** Draw a portion of an image to the display */
+#define gfx_DrawImage16(x, y, pImage, sx, sy, w, h, pMask) (*g_GfxDriver.m_pfDrawImage16)(x, y, pImage, sx, sy, w, h, pMask)
+
+/** Draw a portion of an image to the display */
+#define gfx_DrawImage(x, y, pImage, sx, sy, w, h, pMask, color, pPalette) (*g_GfxDriver.m_pfDrawImage)(x, y, pImage, sx, sy, w, h, pMask, color, pPalette)
 
 /** Draw a line from one point to another */
 #define gfx_DrawLine(x1, y1, x2, y2, color) (*g_GfxDriver.m_pfDrawLine)(x1, y1, x2, y2, color)

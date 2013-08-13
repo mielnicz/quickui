@@ -26,17 +26,17 @@ GFX_RESULT gfx_common_SetClip(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2
  */
 GFX_RESULT gfx_common_FillRegion(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, GFX_COLOR color);
 
-/** Draw an icon to the display */
-GFX_RESULT gfx_common_DrawIcon(uint16_t x, uint16_t y, GFX_ICON *pIcon, GFX_COLOR color);
-
 /** Draw a portion of an icon to the display */
-GFX_RESULT gfx_common_DrawIconPortion(uint16_t x, uint16_t y, GFX_ICON *pIcon, uint8_t sx, uint8_t sy, uint8_t w, uint8_t h, GFX_COLOR color);
-
-/** Draw an image to the display */
-GFX_RESULT gfx_common_DrawImage(uint16_t x, uint16_t y, GFX_IMAGE *pImage, GFX_PALETTE pPalette);
+GFX_RESULT gfx_common_DrawIcon(uint16_t x, uint16_t y, GFX_IMAGE *pIcon, uint8_t sx, uint8_t sy, uint8_t w, uint8_t h, GFX_IMAGE *pMask, GFX_COLOR color);
 
 /** Draw a portion of an image to the display */
-GFX_RESULT gfx_common_DrawImagePortion(uint16_t x, uint16_t y, GFX_IMAGE *pImage, uint8_t sx, uint8_t sy, uint8_t w, uint8_t h, GFX_PALETTE pPalette);
+GFX_RESULT gfx_common_DrawImage4(uint16_t x, uint16_t y, GFX_IMAGE *pImage, uint8_t sx, uint8_t sy, uint8_t w, uint8_t h, GFX_IMAGE *pMask, GFX_PALETTE pPalette);
+
+/** Draw a portion of an image to the display */
+GFX_RESULT gfx_common_DrawImage16(uint16_t x, uint16_t y, GFX_IMAGE *pImage, uint8_t sx, uint8_t sy, uint8_t w, uint8_t h, GFX_IMAGE *pMask);
+
+/** Draw a portion of an image to the display */
+GFX_RESULT gfx_common_DrawImage(uint16_t x, uint16_t y, GFX_IMAGE *pImage, uint8_t sx, uint8_t sy, uint8_t w, uint8_t h, GFX_IMAGE *pMask, GFX_COLOR color, GFX_PALETTE pPalette);
 
 /** Draw a line from one point to another */
 GFX_RESULT gfx_common_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, GFX_COLOR color);

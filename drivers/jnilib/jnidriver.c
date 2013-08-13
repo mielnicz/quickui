@@ -177,7 +177,7 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawIcon(JNIEnv *
   if((icon<0)||(icon>=g_nextIndex))
     return (jint)GFX_RESULT_INTERNAL;
   // Now draw it
-  return (jint)gfx_DrawIcon(x, y, (GFX_ICON *)&g_assets[icon], color);
+  return (jint)gfx_DrawIcon(x, y, (GFX_IMAGE *)&g_assets[icon], 0, 0, -1, -1, color, NULL);
   }
 
 /*
@@ -189,7 +189,7 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawIconPortion(J
   if((icon<0)||(icon>=g_nextIndex))
     return (jint)GFX_RESULT_INTERNAL;
   // Now draw it
-  return (jint)gfx_DrawIconPortion(x, y, (GFX_ICON *)&g_assets[icon], sx, sy, w, h, color);
+  return (jint)gfx_DrawIcon(x, y, (GFX_IMAGE *)&g_assets[icon], sx, sy, w, h, color, NULL);
   }
 
 /*
