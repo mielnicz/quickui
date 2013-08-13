@@ -137,7 +137,7 @@ typedef struct _GFX_IMAGE {
 /** Calculate the length (in bytes) of a line in an image
  */
 #define GFX_LINE_LENGTH(image, bpp) \
-  ((((image).m_header.m_width * (bpp) - 1) / 8) + 1)
+  ((((image)->m_header.m_width * (bpp) - 1) / 8) + 1)
 
 //---------------------------------------------------------------------------
 // Graphics driver SPI

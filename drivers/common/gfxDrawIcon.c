@@ -12,76 +12,6 @@
 #include <quickgfx.h>
 #include <gfxdriver.h>
 
-//---------------------------------------------------------------------------
-// Helper functions
-//---------------------------------------------------------------------------
-
-//--- Local static variables
-static GFX_IMAGE *m_pIcon;      //! Pointer to the icon being used
-static uint16_t   m_bpl;        //! Bytes per line
-static uint16_t   m_width;      //! Width of the icon
-static uint16_t   m_height;     //! Height of the icon
-static GFX_IMAGE *m_pMask;      //! Pointer to the icon being used
-static uint16_t   m_bplMask;    //! Bytes per line
-static uint16_t   m_widthMask;  //! Width of the icon
-static uint16_t   m_heightMask; //! Height of the icon
-
-/** Initialise state for a particular icon
- *
- */
-static void initIcon(GFX_IMAGE *pIcon) {
-  m_pIcon = pIcon;
-  m_width = pIcon->m_header.m_width, m_width++;
-  m_height = pIcon->m_header.m_height, m_height++;
-  m_bpl = (m_width / 8) + (((m_width % 8)==0)?0:1);
-  }
-
-/** Get the value of a single pixel in the source
- *
- */
-static bool getPixel(uint16_t x, uint16_t y) {
-  uint16_t offset;
-  uint8_t mask;
-  // Make sure the co-ordinates are in range
-  if((x>=m_width)||(y>=m_height))
-    return false;
-  // Calculate offset and mask for the source pixel
-  offset = (y * m_bpl) + (x / 8);
-  mask = 0x80 >> (x % 8);
-  // Return the result
-  return m_pIcon->m_data[offset]&mask;
-  }
-
-/** Initialise state for a particular mask
- *
- */
-static void initMask(GFX_IMAGE *pMask) {
-  m_pMask = pMask;
-  m_widthMask = pMask->m_header.m_width, m_width++;
-  m_heightMask = pMask->m_header.m_height, m_height++;
-  m_bplMask = (m_widthMask / 8) + (((m_widthMask % 8)==0)?0:1);
-  }
-
-/** Get the value of a single pixel in the source
- *
- */
-static bool getMaskPixel(uint16_t x, uint16_t y) {
-  uint16_t offset;
-  uint8_t mask;
-  // Make sure the co-ordinates are in range
-  if((x>=m_widthMask)||(y>=m_heightMask))
-    return false;
-  // Calculate offset and mask for the source pixel
-  offset = (y * m_bplMask) + (x / 8);
-  mask = 0x80 >> (x % 8);
-  // Return the result
-  return m_pMask->m_data[offset]&mask;
-  }
-
-//---------------------------------------------------------------------------
-// Public functions
-//---------------------------------------------------------------------------
-
 /** Draw a portion of an icon to the display
  *
  * Another straight forward, brute force implentation. Once again it depends
@@ -100,20 +30,21 @@ static bool getMaskPixel(uint16_t x, uint16_t y) {
  */
 GFX_RESULT gfx_common_DrawIcon(uint16_t x, uint16_t y, GFX_IMAGE *pIcon, uint8_t sx, uint8_t sy, uint8_t w, uint8_t h, GFX_IMAGE *pMask, GFX_COLOR color) {
   uint16_t dx, dy;
+  MASK_INFO infoIcon, infoMask;
   // Verify image data
   if((pIcon==NULL)||(pIcon->m_header.m_bpp!=IMAGE_BPP_1))
     return GFX_RESULT_BADARG;
-  initIcon(pIcon);
+  maskInitInfo(&infoIcon, pIcon);
   // Handle using a mask
   if(pMask!=NULL) {
     // Make sure the mask is a monochrom image
     if((pMask->m_header.m_bpp!=IMAGE_BPP_1)||(pMask->m_header.m_width!=pIcon->m_header.m_width)||(pMask->m_header.m_height!=pIcon->m_header.m_height))
       return GFX_RESULT_BADARG;
-    initMask(pMask);
+    maskInitInfo(&infoMask, pMask);
     // Draw the pixels
     for(dy=0;dy<h;dy++) {
       for(dx=0;dx<w;dx++) {
-        if(getPixel(sx + dx, sy + dy)&&getMaskPixel(sx + dx, sy + dy))
+        if(maskGetPixel(&infoIcon, sx + dx, sy + dy)&&maskGetPixel(&infoMask, sx + dx, sy + dy))
           gfx_PutPixel(x + dx, y + dy, color);
         }
       }
@@ -122,7 +53,7 @@ GFX_RESULT gfx_common_DrawIcon(uint16_t x, uint16_t y, GFX_IMAGE *pIcon, uint8_t
     // Draw the pixels
     for(dy=0;dy<h;dy++) {
       for(dx=0;dx<w;dx++) {
-        if(getPixel(sx + dx, sy + dy))
+        if(maskGetPixel(&infoIcon, sx + dx, sy + dy))
           gfx_PutPixel(x + dx, y + dy, color);
         }
       }

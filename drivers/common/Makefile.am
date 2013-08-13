@@ -11,4 +11,5 @@ libgfxcommon_la_SOURCES = \
     gfxDrawLine.c \
     gfxFillRegion.c \
     gfxEvents.c \
-    gfxSetClip.c
+    gfxSetClip.c \
+    masking.c
