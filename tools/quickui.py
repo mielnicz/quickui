@@ -109,14 +109,14 @@ def createColor(red, green, blue):
 
 """ Write an image header
 """
-def writeImageHeader(output, width, height):
-  output.write(pack("BB", width - 1, height - 1))
+def writeImageHeader(output, width, height, bpp):
+  output.write(pack("BBBB", width - 1, height - 1, bpp, 0))
 
 """ Read an image header
 """
 def readImageHeader(input):
-  width, height = unpack("BB", input[:2])
-  return input[2:], width + 1, height + 1
+  width, height, bpp, reserved = unpack("BBBB", input[:4])
+  return input[4:], width + 1, height + 1, bpp
 
 """ Write image data
 """
@@ -261,7 +261,10 @@ def readImage(filename):
       input = input + data
       data = content.read()
   # Read the image header
-  input, width, height = readImageHeader(input)
+  input, width, height, bpp = readImageHeader(input)
+  if bpp <> 1:
+    print "ERROR: The image file is not a palette image (bpp = %i)" % bpp
+    exit(1)
   # Now read the data for the Image
   input, bits = readImageData(input, width, height)
   return width, height, bits
@@ -272,7 +275,7 @@ def writeImage(filename, width, height, bits):
   # Open the file
   output = open(filename, "wb")
   # Write the header
-  writeImageHeader(output, width, height)
+  writeImageHeader(output, width, height, 4)
   # Write the data
   writeImageData(output, width, height, bits)
   # All done
@@ -289,7 +292,10 @@ def readIcon(filename):
       input = input + data
       data = content.read()
   # Read the image header
-  input, width, height = readImageHeader(input)
+  input, width, height, bpp = readImageHeader(input)
+  if bpp <> 1:
+    print "ERROR: The image file is not an icon (bpp = %i)" % bpp
+    exit(1)
   # Now read the data for the Icon
   input, bits = readIconData(input, width, height)
   return width, height, bits
@@ -300,7 +306,7 @@ def writeIcon(filename, width, height, bits):
   # Open the file
   output = open(filename, "wb")
   # Write the header
-  writeImageHeader(output, width, height)
+  writeImageHeader(output, width, height, 1)
   # Write the data
   writeIconData(output, width, height, bits)
   # All done
@@ -319,7 +325,7 @@ def writeFont(filename, numchars, height, default, charmap, imgwidth, imgheight,
   # Write the font header
   writeFontHeader(output, numchars, height, default, charmap)
   # Write the icon header
-  writeImageHeader(output, imgwidth, imgheight)
+  writeImageHeader(output, imgwidth, imgheight, 1)
   # Write the icon data
   writeIconData(output, imgwidth, imgheight, bits)
   # All done
