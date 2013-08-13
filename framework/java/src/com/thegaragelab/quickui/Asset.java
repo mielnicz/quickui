@@ -141,7 +141,7 @@ public class Asset {
       return null;
     // Now create the instance
     icon = new Icon(m_buffer, 0, size);
-    if(icon.getHandle()<0)
+    if((icon.getHandle()<0)||(icon.getBitsPerPixel()!=1))
       return null;
     // And register it in the cache of assets
     addAsset(name, icon);

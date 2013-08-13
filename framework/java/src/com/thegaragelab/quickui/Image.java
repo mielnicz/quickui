@@ -21,6 +21,7 @@ public class Image extends Asset implements IDimension {
   //--- Instance variables
   private int m_width;  //! Width of the image in pixels
   private int m_height; //! Height of the image in pixels
+  private int m_bpp;    //! Bits per pixel for this image
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -36,17 +37,31 @@ public class Image extends Asset implements IDimension {
     // Verify the data
     ByteBuffer buffer = ByteBuffer.wrap(data, offset, size);
     buffer.order(ByteOrder.LITTLE_ENDIAN);
-    m_width = 1 + buffer.get();
-    m_height = 1 + buffer.get();
+    m_width = (buffer.get() & 0xFF) + 1;
+    m_height = (buffer.get() & 0xFF) + 1;
+    m_bpp = (buffer.get() & 0xFF);
+    buffer.get(); // Skip reserved byte
     // Determine the size of the data we expect
-    int expected = (m_width / 2) + (((m_width%2)==0)?0:1);
+    int expected = ((m_width * m_bpp) / 8) + ((((m_width * m_bpp) % 8)==0)?0:1);
     expected = expected * m_height;
-    if(size!=(expected + 2))
+    if(size!=(expected + 4))
       return;
     // Try and register it
     m_handle = Driver.getInstance().registerAsset(Asset.IMAGE, data, offset, size);
     if(m_handle<0)
       return;
+    }
+  
+  //-------------------------------------------------------------------------
+  // Image specific operations
+  //-------------------------------------------------------------------------
+  
+  /** Get the bits per pixel for this image.
+   * 
+   * @return the number of bits per pixel in the image.
+   */
+  public int getBitsPerPixel() {
+    return m_bpp;
     }
   
   //-------------------------------------------------------------------------
