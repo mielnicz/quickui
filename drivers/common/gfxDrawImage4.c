@@ -30,7 +30,7 @@ static int getImage4Pixel(GFX_IMAGE *pImage, uint16_t x, uint16_t y, int bpl) {
 
 /** Draw a portion of an image to the display
  *
- * Another straight forward, brute force implentation. Once again it depends
+ * Another straight forward, brute force implementation. Once again it depends
  * on the drivers PutPixel implementation to handle any clipping required
  * and doesn't do any error or bounds checking of it's parameters.
  *
