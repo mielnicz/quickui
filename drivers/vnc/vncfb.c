@@ -180,8 +180,8 @@ GFX_RESULT gfx_Init(uint16_t width, uint16_t height) {
   g_GfxDriver.m_pfFillRegion = gfx_common_FillRegion;
   g_GfxDriver.m_pfDrawIcon = gfx_common_DrawIcon;
   g_GfxDriver.m_pfDrawImage = gfx_common_DrawImage;
-  g_GfxDriver.m_pfDrawImage4 = gfx_common_DrawImage;
-  g_GfxDriver.m_pfDrawImage16 = gfx_common_DrawImage;
+  g_GfxDriver.m_pfDrawImage4 = gfx_common_DrawImage4;
+  g_GfxDriver.m_pfDrawImage16 = gfx_common_DrawImage16;
   g_GfxDriver.m_pfDrawLine = gfx_common_DrawLine;
   g_GfxDriver.m_pfDrawBox = gfx_common_DrawBox;
   g_GfxDriver.m_pfCheckEvents = gfx_vnc_CheckEvents;
