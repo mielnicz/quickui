@@ -36,9 +36,9 @@ GFX_RESULT gfx_common_DrawIcon(uint16_t x, uint16_t y, GFX_IMAGE *pIcon, uint8_t
     return GFX_RESULT_BADARG;
   maskInitInfo(&infoIcon, pIcon);
   // Set the width and height if needed
-  if(w<0)
+  if((w<0)||((sx + w)>(pIcon->m_header.m_width + 1)))
     w = pIcon->m_header.m_width - sx;
-  if(h<0)
+  if((h<0)||((sy + h)>(pIcon->m_header.m_height + 1)))
     h = pIcon->m_header.m_height - sy;
   // Handle using a mask
   if(pMask!=NULL) {
