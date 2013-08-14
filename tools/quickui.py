@@ -30,7 +30,25 @@ MAX_IMAGE_HEIGHT = 256
 """ Process an RGB file
 """
 def imageToBits_RGB(image, oncolor):
-  print "  Processing RGB graphics file."
+  width, height = image.size
+  width = min(width, MAX_IMAGE_WIDTH)
+  height = min(height, MAX_IMAGE_HEIGHT)
+  print "  Processing %i x %i image." % (width, height)
+  bits = ""
+  for y in range(height):
+    line = ""
+    for x in range(width):
+      color = image.getpixel((x, y))
+      if (color[0] == oncolor[0]) and (color[1] == oncolor[1]) and (color[2] == oncolor[2]):
+        line = line + "1"
+      else:
+        line = line + "0"
+    # Pad the line to a full number of bytes
+    while (len(line) % 8) <> 0:
+      line = line + "0"
+    bits = bits + line
+  # All done
+  return width, height, bits
 
 """ Process an RGBA file
 """
@@ -126,19 +144,16 @@ def writeImageData(output, width, height, bits):
   if len(bits) <> size:
     print "ERROR: Insufficient data provided for image (Wanted %i, got %i)" % (size, len(bits))
     exit(1)
-  nwidth = int(width / 2)
-  if (width % 2) > 0:
-    nwidth = nwidth + 1
   index = 0
   nybbles = 0
   val = 0
   for y in range(height):
-    for x in range(nwidth):
+    for x in range(width):
       val = (val & 0x0F) << 4
       if x < width:
         val = val | (bits[index] & 0x0F)
         index = index + 1
-      nybbles = nyblles + 1
+      nybbles = nybbles + 1
       if (nybbles % 2) == 0:
         output.write(pack("B", val & 0xFF))
 

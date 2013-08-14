@@ -13,6 +13,9 @@ from quickui import *
 # Text file processing
 #----------------------------------------------------------------------------
 
+def chunk(seq, size):
+  return [seq[i:i+size] for i in range(0, len(seq), size)]
+
 """ Process an image file.
 """
 def processImageFile(filename):
@@ -36,7 +39,7 @@ def processImageFile(filename):
   # Save the palette
   outfile = splitext(filename)[0] + EXTENSION_PALETTE
   print "  Writing palette to %s" % outfile
-  pal = [ (x, y, z) for x, y, z in image16.palette.getdata() ]
+  pal = [map(ord, bytes) for bytes in chunk(image16.im.getpalette(), 3)][:16]
   writePalette(outfile, pal)
   # Save the image
   outfile = splitext(filename)[0] + EXTENSION_IMAGE
@@ -44,8 +47,8 @@ def processImageFile(filename):
   results = list()
   for y in range(min(image16.size[1], 256)):
     for x in range(min(image16.size[0], 256)):
-      results.append(image16.getpixel((x, y))
-  writeImage(outfile, pal)
+      results.append(image16.getpixel((x, y)))
+  writeImage(outfile, image.size[0], image.size[1], results)
 
 #----------------------------------------------------------------------------
 # Main program
