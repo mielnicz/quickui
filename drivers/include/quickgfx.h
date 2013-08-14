@@ -87,9 +87,9 @@ typedef struct _GFX_TOUCH_EVENT_INFO {
  *
  */
 typedef enum _IMAGE_BPP {
-  IMAGE_BPP_1  = 0, //! 1 bpp (monochrome) image.
-  IMAGE_BPP_4  = 1, //! 4 bpp (palette) image.
-  IMAGE_BPP_16 = 2, //! 16 bpp (rrrrrggggggbbbbb) image.
+  IMAGE_BPP_1  = 1,  //! 1 bpp (monochrome) image.
+  IMAGE_BPP_4  = 4,  //! 4 bpp (palette) image.
+  IMAGE_BPP_16 = 16, //! 16 bpp (rrrrrggggggbbbbb) image.
   } IMAGE_BPP;
 
 /** Image header information
