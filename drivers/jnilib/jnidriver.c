@@ -198,7 +198,7 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawIconPortion(J
  * Signature: (IIII)I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawImage(JNIEnv *pEnv, jobject obj, jint x, jint y, jint image, jint palette) {
-  return (jint)gfx_DrawImage4(x, y, (GFX_IMAGE *)&g_assets[image], 0, 0, -1, -1, (GFX_COLOR *)&g_assets[palette], NULL);
+  return (jint)gfx_DrawImage4(x, y, (GFX_IMAGE *)&g_assets[image], 0, 0, -1, -1, NULL, (GFX_COLOR *)&g_assets[palette]);
   }
 
 /*
@@ -207,7 +207,7 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawImage(JNIEnv 
  * Signature: (IIIIIIII)I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawImagePortion(JNIEnv *pEnv, jobject obj, jint x, jint y, jint image, jint sx, jint sy, jint w, jint h, jint palette) {
-  return (jint)gfx_DrawImage4(x, y, (GFX_IMAGE *)&g_assets[image], sx, sy, w, h, (GFX_COLOR *)&g_assets[palette], NULL);
+  return (jint)gfx_DrawImage4(x, y, (GFX_IMAGE *)&g_assets[image], sx, sy, w, h, NULL, (GFX_COLOR *)&g_assets[palette]);
   }
 
 /*
