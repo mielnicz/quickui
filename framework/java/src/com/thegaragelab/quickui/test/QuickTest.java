@@ -10,6 +10,7 @@ package com.thegaragelab.quickui.test;
 //--- Imports
 import com.thegaragelab.quickui.*;
 import com.thegaragelab.quickui.controls.*;
+import com.thegaragelab.quickui.dialogs.*;
 
 /** A simple test application for the framework
  *
@@ -67,7 +68,7 @@ public class QuickTest extends Application {
        Button.EVENT_TOUCHED,
        new IControlEventHandler() {
          public void onEvent(IWindow source, int event, Object params) {
-           System.out.println("Touch!");
+           Application.getInstance().showDialog(new DialogBusy("Loading ..."));
            }
          }
        );

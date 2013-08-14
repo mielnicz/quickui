@@ -304,6 +304,7 @@ class Driver implements ISurface {
    * @param palette the Palette to use to display the image.
    */
   public void drawImage(IPoint point, Image image, Palette palette) {
+    gfxDrawImage(point.getX(), point.getY(), image.getHandle(), palette.getHandle());
     }
   
   /** Draw a portion of an Image to the screen.
@@ -314,6 +315,7 @@ class Driver implements ISurface {
    * @param portion the Rectangle describing the portion of the image to display.
    */
   public void drawImage(IPoint point, Image image, Palette palette, IRectangle portion) {
+    gfxDrawImagePortion(point.getX(), point.getY(), image.getHandle(), portion.getX(), portion.getY(), portion.getWidth(), portion.getHeight(), palette.getHandle());
     }
   
   /** Draw a single character using the given font.

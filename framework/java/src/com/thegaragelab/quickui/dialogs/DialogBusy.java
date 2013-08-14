@@ -21,11 +21,15 @@ import com.thegaragelab.quickui.controls.*;
 public class DialogBusy extends Dialog implements SimpleTimer.Listener {
   //--- Constants
   private static final long   TEST_INTERVAL   = 250;
-  private static final String ANIMATION_ASSET = "rotator";
-  
+  private static final String ANIMATION_ASSET = "loader";
+  private static final int    IMAGE_SIZE      = 24;
+  private static final int    IMAGE_WIDTH     = 4;
+  private static final int    IMAGE_FRAMES    = 12;
+
   //--- Instance variables
   private SimpleTimer m_timer;    //! The timer used to control testing
-  private Icon        m_icon;     //! The icon to animate
+  private Image       m_image;    //! The image to animate
+  private Palette     m_palette;  //! The palette to use for colors
   private int         m_frame;    //! The current frame of the icon
   private Rectangle   m_iconRect; //! Where to place the icon
   
@@ -39,8 +43,8 @@ public class DialogBusy extends Dialog implements SimpleTimer.Listener {
   public DialogBusy(String text) {
     super();
     // Now add the text
-    if(m_icon!=null)
-      new Label(this, new Rectangle(m_icon.getHeight() + 4, 2, getWidth() - m_icon.getHeight() - 4, getHeight() - 4), text);
+    if(m_image!=null)
+      new Label(this, new Rectangle(m_image.getHeight() + 4, 2, getWidth() - m_image.getHeight() - 4, getHeight() - 4), text);
     else
       new Label(this, new Rectangle(2, 2, getWidth() - 4, getHeight() - 4), text);
     }
@@ -64,13 +68,9 @@ public class DialogBusy extends Dialog implements SimpleTimer.Listener {
   public void onCreate() {
     super.onCreate();
     // Load the icon to use for animation
-    m_icon = Asset.loadIcon(ANIMATION_ASSET);
-    m_iconRect = new Rectangle(
-      1,
-      1,
-      m_icon.getHeight(),
-      m_icon.getHeight()
-      );
+    m_image = Asset.loadImage(ANIMATION_ASSET);
+    m_palette = Asset.loadPalette("theme");
+    m_iconRect = new Rectangle(1, 1, IMAGE_SIZE, IMAGE_SIZE);
     }
 
   /** Paint the window
@@ -81,7 +81,7 @@ public class DialogBusy extends Dialog implements SimpleTimer.Listener {
   public void onPaint() {
     super.onPaint();
     // Do we have an icon to paint ?
-    if(m_icon==null)
+    if(m_image==null)
       return;
     // Clear the icon background
     fillRect(
@@ -89,17 +89,17 @@ public class DialogBusy extends Dialog implements SimpleTimer.Listener {
       Application.getInstance().getSystemColor(Application.SYS_COLOR_DLG_BACKGROUND)
       );
     // Calculate the new frame of the icon and draw it
-    m_frame = m_frame % (m_icon.getWidth() / m_icon.getHeight());
+    m_frame = m_frame % IMAGE_FRAMES;
     Rectangle slice = new Rectangle(
-      m_icon.getHeight() * m_frame,
-      0,
-      m_icon.getHeight(),
-      m_icon.getHeight()
+      IMAGE_SIZE * (m_frame % IMAGE_WIDTH),
+      IMAGE_SIZE * (m_frame / IMAGE_WIDTH),
+      IMAGE_SIZE,
+      IMAGE_SIZE
       );
-    this.drawIcon(
+    this.drawImage(
       m_iconRect,
-      m_icon,
-      Application.getInstance().getSystemColor(Application.SYS_COLOR_ICON_SUCCESS),
+      m_image,
+      m_palette,
       slice
       );
     }
