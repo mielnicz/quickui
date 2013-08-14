@@ -35,9 +35,14 @@ GFX_RESULT gfx_common_DrawIcon(uint16_t x, uint16_t y, GFX_IMAGE *pIcon, uint8_t
   if((pIcon==NULL)||(pIcon->m_header.m_bpp!=IMAGE_BPP_1))
     return GFX_RESULT_BADARG;
   maskInitInfo(&infoIcon, pIcon);
+  // Set the width and height if needed
+  if(w<0)
+    w = pIcon->m_header.m_width - sx;
+  if(h<0)
+    h = pIcon->m_header.m_height - sy;
   // Handle using a mask
   if(pMask!=NULL) {
-    // Make sure the mask is a monochrom image
+    // Make sure the mask is a monochrome image
     if((pMask->m_header.m_bpp!=IMAGE_BPP_1)||(pMask->m_header.m_width!=pIcon->m_header.m_width)||(pMask->m_header.m_height!=pIcon->m_header.m_height))
       return GFX_RESULT_BADARG;
     maskInitInfo(&infoMask, pMask);
