@@ -48,7 +48,7 @@ def processImageFile(filename):
   for y in range(min(image16.size[1], 256)):
     for x in range(min(image16.size[0], 256)):
       results.append(image16.getpixel((x, y)))
-  writeImage(outfile, image.size[0], image.size[1], results)
+  writeImage(outfile, min(image16.size[0], 256), min(image16.size[1], 256), results)
 
 #----------------------------------------------------------------------------
 # Main program
