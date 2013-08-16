@@ -374,56 +374,20 @@ public class Application extends Container {
     m_driver.drawBox(rect, color);
     }
 
-  /** Draw an Icon to the screen.
+  /** Draw an Image to the screen.
    * 
    * @param point the Point specifying the top left corner of the icon.
-   * @param icon the Icon to display.
-   * @param color the Color to use for the solid parts of the icon.
+   * @param image the Image to display.
+   * @param source the Rectangle describing the portion of the image to display (optional - may be null).
+   * @param mask the Icon to use as a mask (optional - may be null).
+   * @param color the color to use for icons (optional - default is black).
+   * @param palette the Palette to use to display the image (only required for 4bpp images).
    */
-  @Override
-  public void drawIcon(IPoint point, Icon icon, Color color) {
+  public void drawImage(IPoint point, Image image, IRectangle source, Icon mask, Color color, Palette palette) {
     point = point.translate(m_offset);
-    m_driver.drawIcon(point, icon, color);
+    m_driver.drawImage(point, image, source, mask, color, palette);
     }
 
-  /** Draw a portion of an Icon to the screen.
-   * 
-   * @param point the Point specifying the top left corner of the icon.
-   * @param icon the Icon to display.
-   * @param color the Color to use for the solid parts of the icon.
-   * @param portion a Rectangle specifying the portion of the icon to draw.
-   */
-  @Override
-  public void drawIcon(IPoint point, Icon icon, Color color, IRectangle portion) {
-    point = point.translate(m_offset);
-    m_driver.drawIcon(point, icon, color, portion);
-    }
-  
-  /** Draw an Image to the screen.
-   * 
-   * @param point the Point specifying the top left corner of the icon.
-   * @param image the Image to display.
-   * @param palette the Palette to use to display the image.
-   */
-  @Override
-  public void drawImage(IPoint point, Image image, Palette palette) {
-    point = point.translate(m_offset);
-    m_driver.drawImage(point, image, palette);
-    }
-  
-  /** Draw an Image to the screen.
-   * 
-   * @param point the Point specifying the top left corner of the icon.
-   * @param image the Image to display.
-   * @param palette the Palette to use to display the image.
-   * @param portion the Rectangle describing the portion of the image to display.
-   */
-  @Override
-  public void drawImage(IPoint point, Image image, Palette palette, IRectangle portion) {
-    point = point.translate(m_offset);
-    m_driver.drawImage(point, image, palette, portion);
-    }
-  
   //-------------------------------------------------------------------------
   // Application specific operations
   //-------------------------------------------------------------------------
@@ -463,7 +427,14 @@ public class Application extends Container {
     if((icon<0)||(icon>SYSTEM_ICON_MAX)||(m_icons==null))
       return;
     // Show the icon
-    drawIcon(position, m_icons, color, new Rectangle(icon * SYSTEM_ICON_SIZE, 0, SYSTEM_ICON_SIZE, SYSTEM_ICON_SIZE));
+    drawImage(
+      position, 
+      m_icons,
+      new Rectangle(icon * SYSTEM_ICON_SIZE, 0, SYSTEM_ICON_SIZE, SYSTEM_ICON_SIZE),
+      null,
+      color,
+      null
+      );
     }
   
   /** Get the system font

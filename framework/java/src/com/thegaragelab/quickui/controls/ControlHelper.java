@@ -101,16 +101,18 @@ class ControlHelper {
       }
     // Draw the requested icon
     // TODO: This is not very generic, it assume all icons are on the same line.
-    surface.drawIcon(
+    surface.drawImage(
       where,
       m_icons,
-      color,
       new Rectangle(
         icon * ICON_WIDTH,
         0,
         ICON_WIDTH,
         ICON_HEIGHT
-        )
+        ),
+      null,
+      color,
+      null
       );
     }
   

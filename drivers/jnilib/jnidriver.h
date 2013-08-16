@@ -57,35 +57,11 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxFillRegion
 
 /*
  * Class:     com_thegaragelab_quickui_Driver
- * Method:    gfxDrawIcon
- * Signature: (IIII)I
- */
-JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawIcon
-  (JNIEnv *, jobject, jint, jint, jint, jint);
-
-/*
- * Class:     com_thegaragelab_quickui_Driver
- * Method:    gfxDrawIconPortion
- * Signature: (IIIIIIII)I
- */
-JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawIconPortion
-  (JNIEnv *, jobject, jint, jint, jint, jint, jint, jint, jint, jint);
-
-/*
- * Class:     com_thegaragelab_quickui_Driver
  * Method:    gfxDrawImage
- * Signature: (IIII)I
+ * Signature: (II[BIIII[BI[B)I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawImage
-  (JNIEnv *, jobject, jint, jint, jint, jint);
-
-/*
- * Class:     com_thegaragelab_quickui_Driver
- * Method:    gfxDrawImagePortion
- * Signature: (IIIIIIII)I
- */
-JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawImagePortion
-  (JNIEnv *, jobject, jint, jint, jint, jint, jint, jint, jint, jint);
+  (JNIEnv *, jobject, jint, jint, jbyteArray, jint, jint, jint, jint, jbyteArray, jint, jbyteArray);
 
 /*
  * Class:     com_thegaragelab_quickui_Driver
@@ -105,19 +81,27 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawBox
 
 /*
  * Class:     com_thegaragelab_quickui_Driver
+ * Method:    gfxDrawChar
+ * Signature: ([BIIIB)I
+ */
+JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawChar
+  (JNIEnv *, jobject, jbyteArray, jint, jint, jint, jbyte);
+
+/*
+ * Class:     com_thegaragelab_quickui_Driver
+ * Method:    gfxDrawString
+ * Signature: ([BIII[B)I
+ */
+JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawString
+  (JNIEnv *, jobject, jbyteArray, jint, jint, jint, jbyteArray);
+
+/*
+ * Class:     com_thegaragelab_quickui_Driver
  * Method:    gfxCheckEvents
  * Signature: ()I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxCheckEvents
   (JNIEnv *, jobject);
-
-/*
- * Class:     com_thegaragelab_quickui_Driver
- * Method:    gfxRegisterAsset
- * Signature: (I[BII)I
- */
-JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxRegisterAsset
-  (JNIEnv *, jobject, jint, jbyteArray, jint, jint);
 
 /*
  * Class:     com_thegaragelab_quickui_Driver

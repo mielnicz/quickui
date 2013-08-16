@@ -117,7 +117,14 @@ public class Font extends Asset {
       m_height - 1
       );
     // Now draw the character
-    surface.drawIcon(point, m_icon, color, cell);
+    surface.drawImage(
+      point,
+      m_icon,
+      cell,
+      null,
+      color,
+      null
+      );
     }
   
   /** Draw a string (sequence of characters)
@@ -138,7 +145,14 @@ public class Font extends Asset {
       cell.setX(m_xpos[index]);
       cell.setY(m_ypos[index]);
       cell.setWidth(m_widths[index] - 1);
-      surface.drawIcon(where, m_icon, color, cell);
+      surface.drawImage(
+        where,
+        m_icon,
+        cell,
+        null,
+        color,
+        null
+        );
       where.setX(where.getX() + m_widths[index]);
       }
     }
@@ -232,10 +246,10 @@ public class Font extends Asset {
    * The handle for a font is the handle for the backing icon. Return that
    * if we have it, otherwise we default to the invalid handle.
    */
-  public int getHandle() {
+  public byte[] getData() {
     if(m_icon!=null)
-      return m_icon.getHandle();
-    return super.getHandle();
+      return m_icon.getData();
+    return super.getData();
     }
   
   }

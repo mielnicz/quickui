@@ -48,7 +48,7 @@ public class Asset {
   private static Map<String, Asset> m_assets; //! All loaded assets
   
   //--- Instance variables
-  protected int m_handle; //! The handle assigned to this asset
+  protected byte[] m_data; //! The raw data for this asset
   
   //-------------------------------------------------------------------------
   // Construction and initialisation
@@ -58,7 +58,6 @@ public class Asset {
    * 
    */
   protected Asset() {
-    m_handle = -1;
     }
   
   //-------------------------------------------------------------------------
@@ -141,7 +140,7 @@ public class Asset {
       return null;
     // Now create the instance
     icon = new Icon(m_buffer, 0, size);
-    if((icon.getHandle()<0)||(icon.getBitsPerPixel()!=1))
+    if((icon.getData()==null)||(icon.getBitsPerPixel()!=1))
       return null;
     // And register it in the cache of assets
     addAsset(name, icon);
@@ -166,7 +165,7 @@ public class Asset {
       return null;
     // Now create the instance
     image = new Image(m_buffer, 0, size);
-    if(image.getHandle()<0)
+    if(image.getData()==null)
       return null;
     // And register it in the cache of assets
     addAsset(name, image);
@@ -191,7 +190,7 @@ public class Asset {
       return null;
     // Now create the instance
     palette = new Palette(m_buffer, 0, size);
-    if(palette.getHandle()<0)
+    if(palette.getData()==null)
       return null;
     // And register it in the cache of assets
     addAsset(name, palette);
@@ -216,7 +215,7 @@ public class Asset {
       return null;
     // Now create the instance
     font = new Font(m_buffer, 0, size);
-    if(font.getHandle()<0)
+    if(font.getData()==null)
       return null;
     // And register it in the cache of assets
     addAsset(name, font);
@@ -227,10 +226,14 @@ public class Asset {
   // Getters
   //-------------------------------------------------------------------------
   
-  /** Get the handle for this asset
+  /** Get the raw data for this asset
+   * 
+   * @return a byte array containing the data for this asset. You must never
+   *         modify the contents of this array. If the asset failed to load
+   *         the return value will be null.
    */
-  public int getHandle() {
-    return m_handle;
+  public byte[] getData() {
+    return m_data;
     }
   
   }

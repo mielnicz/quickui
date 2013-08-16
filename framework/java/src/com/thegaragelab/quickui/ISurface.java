@@ -60,39 +60,16 @@ public interface ISurface extends IDimension {
    */
   public void drawBox(IRectangle rect, Color color);
 
-  /** Draw an Icon to the screen.
-   * 
-   * @param point the Point specifying the top left corner of the icon.
-   * @param icon the Icon to display.
-   * @param color the Color to use for the solid parts of the icon.
-   */
-  public void drawIcon(IPoint point, Icon icon, Color color);
-
-  /** Draw a portion of an Icon to the screen.
-   * 
-   * @param point the Point specifying the top left corner of the icon.
-   * @param icon the Icon to display.
-   * @param color the Color to use for the solid parts of the icon.
-   * @param portion a Rectangle specifying the portion of the icon to draw.
-   */
-  public void drawIcon(IPoint point, Icon icon, Color color, IRectangle portion);
-  
   /** Draw an Image to the screen.
    * 
    * @param point the Point specifying the top left corner of the icon.
    * @param image the Image to display.
-   * @param palette the Palette to use to display the image.
+   * @param source the Rectangle describing the portion of the image to display (optional - may be null).
+   * @param mask the Icon to use as a mask (optional - may be null).
+   * @param color the color to use for icons (optional - default is black).
+   * @param palette the Palette to use to display the image (only required for 4bpp images).
    */
-  public void drawImage(IPoint point, Image image, Palette palette);
-  
-  /** Draw a portion of an Image to the screen.
-   * 
-   * @param point the Point specifying the top left corner of the icon.
-   * @param image the Image to display.
-   * @param palette the Palette to use to display the image.
-   * @param portion the Rectangle describing the portion of the image to display.
-   */
-  public void drawImage(IPoint point, Image image, Palette palette, IRectangle portion);
+  public void drawImage(IPoint point, Image image, IRectangle source, Icon mask, Color color, Palette palette);
 
   /** Draw a single character using the given font.
    * 

@@ -17,6 +17,9 @@ import java.util.*;
  * The class is a singleton, only one driver can be used at any given time.
  */
 class Driver implements ISurface {
+  //--- Internal constants
+  private static final Rectangle DEFAULT_SOURCE = new Rectangle(0, 0, -1, -1);
+  
   //--- Instance variables
   private Queue<TouchEvent> m_events; //! The event queue.
   
@@ -111,21 +114,9 @@ class Driver implements ISurface {
    */
   private native int gfxFillRegion(int x1, int y1, int x2, int y2, int color);
 
-  /** Draw an icon to the display 
-   */
-  private native int gfxDrawIcon(int x, int y, int icon, int color);
-
   /** Draw a portion of an icon to the display 
    */
-  private native int gfxDrawIconPortion(int x, int y, int icon, int sx, int sy, int w, int h, int color);
-
-  /** Draw an image to the display 
-   */
-  private native int gfxDrawImage(int x, int y, int image, int palette);
-
-  /** Draw a portion of an image to the display 
-   */
-  private native int gfxDrawImagePortion(int x, int y, int image, int sx, int sy, int w, int h, int palette);
+  private native int gfxDrawImage(int x, int y, byte[] image, int sx, int sy, int w, int h, byte[] mask, int color, byte[] palette);
 
   /** Draw a line from one point to another 
    */
@@ -135,13 +126,19 @@ class Driver implements ISurface {
    */
   private native int gfxDrawBox(int x1, int y1, int x2, int y2, int color);
 
+  /** Draw a single character from a font
+   * 
+   */
+  private native int gfxDrawChar(byte[] font, int x, int y, int color, byte ch);
+  
+  /** Draw a string with the given font
+   * 
+   */
+  private native int gfxDrawString(byte[] font, int x, int y, int color, byte[] text);
+  
   /** Process pending events
    */
   private native int gfxCheckEvents();
-  
-  /** Register an asset
-   */
-  private native int gfxRegisterAsset(int type, byte[] data, int offset, int length);
   
   /** Get the width of the display in pixels
    * 
@@ -276,46 +273,47 @@ class Driver implements ISurface {
     gfxDrawBox(rect.getX(), rect.getY(), rect.getX() + rect.getWidth() - 1, rect.getY() + rect.getHeight() - 1, color.getNativeFormat());
     }
 
-  /** Draw an Icon to the screen.
-   * 
-   * @param point the Point specifying the top left corner of the icon.
-   * @param icon the Icon to display.
-   * @param color the Color to use for the solid parts of the icon.
-   */
-  public void drawIcon(IPoint point, Icon icon, Color color) {
-    gfxDrawIcon(point.getX(), point.getY(), icon.getHandle(), color.getNativeFormat());
-    }
-
-  /** Draw a portion of an Icon to the screen.
-   * 
-   * @param point the Point specifying the top left corner of the icon.
-   * @param icon the Icon to display.
-   * @param color the Color to use for the solid parts of the icon.
-   * @param portion a Rectangle specifying the portion of the icon to draw.
-   */
-  public void drawIcon(IPoint point, Icon icon, Color color, IRectangle portion) {
-    gfxDrawIconPortion(point.getX(), point.getY(), icon.getHandle(), portion.getX(), portion.getY(), portion.getWidth(), portion.getHeight(), color.getNativeFormat());
-    }
-  
   /** Draw an Image to the screen.
    * 
    * @param point the Point specifying the top left corner of the icon.
    * @param image the Image to display.
-   * @param palette the Palette to use to display the image.
+   * @param source the Rectangle describing the portion of the image to display (optional - may be null).
+   * @param mask the Icon to use as a mask (optional - may be null).
+   * @param color the color to use for icons (optional - default is black).
+   * @param palette the Palette to use to display the image (only required for 4bpp images).
    */
-  public void drawImage(IPoint point, Image image, Palette palette) {
-    gfxDrawImage(point.getX(), point.getY(), image.getHandle(), palette.getHandle());
-    }
-  
-  /** Draw a portion of an Image to the screen.
-   * 
-   * @param point the Point specifying the top left corner of the icon.
-   * @param image the Image to display.
-   * @param palette the Palette to use to display the image.
-   * @param portion the Rectangle describing the portion of the image to display.
-   */
-  public void drawImage(IPoint point, Image image, Palette palette, IRectangle portion) {
-    gfxDrawImagePortion(point.getX(), point.getY(), image.getHandle(), portion.getX(), portion.getY(), portion.getWidth(), portion.getHeight(), palette.getHandle());
+  public void drawImage(IPoint point, Image image, IRectangle source, Icon mask, Color color, Palette palette) {
+    // Check parameters here before invoking the call
+    if((point==null)||(image==null))
+      return;
+    // Set up defaults
+    if(source==null)
+      source = new Rectangle(DEFAULT_SOURCE);
+    if(color==null)
+      color = Color.BLACK;
+    byte[] maskData = null;
+    if(mask!=null)
+      maskData = mask.getData();
+    // 4bpp images require a palette
+    byte[] paletteData = null;
+    if(image.getBitsPerPixel()==4) {
+      if(palette==null)
+        return;
+      paletteData = palette.getData();
+      }
+    // Now do the call
+    gfxDrawImage(
+      point.getX(), 
+      point.getY(),
+      image.getData(),
+      source.getX(),
+      source.getY(),
+      source.getWidth(),
+      source.getHeight(),
+      maskData,
+      color.getNativeFormat(),
+      paletteData
+      );
     }
   
   /** Draw a single character using the given font.
@@ -343,24 +341,6 @@ class Driver implements ISurface {
   //-------------------------------------------------------------------------
   // Driver specific operations
   //-------------------------------------------------------------------------
-  
-  /** Register an asset
-   * 
-   * @param type the type of the asset being registered.
-   * @param data the byte array containing the data for the asset.
-   * @param offset the offset into the data array where the asset is.
-   * @param size the size of the asset in bytes.
-   * 
-   * @return a positive integer representing a handle for the asset or -1
-   *         if an error occurs.
-   */
-  int registerAsset(int type, byte[] data, int offset, int size) {
-    // Verify the data being passed in
-    if((offset + size)>data.length)
-      return -1;
-    // Now register it
-    return gfxRegisterAsset(type, data, offset, size);
-    }
   
   /** Process any input events.
    * 

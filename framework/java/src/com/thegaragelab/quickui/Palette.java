@@ -37,16 +37,15 @@ public class Palette extends Asset {
     // Verify the data
     if(size!=(2 * PALETTE_SIZE))
       return;
-    // Try and register it
-    m_handle = Driver.getInstance().registerAsset(Asset.PALETTE, data, offset, size);
-    if(m_handle<0)
-      return;
     // Now build up our internal state
     m_colors = new Color[PALETTE_SIZE];
     ByteBuffer buffer = ByteBuffer.wrap(data, 0, size);
     buffer.order(ByteOrder.LITTLE_ENDIAN);
     for(int index=0; index<PALETTE_SIZE; index++)
       m_colors[index] = new Color(buffer.getShort());
+    // Save away the raw data
+    m_data = new byte[size];
+    System.arraycopy(data, offset, m_data, 0, size);
     }
 
   //-------------------------------------------------------------------------

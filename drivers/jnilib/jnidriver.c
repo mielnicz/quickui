@@ -6,40 +6,11 @@
 * Provides an interface between Java and the QuickGFX low level driver.
 *---------------------------------------------------------------------------*/
 #include <stdint.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <quickgfx.h>
 #include "jnidriver.h"
-
-/*--------------------------------------------------------------------------*
-* These globals and functions are used to help manage assets.
-*--------------------------------------------------------------------------*/
-
-static uint8_t *g_assets    = NULL; //! Raw asset data
-static int32_t  g_nextIndex = 0;    //! Next index for new asset
-
-/** Add data to the assets table.
- *
- */
-static int addAsset(JNIEnv *pEnv, jbyteArray data, jint offset, jint size) {
-  int32_t handle = g_nextIndex;
-  // Try and reallocate the array to fit the new data
-  uint8_t *pNew = (uint8_t *)realloc(g_assets, g_nextIndex + size);
-  if(pNew==NULL)
-    return -1;
-  g_assets = pNew;
-  // Try and map the Java byte array into memory
-  pNew = (uint8_t *)(*pEnv)->GetByteArrayElements(pEnv, data, NULL);
-  if(pNew==NULL)
-    return -1;
-  // Now copy the data across and update the index
-  memcpy(&g_assets[g_nextIndex], &pNew[offset], size);
-  g_nextIndex += size;
-  // Release the Java array
-  (*pEnv)->ReleaseByteArrayElements(pEnv, data, pNew, JNI_ABORT);
-  // All done
-  return handle;
-  }
 
 /*--------------------------------------------------------------------------*
 * These globals and functions are used to help manage events.
@@ -169,45 +140,87 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxFillRegion(JNIEnv
 
 /*
  * Class:     com_thegaragelab_quickui_Driver
- * Method:    gfxDrawIcon
- * Signature: (IIII)I
+ * Method:    gfxDrawChar
+ * Signature: ([BIIIB)I
  */
-JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawIcon(JNIEnv *pEnv, jobject obj, jint x, jint y, jint icon, jint color) {
-  // Make sure the asset is at least in range
-  if((icon<0)||(icon>=g_nextIndex))
-    return (jint)GFX_RESULT_INTERNAL;
-  // Now draw it
-  return (jint)gfx_DrawIcon(x, y, (GFX_IMAGE *)&g_assets[icon], 0, 0, -1, -1, NULL, color);
+JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawChar(JNIEnv *pEnv, jobject obj, jbyteArray font, jint x, jint y, jint color, jbyte ch) {
+  return (jint)GFX_RESULT_INTERNAL;
   }
 
 /*
  * Class:     com_thegaragelab_quickui_Driver
- * Method:    gfxDrawIconPortion
- * Signature: (IIIIIIII)I
+ * Method:    gfxDrawString
+ * Signature: ([BIII[B)I
  */
-JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawIconPortion(JNIEnv *pEnv, jobject obj, jint x, jint y, jint icon, jint sx, jint sy, jint w, jint h, jint color) {
-  if((icon<0)||(icon>=g_nextIndex))
-    return (jint)GFX_RESULT_INTERNAL;
-  // Now draw it
-  return (jint)gfx_DrawIcon(x, y, (GFX_IMAGE *)&g_assets[icon], sx, sy, w, h, NULL, color);
+JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawString(JNIEnv *pEnv, jobject obj, jbyteArray font, jint x, jint y, jint color, jbyteArray str) {
+  return (jint)GFX_RESULT_INTERNAL;
   }
 
 /*
  * Class:     com_thegaragelab_quickui_Driver
  * Method:    gfxDrawImage
- * Signature: (IIII)I
+ * Signature: (II[BIIII[BI[B)I
  */
-JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawImage(JNIEnv *pEnv, jobject obj, jint x, jint y, jint image, jint palette) {
-  return (jint)gfx_DrawImage4(x, y, (GFX_IMAGE *)&g_assets[image], 0, 0, -1, -1, NULL, (GFX_COLOR *)&g_assets[palette]);
-  }
-
-/*
- * Class:     com_thegaragelab_quickui_Driver
- * Method:    gfxDrawImagePortion
- * Signature: (IIIIIIII)I
- */
-JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawImagePortion(JNIEnv *pEnv, jobject obj, jint x, jint y, jint image, jint sx, jint sy, jint w, jint h, jint palette) {
-  return (jint)gfx_DrawImage4(x, y, (GFX_IMAGE *)&g_assets[image], sx, sy, w, h, NULL, (GFX_COLOR *)&g_assets[palette]);
+JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawImage(JNIEnv *pEnv, jobject obj, jint x, jint y, jbyteArray image, jint sx, jint sy, jint w, jint h, jbyteArray mask, jint color, jbyteArray palette) {
+  // The image is required
+  if(image==NULL)
+    return GFX_RESULT_BADARG;
+  GFX_IMAGE *pImage = (GFX_IMAGE *)(*pEnv)->GetByteArrayElements(pEnv, image, NULL);
+  if(pImage==NULL)
+    return GFX_RESULT_INTERNAL;
+  // Collect the rest of the arguments
+  bool bFreeMask = false, bFreePalette = false;
+  GFX_PALETTE *pPalette = NULL;
+  GFX_IMAGE *pMask = NULL;
+  jint result = (jint)GFX_RESULT_INTERNAL;
+  // Do we have a mask ?
+  if(mask!=NULL) {
+    pMask = (GFX_IMAGE *)(*pEnv)->GetByteArrayElements(pEnv, mask, NULL);
+    if(pMask==NULL)
+      goto gfxDrawImage_cleanup;
+    bFreeMask = true;
+    // Make sure the mask is a monochrome image
+    if(pMask->m_header.m_bpp!=IMAGE_BPP_1) {
+      result = (jint)GFX_RESULT_BADARG;
+      goto gfxDrawImage_cleanup;
+      }
+    }
+  // If the main image is 4bpp we need a palette
+  if(pImage->m_header.m_bpp==IMAGE_BPP_4) {
+    if(palette==NULL) {
+      result = (jint)GFX_RESULT_BADARG;
+      goto gfxDrawImage_cleanup;
+      }
+    pPalette = (GFX_COLOR *)(*pEnv)->GetByteArrayElements(pEnv, palette, NULL);
+    if(pPalette==NULL)
+      goto gfxDrawImage_cleanup;
+    bFreePalette = true;
+    }
+  // Do the rendering
+  switch(pImage->m_header.m_bpp) {
+    case IMAGE_BPP_1 :
+      result = (jint)gfx_DrawIcon(x, y, pImage, sx, sy, w, h, pMask, color);
+      break;
+    case IMAGE_BPP_4 :
+      result = (jint)gfx_DrawImage4(x, y, pImage, sx, sy, w, h, pMask, pPalette);
+      break;
+    case IMAGE_BPP_16:
+      result = (jint)gfx_DrawImage16(x, y, pImage, sx, sy, w, h, pMask);
+      break;
+    default:
+      result = (jint)GFX_RESULT_BADARG;
+    }
+gfxDrawImage_cleanup:
+  // Free up the image data
+  (*pEnv)->ReleaseByteArrayElements(pEnv, image, pImage, JNI_ABORT);
+  // Free up mask data (if used)
+  if(bFreeMask&&(pMask!=NULL))
+    (*pEnv)->ReleaseByteArrayElements(pEnv, mask, pMask, JNI_ABORT);
+  // Free up palette data (if used)
+  if(bFreePalette&&(pPalette!=NULL))
+    (*pEnv)->ReleaseByteArrayElements(pEnv, palette, pPalette, JNI_ABORT);
+  // All done
+  return (jint)result;
   }
 
 /*
