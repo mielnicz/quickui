@@ -8,6 +8,8 @@ libgfxcommon_la_SOURCES = \
     gfxDrawImage.c \
     gfxDrawImage4.c \
     gfxDrawImage16.c \
+    gfxDrawChar.c \
+    gfxDrawString.c \
     gfxDrawLine.c \
     gfxFillRegion.c \
     gfxEvents.c \

@@ -144,7 +144,17 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxFillRegion(JNIEnv
  * Signature: ([BIIIB)I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawChar(JNIEnv *pEnv, jobject obj, jbyteArray font, jint x, jint y, jint color, jbyte ch) {
-  return (jint)GFX_RESULT_INTERNAL;
+  // The font is required
+  if(font==NULL)
+    return GFX_RESULT_BADARG;
+  GFX_FONT *pFont = (GFX_FONT *)(*pEnv)->GetByteArrayElements(pEnv, font, NULL);
+  if(pFont==NULL)
+    return GFX_RESULT_INTERNAL;
+  // Now draw the character
+  jint result = (jint)gfx_DrawChar(x, y, pFont, color, ch);
+  // Clean up and return
+  (*pEnv)->ReleaseByteArrayElements(pEnv, font, pFont, JNI_ABORT);
+  return result;
   }
 
 /*
@@ -153,7 +163,23 @@ JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawChar(JNIEnv *
  * Signature: ([BIII[B)I
  */
 JNIEXPORT jint JNICALL Java_com_thegaragelab_quickui_Driver_gfxDrawString(JNIEnv *pEnv, jobject obj, jbyteArray font, jint x, jint y, jint color, jbyteArray str) {
-  return (jint)GFX_RESULT_INTERNAL;
+  // The font and string are both required
+  if((font==NULL)||(str==NULL))
+    return GFX_RESULT_BADARG;
+  GFX_FONT *pFont = (GFX_FONT *)(*pEnv)->GetByteArrayElements(pEnv, font, NULL);
+  if(pFont==NULL)
+    return GFX_RESULT_INTERNAL;
+  uint8_t *pString = (uint8_t *)(*pEnv)->GetByteArrayElements(pEnv, str, NULL);
+  if(pString==NULL) {
+    (*pEnv)->ReleaseByteArrayElements(pEnv, font, pFont, JNI_ABORT);
+    return GFX_RESULT_INTERNAL;
+    }
+  // Now draw the character
+  jint result = (jint)gfx_DrawString(x, y, pFont, color, pString);
+  // Clean up and return
+  (*pEnv)->ReleaseByteArrayElements(pEnv, font, pFont, JNI_ABORT);
+  (*pEnv)->ReleaseByteArrayElements(pEnv, str, pString, JNI_ABORT);
+  return result;
   }
 
 /*

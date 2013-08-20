@@ -383,11 +383,38 @@ public class Application extends Container {
    * @param color the color to use for icons (optional - default is black).
    * @param palette the Palette to use to display the image (only required for 4bpp images).
    */
+  @Override
   public void drawImage(IPoint point, Image image, IRectangle source, Icon mask, Color color, Palette palette) {
     point = point.translate(m_offset);
     m_driver.drawImage(point, image, source, mask, color, palette);
     }
 
+  /** Draw a single character using the given font.
+   * 
+   * @param font the Font to use to render the character.
+   * @param point the location to draw the character at.
+   * @param color the Color to draw the character with.
+   * @param ch the character to draw.
+   */
+  @Override
+  public void drawChar(Font font, IPoint point, Color color, char ch) {
+    point = point.translate(m_offset);
+    m_driver.drawChar(font, point, color, ch);
+    }
+
+  /** Draw a string using the given font.
+   * 
+   * @param font the Font to use to render the character.
+   * @param point the location to draw the character at.
+   * @param color the Color to draw the character with.
+   * @param string the string to draw.
+   */
+  @Override
+  public void drawString(Font font, IPoint point, Color color, String string) {
+    point = point.translate(m_offset);
+    m_driver.drawString(font, point, color, string);
+    }
+  
   //-------------------------------------------------------------------------
   // Application specific operations
   //-------------------------------------------------------------------------

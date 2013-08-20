@@ -7,6 +7,7 @@
 *---------------------------------------------------------------------------*/
 package com.thegaragelab.quickui;
 
+import java.io.*;
 //--- Imports
 import java.util.*;
 
@@ -324,7 +325,9 @@ class Driver implements ISurface {
    * @param ch the character to draw.
    */
   public void drawChar(Font font, IPoint point, Color color, char ch) {
-    // This must be implemented by the framework
+    // Check parameters
+    if(font!=null)
+      gfxDrawChar(font.getData(), point.getX(), point.getY(), color.getNativeFormat(), (byte)ch);
     }
 
   /** Draw a string using the given font.
@@ -335,7 +338,31 @@ class Driver implements ISurface {
    * @param string the string to draw.
    */
   public void drawString(Font font, IPoint point, Color color, String string) {
-    // This must be implemented by the framework.
+    // Check parameters
+    if(font==null)
+      return;
+    // Convert the string into an array of bytes
+    byte[] rawString = null;
+    // Treat null strings as empty
+    if(string==null)
+      rawString = new byte[0];
+    else {
+      // Convert to ASCII (falling back to empty if we can't)
+      try {
+        rawString = string.getBytes("US-ASCII");
+        } 
+      catch (UnsupportedEncodingException e) {
+        // Hacky, but avoids exceptions
+        rawString = new byte[0];
+        }
+      }
+    // Now render it
+    if(rawString.length>0) {
+      byte[] printString = new byte[rawString.length + 1];
+      System.arraycopy(rawString, 0, printString, 0, rawString.length);
+      printString[rawString.length] = 0x00;
+      gfxDrawString(font.getData(), point.getX(), point.getY(), color.getNativeFormat(), printString);
+      }
     }
 
   //-------------------------------------------------------------------------

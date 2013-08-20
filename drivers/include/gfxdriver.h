@@ -43,6 +43,12 @@ GFX_RESULT gfx_common_DrawImage16(uint16_t x, uint16_t y, GFX_IMAGE *pImage, uin
 /** Draw a portion of an image to the display */
 GFX_RESULT gfx_common_DrawImage(uint16_t x, uint16_t y, GFX_IMAGE *pImage, uint8_t sx, uint8_t sy, uint8_t w, uint8_t h, GFX_IMAGE *pMask, GFX_COLOR color, GFX_PALETTE pPalette);
 
+/** Draw a single character to the display */
+GFX_RESULT gfx_common_DrawChar(uint16_t x, uint16_t y, GFX_FONT *pFont, int color, char ch);
+
+/** Draw a string to the display */
+GFX_RESULT gfx_common_DrawString(uint16_t x, uint16_t y, GFX_FONT *pFont, int color, const char *cszString);
+
 /** Draw a line from one point to another */
 GFX_RESULT gfx_common_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, GFX_COLOR color);
 

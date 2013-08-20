@@ -114,6 +114,43 @@ typedef struct _GFX_IMAGE {
   uint8_t          m_data[1]; //! The actual image data
   } GFX_IMAGE;
 
+/** Information about a single character in a font.
+ *
+ * For each character in a font this structure defines it's ASCII value,
+ * it's width and the location of it's bitmap in the attached GFX_IMAGE
+ * representing the font.
+ */
+typedef struct _GFX_FONT_CHAR {
+  uint8_t m_char;  //! ASCII value of the character represented
+  uint8_t m_width; //! Width of this character in pixels
+  uint8_t m_x;     //! X position of the top left of the character
+  uint8_t m_y;     //! Y position of the top left of the character
+  } GFX_FONT_CHAR;
+
+/** The font header
+ *
+ * The font header defines the number of characters in the font, the height
+ * of the characters and the default character to use if there is no defined
+ * character for the one specified.
+ */
+typedef struct _GFX_FONT_HEADER {
+  uint8_t m_chars;    //! Number of characters in this font
+  uint8_t m_height;   //! Height of the characters in this font
+  uint8_t m_default;  //! ASCII value of the default character to display
+  uint8_t m_reserved; //! Reserved for future use
+  } GFX_FONT_HEADER;
+
+/** A font structure
+ *
+ * A font consists of a GFX_FONT_HEADER structure followed by up to 256
+ * GFX_FONT_CHAR entries followed by a 1 bpp GFX_IMAGE structure. The
+ * GFX_IMAGE data is used to render the font.
+ */
+typedef struct _GFX_FONT {
+  GFX_FONT_HEADER m_header;   //! Font header information
+  GFX_FONT_CHAR   m_chars[1]; //! Font character data
+  } GFX_FONT;
+
 // Revert to normal structure packing
 #pragma pack(pop)
 
@@ -177,6 +214,12 @@ typedef GFX_RESULT (*_gfx_DrawImage16)(uint16_t x, uint16_t y, GFX_IMAGE *pImage
 /** Draw an image to the display */
 typedef GFX_RESULT (*_gfx_DrawImage)(uint16_t x, uint16_t y, GFX_IMAGE *pImage, uint8_t sx, uint8_t sy, uint8_t w, uint8_t h, GFX_IMAGE *pMask, GFX_COLOR color, GFX_PALETTE pPalette);
 
+/** Draw a single character to the display */
+typedef GFX_RESULT (*_gfx_DrawChar)(uint16_t x, uint16_t y, GFX_FONT *pFont, int color, char ch);
+
+/** Draw a string to the display */
+typedef GFX_RESULT (*_gfx_DrawString)(uint16_t x, uint16_t y, GFX_FONT *pFont, int color, const char *cszString);
+
 /** Draw a line from one point to another */
 typedef GFX_RESULT (*_gfx_DrawLine)(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, GFX_COLOR color);
 
@@ -209,6 +252,8 @@ typedef struct _GFX_DRIVER {
   _gfx_DrawImage4       m_pfDrawImage4;       //! Draw a 4 bit image
   _gfx_DrawImage16      m_pfDrawImage16;      //! Draw a 16 bit image
   _gfx_DrawImage        m_pfDrawImage;        //! Draw an image
+  _gfx_DrawChar         m_pfDrawChar;         //! Draw a single character
+  _gfx_DrawString       m_pfDrawString;       //! Draw a sequence of characters
   _gfx_DrawLine         m_pfDrawLine;         //! Draw a line
   _gfx_DrawBox          m_pfDrawBox;          //! Draw a box
   _gfx_CheckEvents      m_pfCheckEvents;      //! Check for pending events
@@ -293,6 +338,12 @@ const void *gfx_Framebuffer();
 
 /** Draw a portion of an image to the display */
 #define gfx_DrawImage(x, y, pImage, sx, sy, w, h, pMask, color, pPalette) (*g_GfxDriver.m_pfDrawImage)(x, y, pImage, sx, sy, w, h, pMask, color, pPalette)
+
+/** Draw a single character to the display */
+#define gfx_DrawChar(x, y, pFont, color, ch) (*g_GfxDriver.m_pfDrawChar)(x, y, pFont, color, ch)
+
+/** Draw a string to the display */
+#define gfx_DrawString(x, y, pFont, color, cszString) (*g_GfxDriver.m_pfDrawString)(x, y, pFont, color, cszString)
 
 /** Draw a line from one point to another */
 #define gfx_DrawLine(x1, y1, x2, y2, color) (*g_GfxDriver.m_pfDrawLine)(x1, y1, x2, y2, color)

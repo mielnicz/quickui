@@ -74,6 +74,11 @@ public class Font extends Asset {
         }
     // Now load the Icon resource itself
     m_icon = new Icon(data, offset + ((chars * 4) + 4), size - ((chars * 4) + 4));
+    // Save the raw data
+    if(m_icon.getData()!=null) {
+      m_data = new byte[size];
+      System.arraycopy(data, offset, m_data, 0, size);
+      }
     }
 
   //-------------------------------------------------------------------------
@@ -94,66 +99,6 @@ public class Font extends Asset {
     catch (UnsupportedEncodingException e) {
       // Hacky, but avoids exceptions
       return new byte[0];
-      }
-    }
-  
-  //-------------------------------------------------------------------------
-  // Internal font drawing operations
-  //-------------------------------------------------------------------------
-  
-  /** Draw a single character
-   * 
-   * @param surface the ISurface to draw the character on.
-   * @param point the location to draw the character at.
-   * @param color the Color to draw the character with.
-   * @param ch the character to draw.
-   */
-  void drawChar(ISurface surface, IPoint point, Color color, char ch) {
-    // Get the character cell
-    Rectangle cell = new Rectangle(
-      m_xpos[(int)ch],
-      m_ypos[(int)ch],
-      m_widths[(int)ch] - 1,
-      m_height - 1
-      );
-    // Now draw the character
-    surface.drawImage(
-      point,
-      m_icon,
-      cell,
-      null,
-      color,
-      null
-      );
-    }
-  
-  /** Draw a string (sequence of characters)
-   * 
-   * @param surface the ISurface to draw the character on.
-   * @param point the location to draw the character at.
-   * @param color the Color to draw the character with.
-   * @param string the string to draw.
-   */
-  void drawString(ISurface surface, IPoint point, Color color, String string) {
-    byte[] chars = toASCII(string);
-    Rectangle cell = new Rectangle(Point.ORIGIN, Dimension.EMPTY);
-    cell.setHeight(m_height - 1);
-    // Now draw all the characters
-    Point where = new Point(point);
-    for(byte ch: chars) {
-      int index = ch & 0xFF;
-      cell.setX(m_xpos[index]);
-      cell.setY(m_ypos[index]);
-      cell.setWidth(m_widths[index] - 1);
-      surface.drawImage(
-        where,
-        m_icon,
-        cell,
-        null,
-        color,
-        null
-        );
-      where.setX(where.getX() + m_widths[index]);
       }
     }
   
@@ -235,21 +180,6 @@ public class Font extends Asset {
       width = width + m_widths[index];
       }
     return new Dimension(width, m_height);
-    }
-  
-  //-------------------------------------------------------------------------
-  // Getters
-  //-------------------------------------------------------------------------
-  
-  /** Get the handle for this asset
-   * 
-   * The handle for a font is the handle for the backing icon. Return that
-   * if we have it, otherwise we default to the invalid handle.
-   */
-  public byte[] getData() {
-    if(m_icon!=null)
-      return m_icon.getData();
-    return super.getData();
     }
   
   }
